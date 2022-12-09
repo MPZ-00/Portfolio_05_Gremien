@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class Tagesordnungspunkte {
     private String name;
     private ArrayList<Antrag> antraege;
@@ -9,5 +10,9 @@ public class Tagesordnungspunkte {
 
     public void addTOP(Antrag antrag) {
         this.antraege.add(antrag);
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

@@ -2,12 +2,14 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Main {
+    private static ArrayList<Gremien> Gremien = null;
     public static void main(String[] args) {
         // Erstelle eine Liste aller Gremien
-        ArrayList<Gremien> Gremien = new ArrayList<Gremien>();
+        Gremien = new ArrayList<Gremien>();
 
         // Erstelle einen Scanner, um die Eingabe vom Benutzer zu lesen
         Scanner scanner = new Scanner(System.in);
+        int auswahl;
 
         // Schleife, die solange läuft, bis der Benutzer das Programm beendet
         while (true) {
@@ -18,6 +20,42 @@ public class Main {
             System.out.println("5. Ende der Sitzung eintragen");
             System.out.println("6. Programm beenden");
             System.out.println("Auswahl: ");
+
+            while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > 6) {
+                System.out.println("Bitte gültige Auswahl eingeben (1-6): ");
+                scanner.nextLine(); // Leere den Eingabepuffer
+            }
+
+            // Führe die entsprechnede Aktion aus
+            switch (auswahl) {
+                case 1: Gremium_und_Beginn_der_Sitzung(); break;
+                
+            }
         }
+    }
+
+    static void Gremium_und_Beginn_der_Sitzung() {
+        Scanner scanner = new Scanner(System.in);
+        Gremien gremium = new Gremien();
+        
+        // Erstelle ein neues Gremium
+        System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
+        gremium.setName(scanner.nextLine());
+
+        System.out.println("Geben Sie den Beginn der Sitzung ein: ");
+        gremium.setStartTime(scanner.nextLine());
+        
+        // Füge Tagesordnungspunkte hinzu
+        while (true) {
+            System.out.println("Geben Sie den Namen des Tagesordnungspunks ein (oder 'ende', um die Eingabe zu beenden): ");
+            String top = scanner.nextLine();
+            
+            if (top.equals("ende")) {break;}
+            
+            
+        }
+        
+        Gremien.add(gremium);
+        scanner.close();
     }
 }
