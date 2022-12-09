@@ -1,22 +1,45 @@
 public class Antrag implements IAntrag {
-    private String name;
-    private String result;
-
-    public Antrag(String name) {
-        setName(name);
+    public enum Ergebnis {
+        JA, NEIN, ENTHALTUNG
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    private String Titel;
+    private String Text;
+    private IAntrag.Ergebnis Ergebnis;
+    private boolean Angenommen;
+
+    public Antrag(String Titel, String Text, IAntrag.Ergebnis Ergebnis, boolean Angenommen) {
+        setTitel(Titel);
+        setText(Text);
+        setErgebnis(Ergebnis);
+        setAngenommen(Angenommen);
     }
-    public String getResult() {
-        return this.result;
+    
+    public void setTitel(String Titel) {
+        this.Titel = Titel;
+    }
+    public void setText(String Text) {
+        this.Text = Text;
+    }
+    public void setAngenommen(Boolean Angenommen) {
+        this.Angenommen = Angenommen;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getTitel() {
+        return this.Titel;
     }
-    public String getName() {
-        return this.name;
+    public String getText() {
+        return this.Text;
+    }
+    public IAntrag.Ergebnis getErgebnis() {
+        return this.Ergebnis;
+    }
+    public Boolean isAngenommen() {
+        return this.Angenommen;
+    }
+
+    @Override
+    public void setErgebnis(IAntrag.Ergebnis Ergebnis) {
+        setErgebnis(Ergebnis);
     }
 }

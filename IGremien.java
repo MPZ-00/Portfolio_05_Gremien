@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public interface IGremien {
     public void addTOPitem(Tagesordnungspunkte item);
     public void setStartTime(String startTime);
@@ -6,4 +8,5 @@ public interface IGremien {
     public String getName();
     public String getStartTime();
     public String getEndTime();
+    public ArrayList<Tagesordnungspunkte> getTOPitems();
 }

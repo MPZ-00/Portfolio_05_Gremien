@@ -39,4 +39,8 @@ public class Gremien implements IGremien {
     public String getName() {
         return this.name;
     }
+
+    public ArrayList<Tagesordnungspunkte> getTOPitems() {
+        return this.TOPitem;
+    }
 }

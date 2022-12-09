@@ -1,6 +1,15 @@
 public interface IAntrag {
-    public void setResult(String result);
-    public String getResult();
-    public void setName(String name);
-    public String getName();
+    public enum Ergebnis {
+        JA, NEIN, ENTHALTUNG
+    }
+
+    public void setTitel(String Titel);
+    public void setText(String Text);
+    public void setErgebnis(Ergebnis Ergebnis);
+    public void setAngenommen(Boolean Angenommen);
+
+    public String getTitel();
+    public String getText();
+    public Ergebnis getErgebnis();
+    public Boolean isAngenommen();
 }

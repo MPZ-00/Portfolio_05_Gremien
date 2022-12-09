@@ -69,7 +69,26 @@ public class Main {
         scanner.close();
     }
 
-    static void Tagesordnungspunkte_anzeigen() {}
+    static void Tagesordnungspunkte_anzeigen() {
+        Gremien aktuellesGremium = Gremien.get(Gremien.size() - 1);
+        ArrayList<Tagesordnungspunkte> TOPs = aktuellesGremium.getTOPitems();
+
+        // Schleife durch alle TOPs
+        for (Tagesordnungspunkte top : TOPs) {
+            // Ausgabe der Namen und Anträge jedes Tagesordnungspunktes
+            System.out.println("Name: " + top.getName());
+            System.out.println("Anträge: ");
+
+            // Schleife durch alle Anträge des Tagesordnungspunktes
+            for (Antrag antrag : top.getAntraege()) {
+                // Ausgabe des Titels, Textes, Ergebnisses und Angenommenen-Status des Antrags
+                System.out.println("Titel: " + antrag.getTitel());
+                System.out.println("Text: " + antrag.getText());
+                System.out.println("Ergebnis: " + antrag.getErgebnis());
+                System.out.println("Angenommen: " + (antrag.isAngenommen() ? "ja" : "nein"));
+            }
+        }
+    }
 
     static void Tagesordnungspunkt_oder_Antrag() {}
 

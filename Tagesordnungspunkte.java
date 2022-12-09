@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-public class Tagesordnungspunkte {
+public class Tagesordnungspunkte implements ITagesordnungspunkte {
     private String name;
     private ArrayList<Antrag> antraege;
 
@@ -14,5 +14,9 @@ public class Tagesordnungspunkte {
 
     public String getName() {
         return this.name;
+    }
+
+    public ArrayList<Antrag> getAntraege() {
+        return this.antraege;
     }
 }
