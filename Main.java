@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 public class Main {
     private static ArrayList<Gremien> Gremien = null;
+    
     public static void main(String[] args) {
         // Erstelle eine Liste aller Gremien
         Gremien = new ArrayList<Gremien>();
@@ -10,27 +11,36 @@ public class Main {
         // Erstelle einen Scanner, um die Eingabe vom Benutzer zu lesen
         Scanner scanner = new Scanner(System.in);
         int auswahl;
+        boolean beenden = false;
 
-        // Schleife, die solange läuft, bis der Benutzer das Programm beendet
-        while (true) {
-            System.out.println("1. Gremium und Beginn der Sitzung auswählen");
-            System.out.println("2. Tagesordnungspunkte anzeigen");
-            System.out.println("3. Tagesordnungspunkt oder Antrag auswählen");
-            System.out.println("4. Protokoll eintragen1");
-            System.out.println("5. Ende der Sitzung eintragen");
-            System.out.println("6. Programm beenden");
-            System.out.println("Auswahl: ");
+        try {
+            // Schleife, die solange läuft, bis der Benutzer das Programm beendet
+            while (!beenden) {
+                System.out.println("1. Gremium und Beginn der Sitzung auswählen");
+                System.out.println("2. Tagesordnungspunkte anzeigen");
+                System.out.println("3. Tagesordnungspunkt oder Antrag auswählen");
+                System.out.println("4. Protokoll eintragen");
+                System.out.println("5. Ende der Sitzung eintragen");
+                System.out.println("6. Programm beenden");
+                System.out.println("Auswahl: ");
 
-            while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > 6) {
-                System.out.println("Bitte gültige Auswahl eingeben (1-6): ");
-                scanner.nextLine(); // Leere den Eingabepuffer
+                while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > 6) {
+                    System.out.println("Bitte gültige Auswahl eingeben (1-6): ");
+                    scanner.nextLine(); // Leere den Eingabepuffer
+                }
+
+                // Führe die entsprechnede Aktion aus
+                switch (auswahl) {
+                    case 1: Gremium_und_Beginn_der_Sitzung(); break;
+                    case 2: Tagesordnungspunkte_anzeigen(); break;
+                    case 3: Tagesordnungspunkt_oder_Antrag(); break;
+                    case 4: Protokoll_eintragen(); break;
+                    case 5: Ende_Sitzung_eintragen(); break;
+                    case 6: beenden = true; break;
+                }
             }
-
-            // Führe die entsprechnede Aktion aus
-            switch (auswahl) {
-                case 1: Gremium_und_Beginn_der_Sitzung(); break;
-                
-            }
+        } finally {
+            scanner.close();
         }
     }
 
@@ -52,10 +62,18 @@ public class Main {
             
             if (top.equals("ende")) {break;}
             
-            
+            gremium.addTOPitem(new Tagesordnungspunkte(top));
         }
         
         Gremien.add(gremium);
         scanner.close();
     }
+
+    static void Tagesordnungspunkte_anzeigen() {}
+
+    static void Tagesordnungspunkt_oder_Antrag() {}
+
+    static void Protokoll_eintragen() {}
+    
+    static void Ende_Sitzung_eintragen() {}
 }
