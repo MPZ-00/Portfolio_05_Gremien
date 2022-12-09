@@ -1,12 +1,21 @@
+import java.sql.Date;
 import java.util.ArrayList;
 
 public interface IGremien {
-    public void addTOPitem(Tagesordnungspunkte item);
-    public void setStartTime(String startTime);
-    public void setEndTime(String endTime);
-    public void setName(String name);
+    public void setID(int ID);
+    public void setName(String Name);
+    public void setOffiziell(Boolean Offiziell);
+    public void setInoffiziell(Boolean Inoffiziell);
+    public void setBeginn(Date Beginn);
+    public void setEnde(Date Ende);
+
+    public int getID();
     public String getName();
-    public String getStartTime();
-    public String getEndTime();
+    public Boolean getOffiziell();
+    public Boolean getInoffiziell();
+    public Date getBeginn();
+    public Date getEnde();
+
+    public void addTOPitem(Tagesordnungspunkte item);
     public ArrayList<Tagesordnungspunkte> getTOPitems();
 }
