@@ -40,6 +40,6 @@ public class Antrag implements IAntrag {
 
     @Override
     public void setErgebnis(IAntrag.Ergebnis Ergebnis) {
-        setErgebnis(Ergebnis);
+        this.Ergebnis = Ergebnis;
     }
 }
