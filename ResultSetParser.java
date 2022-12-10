@@ -18,4 +18,12 @@ public class ResultSetParser implements IDatabaseObject {
 
         return aufgabengebiete;
     }
+
+    public List<Tagesordnung> getTagesordnungenFromResultSet(ResultSet rs) throws SQLException {
+        List<Tagesordnung> Tagesordnung = new ArrayList<Tagesordnung>();
+
+        while (rs.next()) {
+            int ID = rs.getInt("ID");
+        }
+    }
 }

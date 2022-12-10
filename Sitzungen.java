@@ -6,7 +6,8 @@ import java.util.Set;
 public class Sitzungen implements ISitzungen {
     private static int nextID = 1; // statischer Attributwert für die nächste ID
     private static Set<Integer> usedIDs = new HashSet<>(); // statisches Set für verwendete IDs
-    
+    private static Sitzungen aktiveSitzung;
+
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen
     private int ID;
     private Timestamp Beginn;
@@ -25,6 +26,13 @@ public class Sitzungen implements ISitzungen {
         setOeffentlich(Oeffentlich);
         setOrt(Ort);
         setProtokoll(Protokoll);
+    }
+
+    public static void setAktiveSitzung(Sitzungen sitzung) {
+        aktiveSitzung = sitzung;
+    }
+    public static Sitzungen getAktiveSitzung() {
+        return aktiveSitzung;
     }
 
     public int getID() {

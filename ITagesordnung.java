@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public interface ITagesordnungspunkte {
+public interface ITagesordnung {
     public void setID(int ID);
     public void setTitel(String Titel);
     public void setKurzbeschreibung(String Kurzbeschreibung);

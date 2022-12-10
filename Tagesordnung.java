@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-public class Tagesordnungspunkte implements ITagesordnungspunkte {
+
+import javax.swing.text.html.HTML.Tag;
+public class Tagesordnung implements ITagesordnung {
     private static int nextID = 1; // statischer Attributwert für die nächste ID
     private static Set<Integer> usedIDs = new HashSet<>(); // statisches Set für verwendete IDs
     
@@ -13,8 +15,9 @@ public class Tagesordnungspunkte implements ITagesordnungspunkte {
     private ArrayList<Antrag> antraege;
 
     private int GremiumID; // Referenz auf Gremium-Objekt
+    private static Tagesordnung aktuellerTOP;
 
-    public Tagesordnungspunkte(String Titel, String Kurzbeschreibung, String Protokolltext, int GremiumID) {
+    public Tagesordnung(String Titel, String Kurzbeschreibung, String Protokolltext, int GremiumID) {
         setID(nextID++);
         setTitel(Titel);
         setKurzbeschreibung(Kurzbeschreibung);
@@ -22,6 +25,13 @@ public class Tagesordnungspunkte implements ITagesordnungspunkte {
         setGremiumID(GremiumID);
 
         this.antraege = new ArrayList<Antrag>();
+    }
+
+    public static void setAktuellenTOPg(Tagesordnung TOP) {
+        aktuellerTOP = TOP;
+    }
+    public static Tagesordnung getAktuellenTOP() {
+        return aktuellerTOP;
     }
 
     public void setID(int ID) {

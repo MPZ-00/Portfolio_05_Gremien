@@ -1,5 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -20,7 +26,7 @@ public class Main {
             // Schleife, die solange läuft, bis der Benutzer das Programm beendet
             while (!beenden) {
                 System.out.println("1. Gremium und Beginn der Sitzung auswählen");
-                System.out.println("2. Tagesordnungspunkte anzeigen");
+                System.out.println("2. Tagesordnung anzeigen");
                 System.out.println("3. Tagesordnungspunkt oder Antrag auswählen");
                 System.out.println("4. Protokoll eintragen");
                 System.out.println("5. Ende der Sitzung eintragen");
@@ -35,7 +41,7 @@ public class Main {
                 // Führe die entsprechnede Aktion aus
                 switch (auswahl) {
                     case 1: Gremium_und_Beginn_der_Sitzung(); break;
-                    case 2: Tagesordnungspunkte_anzeigen(); break;
+                    case 2: Tagesordnung_anzeigen(); break;
                     case 3: Tagesordnungspunkt_oder_Antrag(); break;
                     case 4: Protokoll_eintragen(); break;
                     case 5: Ende_Sitzung_eintragen(); break;
@@ -44,6 +50,7 @@ public class Main {
             }
         } finally {
             scanner.close();
+            ConnectionManager.getInstance().disconnect();
         }
     }
 
@@ -67,8 +74,9 @@ public class Main {
         // Timestamp sitzungEnde = Timestamp.valueOf((LocalDateTime)sitzungBeginn.toLocalDateTime().plus(Duration.ofHours(2)));
         Timestamp sitzungEnde = new Timestamp(sitzungBeginn.getTime() + TimeUnit.HOURS.toMillis(2));
         Sitzungen sitzung = new Sitzungen(sitzungBeginn, sitzungEnde, LocalDate.now(), true, "", "");
-        
-        // Füge Tagesordnungspunkte hinzu
+        Sitzungen.setAktiveSitzung(sitzung);
+
+        // Füge Tagesordnung hinzu
         while (true) {
             System.out.println("Geben Sie den Namen des Tagesordnungspunks ein (oder 'ende', um die Eingabe zu beenden): ");
             String top = scanner.nextLine();
@@ -116,18 +124,33 @@ public class Main {
         return false;
     }
 
-    static void Tagesordnungspunkte_anzeigen() {
+    static void Tagesordnung_anzeigen() throws SQLException {
+        // Alle Tagesordnung einer Sitzung sortiert nach Titel ausgeben
+        Connection connection = ConnectionManager.getInstance().getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery("SELECT Tagesordnung.Titel FROM top INNER JOIN Tagesordnung ON top.ID_Tagesordnung = Tagesordnung.ID WHERE top.ID_Sitzung = " + Sitzungen.getAktiveSitzung().getID() + " ORDER BY Tagesordnung.Titel ASC");
+
+        List<String> titel = new ArrayList<>();
+        while (rs.next()) {
+            titel.add(rs.getString("Titel"));
+        }
+
+        // Gib die Liste mit den Titeln der Tagesordnung aus
+        System.out.println(titel);
+
+        ResultSet rs2 = statement.executeQuery("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
+
         /*
         Gremien aktuellesGremium = Gremien.get(Gremien.size() - 1);
-        ArrayList<Tagesordnungspunkte> TOPs = aktuellesGremium.getTOPitems();
+        ArrayList<Tagesordnung> TOPs = aktuellesGremium.getTOPitems();
 
         // Schleife durch alle TOPs
-        for (Tagesordnungspunkte top : TOPs) {
-            // Ausgabe der Namen und Anträge jedes Tagesordnungspunktes
+        for (Tagesordnung top : TOPs) {
+            // Ausgabe der Namen und Anträge jedes Tagesordnungs
             System.out.println("Name: " + top.getName());
             System.out.println("Anträge: ");
 
-            // Schleife durch alle Anträge des Tagesordnungspunktes
+            // Schleife durch alle Anträge des Tagesordnungs
             for (Antrag antrag : top.getAntraege()) {
                 // Ausgabe des Titels, Textes, Ergebnisses und Angenommenen-Status des Antrags
                 System.out.println("Titel: " + antrag.getTitel());
