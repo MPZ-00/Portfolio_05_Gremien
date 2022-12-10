@@ -21,6 +21,13 @@ public class Antrag implements IAntrag {
         setErgebnis(Ergebnis);
         setAngenommen(Angenommen);
     }
+    public Antrag(int ID, String Titel, String Text, IAntrag.Ergebnis Ergebnis, boolean Angenommen) {
+        setID(ID);
+        setTitel(Titel);
+        setText(Text);
+        setErgebnis(Ergebnis);
+        setAngenommen(Angenommen);
+    }
     
     public void setID(int ID) {
         // Überprüfung, ob die angegebene ID bereits im Set für verwendete IDs vorhanden ist

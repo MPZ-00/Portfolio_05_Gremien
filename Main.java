@@ -124,22 +124,30 @@ public class Main {
         return false;
     }
 
-    static void Tagesordnung_anzeigen() throws SQLException {
-        // Alle Tagesordnung einer Sitzung sortiert nach Titel ausgeben
-        Connection connection = ConnectionManager.getInstance().getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT Tagesordnung.Titel FROM top INNER JOIN Tagesordnung ON top.ID_Tagesordnung = Tagesordnung.ID WHERE top.ID_Sitzung = " + Sitzungen.getAktiveSitzung().getID() + " ORDER BY Tagesordnung.Titel ASC");
-
-        List<String> titel = new ArrayList<>();
-        while (rs.next()) {
-            titel.add(rs.getString("Titel"));
+    static void Tagesordnung_anzeigen() {
+        try {
+            // Alle Tagesordnung einer Sitzung sortiert nach Titel ausgeben
+            Connection connection = ConnectionManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT Tagesordnung.Titel FROM top INNER JOIN Tagesordnung ON top.ID_Tagesordnung = Tagesordnung.ID WHERE top.ID_Sitzung = " + Sitzungen.getAktiveSitzung().getID() + " ORDER BY Tagesordnung.Titel ASC");
+    
+            List<String> titel = new ArrayList<>();
+            while (rs.next()) {
+                titel.add(rs.getString("Titel"));
+            }
+    
+            // Gib die Liste mit den Titeln der Tagesordnung aus
+            System.out.println(titel);
+    
+            ResultSet rs2 = statement.executeQuery("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
+            List<Antrag> antraege = new ArrayList<Antrag>();
+            while (rs2.next()) {
+                antraege.add(new Antrag(rs2.getInt("ID"), rs2.getString("Titel"), rs2.getString("Text"), IAntrag.Ergebnis.valueOf(rs2.getString("Ergebnis")), Boolean.parseBoolean(rs2.getString("Angenommen"))));
+            }
+        } catch (SQLException e) {
+            e.getStackTrace();
         }
-
-        // Gib die Liste mit den Titeln der Tagesordnung aus
-        System.out.println(titel);
-
-        ResultSet rs2 = statement.executeQuery("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
-
+        // System.println(antraege); // TODO: fix this
         /*
         Gremien aktuellesGremium = Gremien.get(Gremien.size() - 1);
         ArrayList<Tagesordnung> TOPs = aktuellesGremium.getTOPitems();

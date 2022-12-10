@@ -24,6 +24,13 @@ public class ResultSetParser implements IDatabaseObject {
 
         while (rs.next()) {
             int ID = rs.getInt("ID");
+            String Titel = rs.getString("Titel");
+            String Kurzbeschreibung = rs.getString("Kurzbeschreibung");
+            String Protokolltext = rs.getString("Protokolltext");
+
+            Tagesordnung.add(new Tagesordnung(ID, Titel, Kurzbeschreibung, Protokolltext));
         }
+
+        return Tagesordnung;
     }
 }

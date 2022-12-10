@@ -22,12 +22,20 @@ public class Tagesordnung implements ITagesordnung {
         setTitel(Titel);
         setKurzbeschreibung(Kurzbeschreibung);
         setProtokolltext(Protokolltext);
-        setGremiumID(GremiumID);
+        setGremiumID(GremiumID); // TODO: Gremium hat Sitzung top Tagesordnung
+
+        this.antraege = new ArrayList<Antrag>();
+    }
+    public Tagesordnung(int ID, String Titel, String Kurzbeschreibung, String Protokolltext) {
+        setID(ID);
+        setTitel(Titel);
+        setKurzbeschreibung(Kurzbeschreibung);
+        setProtokolltext(Protokolltext);
 
         this.antraege = new ArrayList<Antrag>();
     }
 
-    public static void setAktuellenTOPg(Tagesordnung TOP) {
+    public static void setAktuellenTOP(Tagesordnung TOP) {
         aktuellerTOP = TOP;
     }
     public static Tagesordnung getAktuellenTOP() {
