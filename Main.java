@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -38,7 +37,6 @@ public class Main {
                     scanner.nextLine(); // Leere den Eingabepuffer
                 }
 
-                // Führe die entsprechnede Aktion aus
                 switch (auswahl) {
                     case 1: Gremium_und_Beginn_der_Sitzung(); break;
                     case 2: Tagesordnung_anzeigen(); break;
@@ -118,7 +116,6 @@ public class Main {
         } while (!input.equalsIgnoreCase("ja") && !input.equalsIgnoreCase("nein"));
         
         if (input.equalsIgnoreCase("ja")) {
-            // die Aussage ist wahr
             return true;
         }
         return false;

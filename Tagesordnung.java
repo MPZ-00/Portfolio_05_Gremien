@@ -2,13 +2,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.text.html.HTML.Tag;
-public class Tagesordnung implements ITagesordnung {
+public class Tagesordnung extends AHauptklasse implements ITagesordnung {
     private static int nextID = 1; // statischer Attributwert für die nächste ID
-    private static Set<Integer> usedIDs = new HashSet<>(); // statisches Set für verwendete IDs
     
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen
-    private int ID;
     private String Titel;
     private String Kurzbeschreibung;
     private String Protokolltext;
@@ -42,16 +39,6 @@ public class Tagesordnung implements ITagesordnung {
         return aktuellerTOP;
     }
 
-    public void setID(int ID) {
-        // Überprüfung, ob die angegebene ID bereits im Set für verwendete IDs vorhanden ist
-        if (usedIDs.contains(ID)) {
-            throw new IllegalArgumentException("ID(" + ID + ") ist bereits in verwendung");
-        }
-        
-        // Wert des ID-Attributs ändern und neue ID im Set für verwendete IDs speichern
-        usedIDs.add(this.ID);
-        this.ID = ID;
-    }
     public void setTitel(String Titel) {
         this.Titel = Titel;
     }
@@ -62,9 +49,6 @@ public class Tagesordnung implements ITagesordnung {
         this.Protokolltext = Protokolltext;
     }
 
-    public int getID() {
-        return this.ID;
-    }
     public String getTitel() {
         return this.Titel;
     }
@@ -79,14 +63,10 @@ public class Tagesordnung implements ITagesordnung {
         this.GremiumID = GremiumID;
     }
     public Gremien getGremium() {
-        // Durchlaufe die Liste aller Objekte von Gremien
-        for (Gremien obj : Gremien.objects) {
-            // Überprüfe, ob die ID des aktuellen Objekts der gespeicherten ID in Gremien entspricht
-            if (obj.getID() == this.GremiumID) {
-                return obj;
-            }
+        if (!Gremien.objects.containsKey(this.GremiumID)) {
+            throw new IllegalArgumentException("Kein Gremium mit ID " + this.GremiumID + " gefunden");
         }
-        throw new IllegalArgumentException("Kein Gremium mit ID " + this.GremiumID + " gefunden");
+        return Gremien.objects.get(this.GremiumID); // O(1)
     }
 
     public void addAntrag(Antrag antrag) {

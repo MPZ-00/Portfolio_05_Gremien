@@ -1,14 +1,12 @@
 import java.time.LocalDate;
 
 public interface IGremien {
-    public void setID(int ID);
     public void setName(String Name);
     public void setOffiziell(Boolean Offiziell);
     public void setInoffiziell(Boolean Inoffiziell);
     public void setBeginn(LocalDate Beginn);
     public void setEnde(LocalDate Ende);
 
-    public int getID();
     public String getName();
     public Boolean getOffiziell();
     public Boolean getInoffiziell();

@@ -1,13 +1,13 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class Gremien implements IGremien {
+public class Gremien extends AHauptklasse implements IGremien {
     private static int nextID = 1; // statischer Attributwert für die nächste ID
     private static Set<Integer> usedIDs = new HashSet<>(); // statisches Set für verwendete IDs
-    public static List<Gremien> objects = new ArrayList<Gremien>(); // Liste aller Objekte von Gremien
+    // public static List<Gremien> objects = new ArrayList<Gremien>(); // Liste aller Objekte von Gremien, O(N)
+    public static HashMap<Integer, Gremien> objects = new HashMap<>(); // Liste aller Objekte von Gremien, O(1)
     private static Gremien aktuellesGremium;
 
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen
@@ -25,7 +25,7 @@ public class Gremien implements IGremien {
         setInoffiziell(Inoffiziell);
         setBeginn(Beginn);
         setEnde(Ende);
-        objects.add(this);
+        objects.put(getID(), this);
     }
     
     public static void setAktuellesGremium(Gremien gremium) {
@@ -33,17 +33,6 @@ public class Gremien implements IGremien {
     }
     public static Gremien getAktuellesGremium() {
         return aktuellesGremium;
-    }
-
-    public void setID(int ID) {
-        // Überprüfung, ob die angegebene ID bereits im Set für verwendete IDs vorhanden ist
-        if (usedIDs.contains(ID)) {
-            throw new IllegalArgumentException("ID(" + ID + ") ist bereits in verwendung");
-        }
-        
-        // Wert des ID-Attributs ändern und neue ID im Set für verwendete IDs speichern
-        usedIDs.add(this.ID);
-        this.ID = ID;
     }
 
     public void setName(String Name) {
