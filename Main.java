@@ -1,15 +1,16 @@
 import java.util.Scanner;
-import java.sql.Date;
+import java.util.concurrent.TimeUnit;
+import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
-    private static ArrayList<Gremien> Gremien = null;
+    private static String PATTERN = "dd-MM-YYYY HH:mm:ss";
     
     public static void main(String[] args) {
-        // Erstelle eine Liste aller Gremien
-        Gremien = new ArrayList<Gremien>();
-
         // Erstelle einen Scanner, um die Eingabe vom Benutzer zu lesen
         Scanner scanner = new Scanner(System.in);
         int auswahl;
@@ -48,14 +49,24 @@ public class Main {
 
     static void Gremium_und_Beginn_der_Sitzung() {
         Scanner scanner = new Scanner(System.in);
-        Gremien gremium = new Gremien();
         
         // Erstelle ein neues Gremium
         System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
-        gremium.setName(scanner.nextLine());
+        String gremiumName = scanner.nextLine();
 
-        System.out.println("Geben Sie den Beginn der Sitzung ein: ");
-        gremium.setBeginn(Date.valueOf(scanner.nextLine()));
+        Boolean gremiumOffiziell = ist_Offiziell(scanner);
+
+        System.out.println("Geben Sie den Beginn der Sitzung ein (dd-MM-YYYY HH:mm:ss): ");
+        Timestamp sitzungBeginn = getTimestamp(scanner);
+        // Date sitzungBeginn = Date.valueOf(scanner.nextLine());
+        // Sitzungen(Timestamp Beginn, Timestamp Ende, Date Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll)
+
+        Gremien gremium = new Gremien(gremiumName, gremiumOffiziell, !gremiumOffiziell, LocalDate.now(), LocalDate.now().plusYears(50));
+        Gremien.setAktuellesGremium(gremium);
+
+        // Timestamp sitzungEnde = Timestamp.valueOf((LocalDateTime)sitzungBeginn.toLocalDateTime().plus(Duration.ofHours(2)));
+        Timestamp sitzungEnde = new Timestamp(sitzungBeginn.getTime() + TimeUnit.HOURS.toMillis(2));
+        Sitzungen sitzung = new Sitzungen(sitzungBeginn, sitzungEnde, LocalDate.now(), true, "", "");
         
         // Füge Tagesordnungspunkte hinzu
         while (true) {
@@ -64,14 +75,49 @@ public class Main {
             
             if (top.equals("ende")) {break;}
             
-            gremium.addTOPitem(new Tagesordnungspunkte(top));
         }
         
-        Gremien.add(gremium);
         scanner.close();
     }
 
+    public static Timestamp getTimestamp(Scanner scanner) {
+        // Eingabeaufforderung ausgeben
+        System.out.println("Bitte geben Sie das Tiemstamp im Format dd-MM-YYYY HH:mm:ss ein: ");
+
+        // Nutzereingabe empfangen
+        String input = scanner.nextLine();
+
+        try {
+            // Konvertiere den Eingabe-String in ein LocalDateTime-Objekt
+            LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(PATTERN));
+
+            // Konvertiere das LocalDateTime-Objekt in ein Timestamp-Objekt
+            Timestamp timestamp = Timestamp.from(dateTime.toInstant(ZoneOffset.UTC));
+
+            return timestamp;
+        } catch (IllegalArgumentException e) {
+            // Fehlermeldung ausgeben und erneut nach Timestamp fragen
+            System.out.println("Ungültiges Datumsformat. Bitte versuchen Sie es erneut.");
+            return getTimestamp(scanner);
+        }
+    }
+
+    static boolean ist_Offiziell(Scanner scanner) {
+        String input;
+        do {
+            System.out.println("Ist das Gremium offiziell (ja/nein): ");
+            input = scanner.nextLine();
+        } while (!input.equalsIgnoreCase("ja") && !input.equalsIgnoreCase("nein"));
+        
+        if (input.equalsIgnoreCase("ja")) {
+            // die Aussage ist wahr
+            return true;
+        }
+        return false;
+    }
+
     static void Tagesordnungspunkte_anzeigen() {
+        /*
         Gremien aktuellesGremium = Gremien.get(Gremien.size() - 1);
         ArrayList<Tagesordnungspunkte> TOPs = aktuellesGremium.getTOPitems();
 
@@ -89,7 +135,7 @@ public class Main {
                 System.out.println("Ergebnis: " + antrag.getErgebnis());
                 System.out.println("Angenommen: " + (antrag.isAngenommen() ? "ja" : "nein"));
             }
-        }
+        }*/
     }
 
     static void Tagesordnungspunkt_oder_Antrag() {

@@ -1,5 +1,5 @@
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,13 +11,13 @@ public class Sitzungen implements ISitzungen {
     private int ID;
     private Timestamp Beginn;
     private Timestamp Ende;
-    private Date Einladung_am;
+    private LocalDate Einladung_am;
     private boolean Oeffentlich;
     private String Ort;
     private String Protokoll;
 
     // Konstruktor-Methode, die die Attriubute initialisiert
-    public Sitzungen(Timestamp Beginn, Timestamp Ende, Date Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
+    public Sitzungen(Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
         setID(nextID++);
         setBeginn(Beginn);
         setEnde(Ende);
@@ -25,9 +25,6 @@ public class Sitzungen implements ISitzungen {
         setOeffentlich(Oeffentlich);
         setOrt(Ort);
         setProtokoll(Protokoll);
-        
-        // ID im Set für verwendete IDs speichern
-        usedIDs.add(this.ID);
     }
 
     public int getID() {
@@ -39,7 +36,7 @@ public class Sitzungen implements ISitzungen {
     public Timestamp getEnde() {
         return this.Ende;
     }
-    public Date getEinladung_am() {
+    public LocalDate getEinladung_am() {
         return this.Einladung_am;
     }
     public Boolean getOeffentlich() {
@@ -68,7 +65,7 @@ public class Sitzungen implements ISitzungen {
     public void setEnde(Timestamp Ende) {
         this.Ende = Ende;
     }
-    public void setEinladung_am(Date Einladung_am) {
+    public void setEinladung_am(LocalDate Einladung_am) {
         this.Einladung_am = Einladung_am;
     }
     public void setOeffentlich(Boolean Oeffentlich) {

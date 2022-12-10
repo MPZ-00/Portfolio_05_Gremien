@@ -1,4 +1,4 @@
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -8,16 +8,17 @@ public class Gremien implements IGremien {
     private static int nextID = 1; // statischer Attributwert für die nächste ID
     private static Set<Integer> usedIDs = new HashSet<>(); // statisches Set für verwendete IDs
     public static List<Gremien> objects = new ArrayList<Gremien>(); // Liste aller Objekte von Gremien
-    
+    private static Gremien aktuellesGremium;
+
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen
     private int ID;
     private String Name;
     private Boolean Offiziell;
     private Boolean Inoffiziell;
-    private Date Beginn;
-    private Date Ende;
+    private LocalDate Beginn;
+    private LocalDate Ende;
 
-    public Gremien(String Name, String offiziell, String inoffiziell, Date Beginn, Date Ende) {
+    public Gremien(String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
         setID(nextID++);
         setName(Name);
         setOffiziell(Offiziell);
@@ -27,6 +28,13 @@ public class Gremien implements IGremien {
         objects.add(this);
     }
     
+    public static void setAktuellesGremium(Gremien gremium) {
+        aktuellesGremium = gremium;
+    }
+    public static Gremien getAktuellesGremium() {
+        return aktuellesGremium;
+    }
+
     public void setID(int ID) {
         // Überprüfung, ob die angegebene ID bereits im Set für verwendete IDs vorhanden ist
         if (usedIDs.contains(ID)) {
@@ -47,10 +55,10 @@ public class Gremien implements IGremien {
     public void setInoffiziell(Boolean Inoffiziell) {
         this.Inoffiziell = Inoffiziell;
     }
-    public void setBeginn(Date Beginn) {
+    public void setBeginn(LocalDate Beginn) {
         this.Beginn = Beginn;
     }
-    public void setEnde(Date Ende) {
+    public void setEnde(LocalDate Ende) {
         this.Ende = Ende;
     }
 
@@ -66,10 +74,10 @@ public class Gremien implements IGremien {
     public Boolean getInoffiziell() {
         return this.Inoffiziell;
     }
-    public Date getBeginn() {
+    public LocalDate getBeginn() {
         return this.Beginn;
     }
-    public Date getEnde() {
+    public LocalDate getEnde() {
         return this.Ende;
     }
 }
