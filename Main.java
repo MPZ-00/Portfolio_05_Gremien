@@ -20,6 +20,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int auswahl;
         boolean beenden = false;
+        int AUSWAHL_MAX = 7;
 
         try {
             // Schleife, die solange läuft, bis der Benutzer das Programm beendet
@@ -30,10 +31,11 @@ public class Main {
                 System.out.println("4. Protokoll eintragen");
                 System.out.println("5. Ende der Sitzung eintragen");
                 System.out.println("6. Programm beenden");
+                System.out.println("7. Verbindung selber einrichten");
                 System.out.println("Auswahl: ");
 
                 while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > 6) {
-                    System.out.println("Bitte gültige Auswahl eingeben (1-6): ");
+                    System.out.println("Bitte gültige Auswahl eingeben (1-" + AUSWAHL_MAX + "): ");
                     scanner.nextLine(); // Leere den Eingabepuffer
                 }
 
@@ -178,4 +180,23 @@ public class Main {
     static void Protokoll_eintragen() {}
     
     static void Ende_Sitzung_eintragen() {}
+
+    static void Verbindung_selber_einrichten() {
+        Scanner input = new Scanner(System.in);
+
+        // Eingabeaufforderungen für die Verbindungsparameter
+        System.out.print("URL der Datenbank: ");
+        String url = input.nextLine();
+        System.out.print("Name der Datenbank: ");
+        String db_name = input.nextLine();
+        System.out.print("Benutzername: ");
+        String user = input.nextLine();
+        System.out.print("Passwort: ");
+        String pass = input.nextLine();
+        System.out.println("Port: ");
+        String port = input.nextLine();
+
+        ConnectionManager.getInstance().connect(url, db_name, user, pass, port);
+        input.close();
+    }
 }
