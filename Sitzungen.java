@@ -3,13 +3,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Sitzungen implements ISitzungen {
-    private static int nextID = 1; // statischer Attributwert für die nächste ID
-    private static Set<Integer> usedIDs = new HashSet<>(); // statisches Set für verwendete IDs
+public class Sitzungen extends AHauptklasse implements ISitzungen {
     private static Sitzungen aktiveSitzung;
 
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen
-    private int ID;
     private Timestamp Beginn;
     private Timestamp Ende;
     private LocalDate Einladung_am;
@@ -18,8 +15,8 @@ public class Sitzungen implements ISitzungen {
     private String Protokoll;
 
     // Konstruktor-Methode, die die Attriubute initialisiert
-    public Sitzungen(Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
-        setID(nextID++);
+    public Sitzungen(Integer ID, Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
+        setID(ID);
         setBeginn(Beginn);
         setEnde(Ende);
         setEinladung_am(Einladung_am);
@@ -35,9 +32,6 @@ public class Sitzungen implements ISitzungen {
         return aktiveSitzung;
     }
 
-    public int getID() {
-        return this.ID;
-    }
     public Timestamp getBeginn() {
         return this.Beginn;
     }
@@ -57,16 +51,6 @@ public class Sitzungen implements ISitzungen {
         return this.Protokoll;
     }
 
-    public void setID(int ID) {
-        // Überprüfung, ob die angegebene ID bereits im Set für verwendete IDs vorhanden ist
-        if (usedIDs.contains(ID)) {
-            throw new IllegalArgumentException("ID(" + ID + ") ist bereits in verwendung");
-        }
-        
-        // Wert des ID-Attributs ändern und neue ID im Set für verwendete IDs speichern
-        usedIDs.add(this.ID);
-        this.ID = ID;
-    }
     public void setBeginn(Timestamp Beginn) {
         this.Beginn = Beginn;
     }

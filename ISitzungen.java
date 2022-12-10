@@ -2,7 +2,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public interface ISitzungen {
-    public void setID(int ID);
     public void setBeginn(Timestamp Beginn);
     public void setEnde(Timestamp Ende);
     public void setEinladung_am(LocalDate Einladung_am);
@@ -10,7 +9,6 @@ public interface ISitzungen {
     public void setOrt(String Ort);
     public void setProtokoll(String Protokoll);
 
-    public int getID();
     public Timestamp getBeginn();
     public Timestamp getEnde();
     public LocalDate getEinladung_am();
