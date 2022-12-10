@@ -1,18 +1,21 @@
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Gremien implements IGremien {
     private static int nextID = 1; // statischer Attributwert für die nächste ID
     private static Set<Integer> usedIDs = new HashSet<>(); // statisches Set für verwendete IDs
+    public static List<Gremien> objects = new ArrayList<Gremien>(); // Liste aller Objekte von Gremien
+    
+    // Attribute, die den Spalten der Tabelle Sitzungen entprechen
     private int ID;
     private String Name;
     private Boolean Offiziell;
     private Boolean Inoffiziell;
     private Date Beginn;
     private Date Ende;
-    private ArrayList<Tagesordnungspunkte> TOPitem;
 
     public Gremien(String Name, String offiziell, String inoffiziell, Date Beginn, Date Ende) {
         setID(nextID++);
@@ -21,20 +24,20 @@ public class Gremien implements IGremien {
         setInoffiziell(Inoffiziell);
         setBeginn(Beginn);
         setEnde(Ende);
-        this.TOPitem = new ArrayList<Tagesordnungspunkte>();
-
-        // ID im Set für verwendete IDs speichern
-        usedIDs.add(this.ID);
+        objects.add(this);
     }
-
-    public Gremien() {
-        this.TOPitem = new ArrayList<Tagesordnungspunkte>();
-    };
-
     
     public void setID(int ID) {
+        // Überprüfung, ob die angegebene ID bereits im Set für verwendete IDs vorhanden ist
+        if (usedIDs.contains(ID)) {
+            throw new IllegalArgumentException("ID(" + ID + ") ist bereits in verwendung");
+        }
+        
+        // Wert des ID-Attributs ändern und neue ID im Set für verwendete IDs speichern
+        usedIDs.add(this.ID);
         this.ID = ID;
     }
+
     public void setName(String Name) {
         this.Name = Name;
     }
@@ -68,12 +71,5 @@ public class Gremien implements IGremien {
     }
     public Date getEnde() {
         return this.Ende;
-    }
-
-    public void addTOPitem(Tagesordnungspunkte item) {
-        this.TOPitem.add(item);
-    }
-    public ArrayList<Tagesordnungspunkte> getTOPitems() {
-        return this.TOPitem;
     }
 }

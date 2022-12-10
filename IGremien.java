@@ -15,7 +15,4 @@ public interface IGremien {
     public Boolean getInoffiziell();
     public Date getBeginn();
     public Date getEnde();
-
-    public void addTOPitem(Tagesordnungspunkte item);
-    public ArrayList<Tagesordnungspunkte> getTOPitems();
 }

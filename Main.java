@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Main {
@@ -53,7 +55,7 @@ public class Main {
         gremium.setName(scanner.nextLine());
 
         System.out.println("Geben Sie den Beginn der Sitzung ein: ");
-        gremium.setStartTime(scanner.nextLine());
+        gremium.setBeginn(Date.valueOf(scanner.nextLine()));
         
         // Füge Tagesordnungspunkte hinzu
         while (true) {
@@ -90,7 +92,9 @@ public class Main {
         }
     }
 
-    static void Tagesordnungspunkt_oder_Antrag() {}
+    static void Tagesordnungspunkt_oder_Antrag() {
+
+    }
 
     static void Protokoll_eintragen() {}
     
