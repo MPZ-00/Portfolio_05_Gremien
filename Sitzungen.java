@@ -1,7 +1,5 @@
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Sitzungen extends AHauptklasse implements ISitzungen {
     private static Sitzungen aktiveSitzung;

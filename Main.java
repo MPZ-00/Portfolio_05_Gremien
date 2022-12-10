@@ -39,7 +39,7 @@ public class Main {
 
                 switch (auswahl) {
                     case 1: Gremium_und_Beginn_der_Sitzung(); break;
-                    case 2: Tagesordnung_anzeigen(); break;
+                    case 2: Tagesordnung_anzeigen(); break; // Alle Tagesordnungspunkte einer Sitzung werden in der richtigen Reihenfolge angezeigt. Zu jedem Tagesordnungspunkt werden die zugehörigen Anträge angezeigt.
                     case 3: Tagesordnungspunkt_oder_Antrag(); break;
                     case 4: Protokoll_eintragen(); break;
                     case 5: Ende_Sitzung_eintragen(); break;
@@ -71,7 +71,7 @@ public class Main {
 
         // Timestamp sitzungEnde = Timestamp.valueOf((LocalDateTime)sitzungBeginn.toLocalDateTime().plus(Duration.ofHours(2)));
         Timestamp sitzungEnde = new Timestamp(sitzungBeginn.getTime() + TimeUnit.HOURS.toMillis(2));
-        Sitzungen sitzung = new Sitzungen(sitzungBeginn, sitzungEnde, LocalDate.now(), true, "", "");
+        Sitzungen sitzung = Factory.getInstance().createSitzungen(sitzungBeginn, sitzungEnde, LocalDate.now(), true, "", "");
         Sitzungen.setAktiveSitzung(sitzung);
 
         // Füge Tagesordnung hinzu
@@ -141,29 +141,34 @@ public class Main {
             while (rs2.next()) {
                 antraege.add(new Antrag(rs2.getInt("ID"), rs2.getString("Titel"), rs2.getString("Text"), IAntrag.Ergebnis.valueOf(rs2.getString("Ergebnis")), Boolean.parseBoolean(rs2.getString("Angenommen"))));
             }
+
+            Antraege_fuer_TOP_anzeigen();
         } catch (SQLException e) {
             e.getStackTrace();
         }
-        // System.println(antraege); // TODO: fix this
-        /*
-        Gremien aktuellesGremium = Gremien.get(Gremien.size() - 1);
-        ArrayList<Tagesordnung> TOPs = aktuellesGremium.getTOPitems();
+    }
 
-        // Schleife durch alle TOPs
-        for (Tagesordnung top : TOPs) {
-            // Ausgabe der Namen und Anträge jedes Tagesordnungs
-            System.out.println("Name: " + top.getName());
-            System.out.println("Anträge: ");
+    private static void Antraege_fuer_TOP_anzeigen() throws SQLException {
+        ResultSet rs = getRS("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
+        while (rs.next()) {
+            System.out.println("Antrag ID: " + rs.getInt("Antrag.ID"));
+            System.out.println("Antrag Titel: " + rs.getString("Antrag.Titel"));
+            System.out.println("Antrag Text: " + rs.getString("Antrag.Text"));
+            System.out.println("Antrag Ergebnis: " + rs.getString("Antrag.Ergebnis"));
+            System.out.println("Antrag Angenommen: " + Boolean.valueOf(rs.getString("Antrag.Angenommen")));
+        }
+    }
 
-            // Schleife durch alle Anträge des Tagesordnungs
-            for (Antrag antrag : top.getAntraege()) {
-                // Ausgabe des Titels, Textes, Ergebnisses und Angenommenen-Status des Antrags
-                System.out.println("Titel: " + antrag.getTitel());
-                System.out.println("Text: " + antrag.getText());
-                System.out.println("Ergebnis: " + antrag.getErgebnis());
-                System.out.println("Angenommen: " + (antrag.isAngenommen() ? "ja" : "nein"));
-            }
-        }*/
+    private static ResultSet getRS(String sql) {
+        try {
+            Connection connection = ConnectionManager.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            return rs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     static void Tagesordnungspunkt_oder_Antrag() {

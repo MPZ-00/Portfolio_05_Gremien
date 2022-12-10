@@ -1,3 +1,4 @@
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +27,9 @@ public class Factory {
     public Aufgabengebiete createAufgabengebiete(int Ag_ID, String Aufgabengebiet) {
         return new Aufgabengebiete(getAufgabengebieteID(), Ag_ID, Aufgabengebiet);
     }
+    public Sitzungen createSitzungen(Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
+        return new Sitzungen(getSitzungenID(), Beginn, Ende, Einladung_am, Oeffentlich, Ort, Protokoll);
+    }
     
     private Integer getGremienID() {
         return objects.get(Gremien.class.getName()).size();
@@ -38,5 +42,8 @@ public class Factory {
     }
     private Integer getAufgabengebieteID() {
         return objects.get(Aufgabengebiete.class.getName()).size();
+    }
+    private Integer getSitzungenID() {
+        return objects.get(Sitzungen.class.getName()).size();
     }
 }
