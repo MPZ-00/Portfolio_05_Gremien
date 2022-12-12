@@ -3,7 +3,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResultSetParser implements IDatabaseObject {
+public class ResultSetParser implements IResultSetParser {
     public List<Aufgabengebiete> getAufgabengebieteFromResultSet(ResultSet rs) throws SQLException {
         List<Aufgabengebiete> aufgabengebiete = new ArrayList<Aufgabengebiete>();
 
