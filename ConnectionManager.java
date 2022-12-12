@@ -7,14 +7,14 @@ import java.sql.Statement;
 public class ConnectionManager {
     // JDBC-Treiber- und Datenbank-URL
     private static final String JDBC_DRIVER = "oracle.jdbc.pool.OracleDataSource";
-    private static final String DB_URL = "fbe-neptun2.rwu.de";
+    private static final String DB_URL = "localhost"; // fbe-neptun2.rwu.de
     private static final String PREFIX = "jdbc:oracle:thin:@";
 
     // Datenbank-Zugangsdaten
     private static final String USER = "DABS_42";
     private static final String PASS = "DABS_42";
     private static final String DB_NAME = "DABS_42";
-    private static final String PORT = "1521";
+    private static final String PORT = "10111"; // 1521
     private static final String SID = "namib";
 
     private static ConnectionManager instance = null;
@@ -39,7 +39,7 @@ public class ConnectionManager {
     public Connection getConnection() {
         if (connection == null) {
             try {
-                String new_DB_URL = PREFIX + DB_URL + ":" + PORT + "/" + DB_NAME;
+                String new_DB_URL = PREFIX + DB_URL + ":" + PORT + ":" + SID + "/" + DB_NAME;
                 connection = DriverManager.getConnection(new_DB_URL, USER, PASS);
             } catch (SQLException e) {
                 System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank");
