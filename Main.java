@@ -22,7 +22,8 @@ public class Main {
         "Tagesordnungspunkt oder Antrag auswählen",
         "Protokoll eintragen",
         "Ende der Sitzung eintragen",
-        "Programm beenden"
+        "Programm beenden",
+        "Verbindung mit Localhost"
     );
     
     public static void main(String[] args) {
@@ -52,6 +53,7 @@ public class Main {
                     case "Protokoll eintragen": Protokoll_eintragen(); break;
                     case "Ende der Sitzung eintragen": Ende_Sitzung_eintragen(); break;
                     case "Programm beenden": beenden = true; break;
+                    case "Verbindung mit Localhost": Verbindung_mit_Localhost(); break;
                 }
             }
         } finally {
@@ -217,6 +219,13 @@ public class Main {
         input.close();
     }
 
+    static void Verbindung_mit_Localhost() {
+        try {
+            ConnectionManager.getInstance().directConnnect("jdbc:oracle:thin:@localhost:10111/namib", "DABS_42", "DABS_42");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     private static String get_Value_Or_Null(String value) {
         if (value.equalsIgnoreCase("null")) {
             return null;
