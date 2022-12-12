@@ -15,7 +15,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
-public class Main {
+public class Main extends Aushilfe {
     private static final String PATTERN = "dd-MM-YYYY HH:mm:ss";
     private static final List<String> options = Arrays.asList(
         "Verbindung selber einrichten",
@@ -70,6 +70,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         // TODO: verfügbare Gremien anzeigen, dann entscheiden lassen, ob vorhandenes oder neues verwendet werden soll
+        Aushilfe.getInstance().Gremium_Wahl();
+        // 2. nach Name absteigend sortieren
+        // 3. Auswahl erfolgt durch Eingabe des Namens
+        // 4. aktuelles Gremium setzen
 
         // TODO: vorhandene oder neue Sitzung auswählen
         
@@ -104,7 +108,7 @@ public class Main {
         scanner.close();
     }
 
-    public static Timestamp getTimestamp(Scanner scanner) {
+    private static Timestamp getTimestamp(Scanner scanner) {
         // Eingabeaufforderung ausgeben
         System.out.println("Bitte geben Sie das Timestamp im Format dd-MM-YYYY HH:mm:ss ein: ");
 
@@ -124,7 +128,7 @@ public class Main {
         }
     }
 
-    static boolean ist_Offiziell(Scanner scanner) {
+    private static boolean ist_Offiziell(Scanner scanner) {
         String input;
         do {
             System.out.println("Ist das Gremium offiziell (ja/nein): ");
@@ -134,7 +138,7 @@ public class Main {
         return (input.equalsIgnoreCase("ja"));
     }
 
-    static void Tagesordnung_anzeigen() {
+    private static void Tagesordnung_anzeigen() {
         try {
             // Alle Tagesordnung einer Sitzung sortiert nach Titel ausgeben
             Connection connection = ConnectionManager.getInstance().getConnection();
@@ -189,15 +193,15 @@ public class Main {
         }
     }
 
-    static void Tagesordnungspunkt_oder_Antrag() {
+    private static void Tagesordnungspunkt_oder_Antrag() {
 
     }
 
-    static void Protokoll_eintragen() {}
+    private static void Protokoll_eintragen() {}
     
-    static void Ende_Sitzung_eintragen() {}
+    private static void Ende_Sitzung_eintragen() {}
 
-    static void Verbindung_selber_einrichten() {
+    private static void Verbindung_selber_einrichten() {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Gib 'null' ein, wenn ein Standardwert verwendet werden soll.");
@@ -227,7 +231,7 @@ public class Main {
         input.close();
     }
 
-    static void Verbindung_mit_Localhost() {
+    private static void Verbindung_mit_Localhost() {
         try {
             ConnectionManager.getInstance().directConnnect("jdbc:oracle:thin:@localhost:10111:namib", "DABS_42", "DABS_42");
         } catch (SQLException e) {
