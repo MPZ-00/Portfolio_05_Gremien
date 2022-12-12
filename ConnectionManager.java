@@ -39,7 +39,7 @@ public class ConnectionManager {
     public Connection getConnection() {
         if (connection == null) {
             try {
-                String new_DB_URL = PREFIX + DB_URL + ":" + PORT + ":" + SID + "/" + DB_NAME;
+                String new_DB_URL = PREFIX + DB_URL + ":" + PORT + ":" + SID;
                 connection = DriverManager.getConnection(new_DB_URL, USER, PASS);
             } catch (SQLException e) {
                 System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank");
@@ -62,10 +62,10 @@ public class ConnectionManager {
             url += ":" + getValueOrDefault(port, PORT);
 
             // Füge die SID hinzu, falls diese übergeben wurde
-            // url += ":" + getValueOrDefault(sid, SID);
+            url += ":" + getValueOrDefault(sid, SID);
 
             // Füge den Namen der Datenbank in die URL ein
-            url += "/" + getValueOrDefault(db_name, DB_NAME);
+            // url += "/" + getValueOrDefault(db_name, DB_NAME); // Lass ich weg, führt zum Fehler: Invalid Port
 
             user = getValueOrDefault(user, USER);
             pass = getValueOrDefault(pass, PASS);

@@ -22,8 +22,8 @@ public class Main {
         "Tagesordnungspunkt oder Antrag auswählen",
         "Protokoll eintragen",
         "Ende der Sitzung eintragen",
-        "Programm beenden",
-        "Verbindung mit Localhost"
+        "Verbindung mit Localhost",
+        "Programm beenden"
     );
     
     public static void main(String[] args) {
@@ -64,6 +64,10 @@ public class Main {
 
     static void Gremium_und_Beginn_der_Sitzung() {
         Scanner scanner = new Scanner(System.in);
+
+        // TODO: verfügbare Gremien anzeigen, dann entscheiden lassen, ob vorhandenes oder neues verwendet werden soll
+
+        // TODO: vorhandene oder neue Sitzung auswählen
         
         // Erstelle ein neues Gremium
         System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
@@ -221,7 +225,7 @@ public class Main {
 
     static void Verbindung_mit_Localhost() {
         try {
-            ConnectionManager.getInstance().directConnnect("jdbc:oracle:thin:@localhost:10111/namib", "DABS_42", "DABS_42");
+            ConnectionManager.getInstance().directConnnect("jdbc:oracle:thin:@localhost:10111:namib", "DABS_42", "DABS_42");
         } catch (SQLException e) {
             e.printStackTrace();
         }
