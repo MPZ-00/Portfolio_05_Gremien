@@ -2,11 +2,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -67,10 +69,14 @@ public class Main extends Aushilfe {
         Scanner scanner = new Scanner(System.in);
 
         Aushilfe.getInstance().Gremium_Wahl();
-
         Aushilfe.getInstance().Sitzung_Wahl();
         
-        /*
+        scanner.close();
+    }
+
+    private static void X_nacher() {
+        Scanner scanner = new Scanner(System.in);
+        
         // Erstelle ein neues Gremium
         System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
         String gremiumName = scanner.nextLine();
@@ -97,9 +103,7 @@ public class Main extends Aushilfe {
             
             if (top.equals("ende")) {break;}
             
-        } */
-        
-        scanner.close();
+        }
     }
 
     private static Timestamp getTimestamp(Scanner scanner) {
