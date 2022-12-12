@@ -24,6 +24,10 @@ public class Factory {
         objects.get(className).add(obj);
     }
 
+    public HashSet<AHauptklasse> getObject(String className) {
+        return objects.get(className);
+    }
+
     public Gremien createGremien(String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
         Integer id = getGremienID();
         Gremien new_Gremien = new Gremien(id, Name, offiziell, inoffiziell, Beginn, Ende);
