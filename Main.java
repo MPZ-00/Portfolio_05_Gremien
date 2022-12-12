@@ -30,6 +30,7 @@ public class Main extends Aushilfe {
         int auswahl;
         boolean beenden = false;
 
+        Aushilfe.getInstance().interne_DB_testen();
         Aushilfe.getInstance().interne_DB_initialisieren();
 
         try {

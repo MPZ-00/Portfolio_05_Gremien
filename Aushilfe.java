@@ -87,6 +87,34 @@ public class Aushilfe implements IAushilfe {
         }
     }
 
+    public void interne_DB_testen() {
+        try {
+            System.out.println(ConnectionManager.getInstance().getConnection());
+
+            // Verbindung zur Datenbank herstellen
+            Connection conn = ConnectionManager.getInstance().getConnection();
+
+            // SQL-Abfrage, um alle Tabellen anzuzeigen
+            String sql = "select * from gehoert_zu";
+
+            // Erstelle ein Statement-Objekt, um die Abfrage auszuführen
+            Statement stmt = conn.createStatement();
+
+            // Führe die Abfrage aus und speichere das Ergebnis in einem ResultSet
+            ResultSet rs = stmt.executeQuery(sql);
+
+            // Iteriere durch das ResultSet und gebe die Namen der Tabellen auf der Konsole aus
+            while (rs.next()) {
+                System.out.println(rs.getString("table_name"));
+            }
+
+            // Schließe die Verbindung zur Datenbank
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void interne_DB_initialisieren() {
         try {
             init_Gremien_from_ResultSet();
@@ -95,7 +123,7 @@ public class Aushilfe implements IAushilfe {
             init_Sitzungen_from_ResultSet();
             init_Tagesordnung_from_ResultSet();
         } catch (NullPointerException e) {
-            System.out.println("Tabelle oder View nicht vorhanden");
+            System.err.println("Tabelle oder View nicht vorhanden");
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
