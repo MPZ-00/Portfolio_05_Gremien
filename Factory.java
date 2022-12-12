@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Factory {
-    private HashMap<String, HashSet<Integer>> objects = new HashMap<>();
+    private HashMap<String, HashSet<AHauptklasse>> objects = new HashMap<>();
     private static Factory instance;
 
     private Factory() {}
@@ -16,42 +16,42 @@ public class Factory {
         return instance;
     }
 
-    public void addID(String className, Integer id) {
+    public void addObject(String className, AHauptklasse obj) {
         if (!objects.containsKey(className)) {
-            objects.put(className, new HashSet<Integer>());
+            objects.put(className, new HashSet<AHauptklasse>());
         }
 
-        objects.get(className).add(id);
+        objects.get(className).add(obj);
     }
 
     public Gremien createGremien(String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
         Integer id = getGremienID();
         Gremien new_Gremien = new Gremien(id, Name, offiziell, inoffiziell, Beginn, Ende);
-        addID(Gremien.class.toString(), id);
+        addObject(Gremien.class.toString(), new_Gremien);
         return new_Gremien;
     }
     public Antrag createAngtrag(String Titel, String Text, IAntrag.Ergebnis Ergebnis, boolean Angenommen) {
         Integer id = getAntragID();
-        addID(Antrag.class.toString(), id);
         Antrag new_Antrag = new Antrag(id, Titel, Text, Ergebnis, Angenommen);
+        addObject(Antrag.class.toString(), new_Antrag);
         return new_Antrag;
     }
     public Tagesordnung createTagesordnung(String Titel, String Kurzbeschreibung, String Protokolltext) {
         Integer id = getTagesordnungID();
-        addID(Tagesordnung.class.toString(), id);
         Tagesordnung new_Tagesordnung = new Tagesordnung(id, Titel, Kurzbeschreibung, Protokolltext);
+        addObject(Tagesordnung.class.toString(), new_Tagesordnung);
         return new_Tagesordnung;
     }
     public Aufgabengebiete createAufgabengebiete(int Ag_ID, String Aufgabengebiet) {
         Integer id = getAufgabengebieteID();
-        addID(Aufgabengebiete.class.toString(), id);
         Aufgabengebiete new_Aufgabengebiete = new Aufgabengebiete(id, Ag_ID, Aufgabengebiet);
+        addObject(Aufgabengebiete.class.toString(), new_Aufgabengebiete);
         return new_Aufgabengebiete;
     }
     public Sitzungen createSitzungen(Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
         Integer id = getSitzungenID();
-        addID(Sitzungen.class.toString(), id);
-        Sitzungen new_Sitzungen = new Sitzungen(getSitzungenID(), Beginn, Ende, Einladung_am, Oeffentlich, Ort, Protokoll);
+        Sitzungen new_Sitzungen = new Sitzungen(id, Beginn, Ende, Einladung_am, Oeffentlich, Ort, Protokoll);
+        addObject(Sitzungen.class.toString(), new_Sitzungen);
         return new_Sitzungen;
     }
     

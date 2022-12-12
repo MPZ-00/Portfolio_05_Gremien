@@ -261,7 +261,7 @@ public class Main extends Aushilfe {
                     LocalDate.ofInstant(ende.toInstant(), ZoneId.systemDefault())
                 );
 
-                Factory.getInstance().addID(Gremien.class.toString(), g.getID());
+                Factory.getInstance().addObject(Gremien.class.toString(), g);
             }
 
             ResultSet rs_Antrag = getRS("SELECT * FROM Antrag");
@@ -274,7 +274,7 @@ public class Main extends Aushilfe {
                     Boolean.valueOf(rs_Antrag.getString("Angenommen"))
                 );
 
-                Factory.getInstance().addID(Antrag.class.toString(), a.getID());
+                Factory.getInstance().addObject(Antrag.class.toString(), a);
             }
 
             ResultSet rs_Sitzungen = getRS("SELECT * FROM Sitzungen");
@@ -290,7 +290,7 @@ public class Main extends Aushilfe {
                     rs_Sitzungen.getString("Protokoll")
                 );
 
-                Factory.getInstance().addID(Sitzungen.class.toString(), s.getID());
+                Factory.getInstance().addObject(Sitzungen.class.toString(), s);
             }
 
             ResultSet rs_Tagesordnung = getRS("SELECT * FROM Tagesordnung");
@@ -302,7 +302,7 @@ public class Main extends Aushilfe {
                     rs_Tagesordnung.getString("Protokolltext")
                 );
 
-                Factory.getInstance().addID(Tagesordnung.class.toString(), t.getID());
+                Factory.getInstance().addObject(Tagesordnung.class.toString(), t);
             }
 
             ResultSet rs_Aufgabengebiete = getRS("SELECT * FROM Aufgabengebiete");
@@ -313,7 +313,7 @@ public class Main extends Aushilfe {
                     rs_Aufgabengebiete.getString("Aufgabengebiet")
                 );
 
-                Factory.getInstance().addID(Aufgabengebiete.class.toString(), au.getID());
+                Factory.getInstance().addObject(Aufgabengebiete.class.toString(), au);
             }
         } catch (Exception e) {
             e.printStackTrace();
