@@ -14,8 +14,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class Main {
-    private static String PATTERN = "dd-MM-YYYY HH:mm:ss";
-    private static List<String> options = Arrays.asList(
+    private static final String PATTERN = "dd-MM-YYYY HH:mm:ss";
+    private static final List<String> options = Arrays.asList(
         "Verbindung selber einrichten",
         "Gremium und Beginn der Sitzung auswählen",
         "Tagesordnung anzeigen",
@@ -96,7 +96,7 @@ public class Main {
 
     public static Timestamp getTimestamp(Scanner scanner) {
         // Eingabeaufforderung ausgeben
-        System.out.println("Bitte geben Sie das Tiemstamp im Format dd-MM-YYYY HH:mm:ss ein: ");
+        System.out.println("Bitte geben Sie das Timestamp im Format dd-MM-YYYY HH:mm:ss ein: ");
 
         // Nutzereingabe empfangen
         String input = scanner.nextLine();
@@ -106,9 +106,7 @@ public class Main {
             LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(PATTERN));
 
             // Konvertiere das LocalDateTime-Objekt in ein Timestamp-Objekt
-            Timestamp timestamp = Timestamp.from(dateTime.toInstant(ZoneOffset.UTC));
-
-            return timestamp;
+            return Timestamp.from(dateTime.toInstant(ZoneOffset.UTC));
         } catch (IllegalArgumentException e) {
             // Fehlermeldung ausgeben und erneut nach Timestamp fragen
             System.out.println("Ungültiges Datumsformat. Bitte versuchen Sie es erneut.");
@@ -123,10 +121,7 @@ public class Main {
             input = scanner.nextLine();
         } while (!input.equalsIgnoreCase("ja") && !input.equalsIgnoreCase("nein"));
         
-        if (input.equalsIgnoreCase("ja")) {
-            return true;
-        }
-        return false;
+        return (input.equalsIgnoreCase("ja"));
     }
 
     static void Tagesordnung_anzeigen() {
@@ -156,14 +151,20 @@ public class Main {
         }
     }
 
-    private static void Antraege_fuer_TOP_anzeigen() throws SQLException {
-        ResultSet rs = getRS("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
-        while (rs.next()) {
-            System.out.println("Antrag ID: " + rs.getInt("Antrag.ID"));
-            System.out.println("Antrag Titel: " + rs.getString("Antrag.Titel"));
-            System.out.println("Antrag Text: " + rs.getString("Antrag.Text"));
-            System.out.println("Antrag Ergebnis: " + rs.getString("Antrag.Ergebnis"));
-            System.out.println("Antrag Angenommen: " + Boolean.valueOf(rs.getString("Antrag.Angenommen")));
+    private static void Antraege_fuer_TOP_anzeigen() {
+        try {
+            ResultSet rs = getRS("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
+            while (rs.next()) {
+                System.out.println("Antrag ID: " + rs.getInt("Antrag.ID"));
+                System.out.println("Antrag Titel: " + rs.getString("Antrag.Titel"));
+                System.out.println("Antrag Text: " + rs.getString("Antrag.Text"));
+                System.out.println("Antrag Ergebnis: " + rs.getString("Antrag.Ergebnis"));
+                System.out.println("Antrag Angenommen: " + Boolean.valueOf(rs.getString("Antrag.Angenommen")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
 
@@ -171,8 +172,7 @@ public class Main {
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(sql);
-            return rs;
+            return statement.executeQuery(sql);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

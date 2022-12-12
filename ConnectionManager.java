@@ -52,21 +52,22 @@ public class ConnectionManager {
 
     public void connect(String url, String db_name, String user, String pass, String port, String sid) {
         try {
+            url = getValueOrDefault(url, DB_URL);
             // Formatiere die URL, falls sie nicht mit "jdbc:oracle:thin:@" beginnt
             if (!url.startsWith(PREFIX)) {
                 url = PREFIX + url;
             }
 
             // Füge den Port hinzu, falls er übergeben wurde
-            url += ":" + (port != null && !port.isEmpty() ? port : PORT);
+            url += ":" + getValueOrDefault(port, PORT);
 
             // Füge die SID hinzu, falls diese übergeben wurde
-            url += ":" + (sid != null && !sid.isEmpty() ? sid : SID);
+            url += ":" + getValueOrDefault(sid, SID);
 
             // Füge den Namen der Datenbank in die URL ein
-            url += "/" + db_name;
+            url += "/" + getValueOrDefault(db_name, DB_NAME);
 
-            connection = DriverManager.getConnection(url, user, pass);
+            connection = DriverManager.getConnection(url, getValueOrDefault(user, USER), getValueOrDefault(pass, PASS));
         } catch (SQLException e) {
             System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank");
             e.printStackTrace();
@@ -99,5 +100,9 @@ public class ConnectionManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private String getValueOrDefault(String value, String defaultValue) {
+        return (value != null && !value.isEmpty() ? value : defaultValue);
     }
 }
