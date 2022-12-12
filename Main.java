@@ -57,6 +57,7 @@ public class Main extends Aushilfe {
                     case "Ende der Sitzung eintragen": Ende_Sitzung_eintragen(); break;
                     case "Programm beenden": beenden = true; break;
                     case "Verbindung mit Localhost": Verbindung_mit_Localhost(); break;
+                    case "X_nacher": X_nacher(); break;
                 }
             }
         } finally {
@@ -215,16 +216,13 @@ public class Main extends Aushilfe {
         String pass = input.nextLine();
         System.out.print("Port: ");
         String port = input.nextLine();
-        System.out.print("SID: ");
-        String sid = input.nextLine();
 
         ConnectionManager.getInstance().connect(
             get_Value_Or_Null(url),
             get_Value_Or_Null(db_name),
             get_Value_Or_Null(user),
             get_Value_Or_Null(pass),
-            get_Value_Or_Null(port),
-            get_Value_Or_Null(sid)
+            get_Value_Or_Null(port)
         );
         input.close();
     }
