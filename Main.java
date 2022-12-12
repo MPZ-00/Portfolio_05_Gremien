@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
@@ -31,6 +33,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int auswahl;
         boolean beenden = false;
+
+        interne_DB_initialisieren();
 
         try {
             while (!beenden) {
@@ -235,5 +239,80 @@ public class Main {
             return null;
         }
         return value;
+    }
+
+    private static void interne_DB_initialisieren() {
+        try {
+            ResultSet rs_Gremien = getRS("SELECT * FROM Gremien");
+            while (rs_Gremien.next()) {
+                Date beginn = rs_Gremien.getDate("Beginn");
+                Date ende = rs_Gremien.getDate("Ende");
+
+                Gremien g = new Gremien(
+                    rs_Gremien.getInt("ID"),
+                    rs_Gremien.getString("Name"),
+                    Boolean.valueOf(rs_Gremien.getString("offiziell")),
+                    Boolean.valueOf(rs_Gremien.getString("inoffiziell")),
+                    LocalDate.ofInstant(beginn.toInstant(), ZoneId.systemDefault()),
+                    LocalDate.ofInstant(ende.toInstant(), ZoneId.systemDefault())
+                );
+
+                Factory.getInstance().addID(Gremien.class.toString(), g.getID());
+            }
+
+            ResultSet rs_Antrag = getRS("SELECT * FROM Antrag");
+            while (rs_Antrag.next()) {
+                Antrag a = new Antrag(
+                    rs_Antrag.getInt("ID"),
+                    rs_Antrag.getString("Titel"),
+                    rs_Antrag.getString("Text"),
+                    IAntrag.Ergebnis.valueOf(rs_Antrag.getString("Ergebnis").toUpperCase()),
+                    Boolean.valueOf(rs_Antrag.getString("Angenommen"))
+                );
+
+                Factory.getInstance().addID(Antrag.class.toString(), a.getID());
+            }
+
+            ResultSet rs_Sitzungen = getRS("SELECT * FROM Sitzungen");
+            while (rs_Sitzungen.next()) {
+                Date Einladung_am = rs_Sitzungen.getDate("Einladung_am");
+                Sitzungen s = new Sitzungen(
+                    rs_Sitzungen.getInt("ID"),
+                    rs_Sitzungen.getTimestamp("Beginn"),
+                    rs_Sitzungen.getTimestamp("Ende"),
+                    LocalDate.ofInstant(Einladung_am.toInstant(), ZoneId.systemDefault()),
+                    Boolean.valueOf(rs_Sitzungen.getString("oeffentlich")),
+                    rs_Sitzungen.getString("Ort"),
+                    rs_Sitzungen.getString("Protokoll")
+                );
+
+                Factory.getInstance().addID(Sitzungen.class.toString(), s.getID());
+            }
+
+            ResultSet rs_Tagesordnung = getRS("SELECT * FROM Tagesordnung");
+            while (rs_Tagesordnung.next()) {
+                Tagesordnung t = new Tagesordnung(
+                    rs_Tagesordnung.getInt("ID"),
+                    rs_Tagesordnung.getString("Titel"),
+                    rs_Tagesordnung.getString("Kurzbeschreibung"),
+                    rs_Tagesordnung.getString("Protokolltext")
+                );
+
+                Factory.getInstance().addID(Tagesordnung.class.toString(), t.getID());
+            }
+
+            ResultSet rs_Aufgabengebiete = getRS("SELECT * FROM Aufgabengebiete");
+            while (rs_Aufgabengebiete.next()) {
+                Aufgabengebiete au = new Aufgabengebiete(
+                    rs_Aufgabengebiete.getInt("ID"),
+                    rs_Aufgabengebiete.getInt("Ag_ID"),
+                    rs_Aufgabengebiete.getString("Aufgabengebiet")
+                );
+
+                Factory.getInstance().addID(Aufgabengebiete.class.toString(), au.getID());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
