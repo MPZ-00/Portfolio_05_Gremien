@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -14,38 +15,43 @@ import java.time.format.DateTimeFormatter;
 
 public class Main {
     private static String PATTERN = "dd-MM-YYYY HH:mm:ss";
+    private static List<String> options = Arrays.asList(
+        "Verbindung selber einrichten",
+        "Gremium und Beginn der Sitzung auswählen",
+        "Tagesordnung anzeigen",
+        "Tagesordnungspunkt oder Antrag auswählen",
+        "Protokoll eintragen",
+        "Ende der Sitzung eintragen",
+        "Programm beenden"
+    );
     
     public static void main(String[] args) {
         // Erstelle einen Scanner, um die Eingabe vom Benutzer zu lesen
         Scanner scanner = new Scanner(System.in);
         int auswahl;
         boolean beenden = false;
-        int AUSWAHL_MAX = 7;
 
         try {
-            // Schleife, die solange läuft, bis der Benutzer das Programm beendet
             while (!beenden) {
-                System.out.println("1. Gremium und Beginn der Sitzung auswählen");
-                System.out.println("2. Tagesordnung anzeigen");
-                System.out.println("3. Tagesordnungspunkt oder Antrag auswählen");
-                System.out.println("4. Protokoll eintragen");
-                System.out.println("5. Ende der Sitzung eintragen");
-                System.out.println("6. Programm beenden");
-                System.out.println("7. Verbindung selber einrichten");
+                for (int i = 0; i < options.size(); i++) {
+                    System.out.println((i + 1) + ". " + options.get(i));
+                }
                 System.out.println("Auswahl: ");
 
-                while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > 6) {
-                    System.out.println("Bitte gültige Auswahl eingeben (1-" + AUSWAHL_MAX + "): ");
+                while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > options.size()) {
+                    System.out.println("Bitte gültige Auswahl eingeben (1-" + options.size() + "): ");
                     scanner.nextLine(); // Leere den Eingabepuffer
                 }
 
-                switch (auswahl) {
-                    case 1: Gremium_und_Beginn_der_Sitzung(); break;
-                    case 2: Tagesordnung_anzeigen(); break; // Alle Tagesordnungspunkte einer Sitzung werden in der richtigen Reihenfolge angezeigt. Zu jedem Tagesordnungspunkt werden die zugehörigen Anträge angezeigt.
-                    case 3: Tagesordnungspunkt_oder_Antrag(); break;
-                    case 4: Protokoll_eintragen(); break;
-                    case 5: Ende_Sitzung_eintragen(); break;
-                    case 6: beenden = true; break;
+                // Verwende options.get() anstatt feste Werte im switch-Statement
+                switch (options.get(auswahl - 1)) {
+                    case "Verbindung selber einrichten": Verbindung_selber_einrichten(); break;
+                    case "Gremium und Beginn der Sitzung auswählen": Gremium_und_Beginn_der_Sitzung(); break;
+                    case "Tagesordnung anzeigen": Tagesordnung_anzeigen(); break; // Alle Tagesordnungspunkte einer Sitzung werden in der richtigen Reihenfolge angezeigt. Zu jedem Tagesordnungspunkt werden die zugehörigen Anträge angezeigt.
+                    case "Tagesordnungspunkt oder Antrag auswählen": Tagesordnungspunkt_oder_Antrag(); break;
+                    case "Protokoll eintragen": Protokoll_eintragen(); break;
+                    case "Ende der Sitzung eintragen": Ende_Sitzung_eintragen(); break;
+                    case "Programm beenden": beenden = true; break;
                 }
             }
         } finally {
@@ -184,6 +190,8 @@ public class Main {
     static void Verbindung_selber_einrichten() {
         Scanner input = new Scanner(System.in);
 
+        System.out.println("Gib 'null' ein, wenn ein Standardwert verwendet werden soll.");
+
         // Eingabeaufforderungen für die Verbindungsparameter
         System.out.print("URL der Datenbank: ");
         String url = input.nextLine();
@@ -193,10 +201,26 @@ public class Main {
         String user = input.nextLine();
         System.out.print("Passwort: ");
         String pass = input.nextLine();
-        System.out.println("Port: ");
+        System.out.print("Port: ");
         String port = input.nextLine();
+        System.out.print("SID: ");
+        String sid = input.nextLine();
 
-        ConnectionManager.getInstance().connect(url, db_name, user, pass, port);
+        ConnectionManager.getInstance().connect(
+            get_Value_Or_Null(url),
+            get_Value_Or_Null(db_name),
+            get_Value_Or_Null(user),
+            get_Value_Or_Null(pass),
+            get_Value_Or_Null(port),
+            get_Value_Or_Null(sid)
+        );
         input.close();
+    }
+
+    private static String get_Value_Or_Null(String value) {
+        if (value.equalsIgnoreCase("null")) {
+            return null;
+        }
+        return value;
     }
 }

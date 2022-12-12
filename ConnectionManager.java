@@ -15,6 +15,7 @@ public class ConnectionManager {
     private static final String PASS = "DABS_42";
     private static final String DB_NAME = "DABS_42";
     private static final String PORT = "1521";
+    private static final String SID = "namib";
 
     private static ConnectionManager instance = null;
     private Connection connection = null;
@@ -38,7 +39,7 @@ public class ConnectionManager {
     public Connection getConnection() {
         if (connection == null) {
             try {
-                String new_DB_URL = PREFIX + DB_URL + ":" + PORT + "/" + DB_NAME;
+                String new_DB_URL = PREFIX + DB_URL + ":" + PORT + ":" + SID + "/" + DB_NAME;
                 connection = DriverManager.getConnection(new_DB_URL, USER, PASS);
             } catch (SQLException e) {
                 System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank");
@@ -49,7 +50,7 @@ public class ConnectionManager {
         return connection;
     }
 
-    public void connect(String url, String db_name, String user, String pass, String port) {
+    public void connect(String url, String db_name, String user, String pass, String port, String sid) {
         try {
             // Formatiere die URL, falls sie nicht mit "jdbc:oracle:thin:@" beginnt
             if (!url.startsWith(PREFIX)) {
@@ -57,11 +58,10 @@ public class ConnectionManager {
             }
 
             // Füge den Port hinzu, falls er übergeben wurde
-            if (port != null && !port.isEmpty()) {
-                url += ":" + port;
-            } else {
-                url += ":" + PORT;
-            }
+            url += ":" + (port != null && !port.isEmpty() ? port : PORT);
+
+            // Füge die SID hinzu, falls diese übergeben wurde
+            url += ":" + (sid != null && !sid.isEmpty() ? sid : SID);
 
             // Füge den Namen der Datenbank in die URL ein
             url += "/" + db_name;
