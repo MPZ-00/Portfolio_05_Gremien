@@ -13,16 +13,16 @@ public class Gremien extends AHauptklasse implements IGremien {
 
     public Gremien(String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
         setName(Name);
-        setOffiziell(Offiziell);
-        setInoffiziell(Inoffiziell);
+        setOffiziell(offiziell);
+        setInoffiziell(inoffiziell);
         setBeginn(Beginn);
         setEnde(Ende);
     }
     public Gremien(Integer ID, String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
         setID(ID);
         setName(Name);
-        setOffiziell(Offiziell);
-        setInoffiziell(Inoffiziell);
+        setOffiziell(offiziell);
+        setInoffiziell(inoffiziell);
         setBeginn(Beginn);
         setEnde(Ende);
     }

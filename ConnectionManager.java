@@ -7,14 +7,14 @@ import java.sql.Statement;
 public class ConnectionManager {
     // JDBC-Treiber- und Datenbank-URL
     private static final String JDBC_DRIVER = "oracle.jdbc.pool.OracleDataSource";
-    private static final String DB_URL = "localhost"; // fbe-neptun2.rwu.de
+    private static final String DB_URL = "fbe-neptun.hs-weingarten.de"; // localhost
     private static final String PREFIX = "jdbc:oracle:thin:@";
 
     // Datenbank-Zugangsdaten
     private static final String USER = "DABS_42";
     private static final String PASS = "DABS_42";
     private static final String DB_NAME = "namib";
-    private static final String PORT = "10111"; // 1521
+    private static final String PORT = "1521"; // 10111
 
     private static ConnectionManager instance = null;
     private Connection connection = null;

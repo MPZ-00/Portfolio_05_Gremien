@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -23,10 +24,10 @@ public class Aushilfe implements IAushilfe {
         Scanner scanner = new Scanner(System.in);
         String eingabe;
         do {
-            System.out.print("Welches Gremium soll es sein (Name): ");
+            System.out.print("\nWelches Gremium soll es sein (Name): ");
             eingabe = scanner.nextLine();
         } while (!Gremien_enthaelt_Eingabe(eingabe));
-        
+
         scanner.close();
     }
     private boolean Gremien_enthaelt_Eingabe(String eingabe) {
@@ -41,23 +42,33 @@ public class Aushilfe implements IAushilfe {
     }
 
     public void Gremien_anzeigen() {
+        System.out.println("[Gremien]");
         for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
             Gremien g = (Gremien)object;
-            System.out.printf("ID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
+            System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
         }
     }
 
     public void Sitzung_Wahl() {
         Sitzungen_anzeigen();
-
-        Scanner scanner = new Scanner(System.in);
-        String eingabe;
-        do {
-            System.out.print("Welche Sitzung soll es sein (Beginn): ");
-            eingabe = scanner.nextLine();
-        } while (!Sitzungen_enthaelt_Eingabe(eingabe));
-
-        scanner.close();
+        try (Scanner scanner = new Scanner(System.in)) {
+            String eingabe = null;
+            do {
+                System.out.print("\nWelche Sitzung soll es sein (Beginn): ");
+                while (!scanner.hasNextLine()) {
+                    // Warten, bis der Scanner Eingabebereit ist
+                }
+                System.out.println("nextLine: " + scanner.nextLine());
+                eingabe = scanner.nextLine();
+                if (eingabe.equals("")) {
+                    continue;
+                }
+                // TODO: Fix this
+                System.out.println("Ihre Eingabe: " + eingabe);
+            } while (!Sitzungen_enthaelt_Eingabe(eingabe));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private boolean Sitzungen_enthaelt_Eingabe(String eingabe) {
         for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
@@ -70,9 +81,10 @@ public class Aushilfe implements IAushilfe {
         return false;
     }
     public void Sitzungen_anzeigen() {
+        System.out.println("[Sitzungen]");
         for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen)object;
-            System.out.printf("ID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), "könnte zu lang sein");
+            System.out.printf("\nID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), "könnte zu lang sein");
         }
     }
 
@@ -95,7 +107,7 @@ public class Aushilfe implements IAushilfe {
             Connection conn = ConnectionManager.getInstance().getConnection();
 
             // SQL-Abfrage, um alle Tabellen anzuzeigen
-            String sql = "select * from gehoert_zu";
+            String sql = "select * from Gremien";
 
             // Erstelle ein Statement-Objekt, um die Abfrage auszuführen
             Statement stmt = conn.createStatement();
@@ -105,7 +117,7 @@ public class Aushilfe implements IAushilfe {
 
             // Iteriere durch das ResultSet und gebe die Namen der Tabellen auf der Konsole aus
             while (rs.next()) {
-                System.out.println(rs.getString("table_name"));
+                System.out.println(rs.getString("Name"));
             }
 
             // Schließe die Verbindung zur Datenbank
@@ -116,33 +128,33 @@ public class Aushilfe implements IAushilfe {
     }
 
     public void interne_DB_initialisieren() {
+        System.out.println("Interne DB wird initialisiert");
         try {
             init_Gremien_from_ResultSet();
             init_Antrag_from_ResultSet();
             init_Aufgabengebiete_from_ResultSet();
             init_Sitzungen_from_ResultSet();
             init_Tagesordnung_from_ResultSet();
-        } catch (NullPointerException e) {
-            System.err.println("Tabelle oder View nicht vorhanden");
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            System.err.println("Interne DB konnte nicht initialisert werden,");
             e.printStackTrace();
         }
+        System.out.println("Interne DB initialisiert.");
     }
 
     private void init_Gremien_from_ResultSet() throws SQLException {
         ResultSet rs_Gremien = getRS("SELECT * FROM Gremien");
         while (rs_Gremien.next()) {
-            Date beginn = rs_Gremien.getDate("Beginn");
-            Date ende = rs_Gremien.getDate("Ende");
+            java.sql.Date beginn = rs_Gremien.getDate("Beginn");
+            java.sql.Date ende = rs_Gremien.getDate("Ende");
 
             Gremien g = new Gremien(
                 rs_Gremien.getInt("ID"),
                 rs_Gremien.getString("Name"),
-                Boolean.valueOf(rs_Gremien.getString("offiziell")),
-                Boolean.valueOf(rs_Gremien.getString("inoffiziell")),
-                LocalDate.ofInstant(beginn.toInstant(), ZoneId.systemDefault()),
-                LocalDate.ofInstant(ende.toInstant(), ZoneId.systemDefault())
+                rs_Gremien.getString("offiziell").matches("(?i)1|t|y"),
+                rs_Gremien.getString("inoffiziell").matches("(?i)1|t|y"),
+                beginn.toLocalDate(),
+                ende.toLocalDate()
             );
 
             Factory.getInstance().addObject(Gremien.class.toString(), g);
@@ -156,7 +168,7 @@ public class Aushilfe implements IAushilfe {
                 rs_Antrag.getString("Titel"),
                 rs_Antrag.getString("Text"),
                 IAntrag.Ergebnis.valueOf(rs_Antrag.getString("Ergebnis").toUpperCase()),
-                Boolean.valueOf(rs_Antrag.getString("Angenommen"))
+                Boolean.parseBoolean(rs_Antrag.getString("Angenommen"))
             );
 
             Factory.getInstance().addObject(Antrag.class.toString(), a);
@@ -165,12 +177,12 @@ public class Aushilfe implements IAushilfe {
     private void init_Sitzungen_from_ResultSet() throws SQLException {
         ResultSet rs_Sitzungen = getRS("SELECT * FROM Sitzungen");
         while (rs_Sitzungen.next()) {
-            Date Einladung_am = rs_Sitzungen.getDate("Einladung_am");
+            java.sql.Date Einladung_am = rs_Sitzungen.getDate("Einladung_am");
             Sitzungen s = new Sitzungen(
                 rs_Sitzungen.getInt("ID"),
                 rs_Sitzungen.getTimestamp("Beginn"),
                 rs_Sitzungen.getTimestamp("Ende"),
-                LocalDate.ofInstant(Einladung_am.toInstant(), ZoneId.systemDefault()),
+                Einladung_am.toLocalDate(),
                 Boolean.valueOf(rs_Sitzungen.getString("oeffentlich")),
                 rs_Sitzungen.getString("Ort"),
                 rs_Sitzungen.getString("Protokoll")
