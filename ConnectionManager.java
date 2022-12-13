@@ -103,7 +103,7 @@ public class ConnectionManager implements IConnectionManager {
     }
 
     private String getValueOrDefault(String value, String defaultValue) {
-        return (value != null && !value.isEmpty() ? value : defaultValue);
+        return (value != null && !value.isEmpty() && !value.equalsIgnoreCase("null") ? value : defaultValue);
     }
 
     private void setUser(String user) {

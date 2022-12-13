@@ -25,13 +25,11 @@ public class Main extends Aushilfe {
     
     public static void main(String[] args) {
         // Erstelle einen Scanner, um die Eingabe vom Benutzer zu lesen
-        Scanner scanner = new Scanner(System.in);
-        int auswahl;
-        boolean beenden = false;
 
-        Aushilfe.getInstance().interne_DB_initialisieren();
-
-        try {
+        try (Scanner scanner = new Scanner(System.in)) {
+            int auswahl;
+            boolean beenden = false;
+            Aushilfe.getInstance().interne_DB_initialisieren();
             while (!beenden) {
                 for (int i = 0; i < options.size(); i++) {
                     System.out.println((i + 1) + ". " + options.get(i));
@@ -55,16 +53,24 @@ public class Main extends Aushilfe {
                     case "Tagesordnung anzeigen":
                         Tagesordnung_anzeigen();
                         break;
-                    case "Tagesordnungspunkt oder Antrag auswählen": Tagesordnungspunkt_oder_Antrag(); break;
-                    case "Protokoll eintragen": Protokoll_eintragen(); break;
-                    case "Ende der Sitzung eintragen": Ende_Sitzung_eintragen(); break;
+                    case "Tagesordnungspunkt oder Antrag auswählen":
+                        Tagesordnungspunkt_oder_Antrag();
+                        break;
+                    case "Protokoll eintragen":
+                        Protokoll_eintragen();
+                        break;
+                    case "Ende der Sitzung eintragen":
+                        Ende_Sitzung_eintragen();
+                        break;
                     case "Programm beenden":
                         beenden = true;
                         break;
                     case "Verbindung mit Localhost":
                         ConnectionManager.getInstance().setConnection("localhost", "namib", "DABS_42", "DABS_42", "10111");
                         break;
-                    case "X_nacher": X_nacher(); break;
+                    case "X_nachher":
+                        X_nachher();
+                        break;
                     case "Interne DB initialisieren":
                         Aushilfe.getInstance().interne_DB_initialisieren();
                         break;
@@ -74,7 +80,6 @@ public class Main extends Aushilfe {
                 }
             }
         } finally {
-            scanner.close();
             ConnectionManager.getInstance().disconnect();
         }
     }
@@ -86,7 +91,7 @@ public class Main extends Aushilfe {
         System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
     }
 
-    private static void X_nacher() {
+    private static void X_nachher() {
         Scanner scanner = new Scanner(System.in);
         
         // Erstelle ein neues Gremium
@@ -164,7 +169,7 @@ public class Main extends Aushilfe {
             System.out.println(titel);
     
             ResultSet rs2 = statement.executeQuery("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
-            List<Antrag> antraege = new ArrayList<Antrag>();
+            List<Antrag> antraege = new ArrayList<>();
             while (rs2.next()) {
                 antraege.add(new Antrag(rs2.getInt("ID"), rs2.getString("Titel"), rs2.getString("Text"), IAntrag.Ergebnis.valueOf(rs2.getString("Ergebnis")), Boolean.parseBoolean(rs2.getString("Angenommen"))));
             }
@@ -185,9 +190,7 @@ public class Main extends Aushilfe {
                 System.out.println("Antrag Ergebnis: " + rs.getString("Antrag.Ergebnis"));
                 System.out.println("Antrag Angenommen: " + Boolean.valueOf(rs.getString("Antrag.Angenommen")));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -228,23 +231,10 @@ public class Main extends Aushilfe {
         System.out.print("Port: ");
         String port = input.nextLine();
 
-        ConnectionManager.getInstance().setConnection(
-            get_Value_Or_Null(url),
-            get_Value_Or_Null(db_name),
-            get_Value_Or_Null(user),
-            get_Value_Or_Null(pass),
-            get_Value_Or_Null(port)
-        );
+        ConnectionManager.getInstance().setConnection(url, db_name, user, pass, port);
         input.close();
     }
     private static void aktuelle_Verbindung_anzeigen() {
         System.out.println(ConnectionManager.getInstance().getConnection().toString());
-    }
-
-    private static String get_Value_Or_Null(String value) {
-        if (value.equalsIgnoreCase("null")) {
-            return null;
-        }
-        return value;
     }
 }
