@@ -20,7 +20,6 @@ public class Main extends Aushilfe {
         "Ende der Sitzung eintragen",
         "Verbindung selber einrichten",
         "Verbindung mit Localhost",
-        // "Interne DB initialisieren",
         "Programm beenden"
     );
     
@@ -30,7 +29,6 @@ public class Main extends Aushilfe {
         int auswahl;
         boolean beenden = false;
 
-        // Aushilfe.getInstance().interne_DB_testen();
         Aushilfe.getInstance().interne_DB_initialisieren();
 
         try {
@@ -51,18 +49,27 @@ public class Main extends Aushilfe {
                         Verbindung_selber_einrichten();
                         aktuelle_Verbindung_anzeigen();
                         break;
-                    case "Gremium und Beginn der Sitzung auswählen": Gremium_und_Beginn_der_Sitzung(); break;
-                    case "Tagesordnung anzeigen": Tagesordnung_anzeigen(); break; // Alle Tagesordnungspunkte einer Sitzung werden in der richtigen Reihenfolge angezeigt. Zu jedem Tagesordnungspunkt werden die zugehörigen Anträge angezeigt.
+                    case "Gremium und Beginn der Sitzung auswählen":
+                        Gremium_und_Beginn_der_Sitzung();
+                        break;
+                    case "Tagesordnung anzeigen":
+                        Tagesordnung_anzeigen();
+                        break;
                     case "Tagesordnungspunkt oder Antrag auswählen": Tagesordnungspunkt_oder_Antrag(); break;
                     case "Protokoll eintragen": Protokoll_eintragen(); break;
                     case "Ende der Sitzung eintragen": Ende_Sitzung_eintragen(); break;
-                    case "Programm beenden": beenden = true; break;
-                    case "Verbindung mit Localhost": Verbindung_mit_Localhost(); break;
+                    case "Programm beenden":
+                        beenden = true;
+                        break;
+                    case "Verbindung mit Localhost":
+                        ConnectionManager.getInstance().setConnection("localhost", "namib", "DABS_42", "DABS_42", "10111");
+                        break;
                     case "X_nacher": X_nacher(); break;
-                    case "Interne DB initialisieren": Aushilfe.getInstance().interne_DB_initialisieren(); break;
+                    case "Interne DB initialisieren":
+                        Aushilfe.getInstance().interne_DB_initialisieren();
+                        break;
                     case "Verbindung anzeigen":
-                        //Properties properties = ConnectionManager.getInstance().getConnection().getClientInfo();
-
+                        ConnectionManager.getInstance().showConnection();
                         break;
                 }
             }
@@ -221,7 +228,7 @@ public class Main extends Aushilfe {
         System.out.print("Port: ");
         String port = input.nextLine();
 
-        ConnectionManager.getInstance().connect(
+        ConnectionManager.getInstance().setConnection(
             get_Value_Or_Null(url),
             get_Value_Or_Null(db_name),
             get_Value_Or_Null(user),
@@ -234,13 +241,6 @@ public class Main extends Aushilfe {
         System.out.println(ConnectionManager.getInstance().getConnection().toString());
     }
 
-    private static void Verbindung_mit_Localhost() {
-        try {
-            ConnectionManager.getInstance().directConnnect("jdbc:oracle:thin:@localhost:10111:namib", "DABS_42", "DABS_42");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     private static String get_Value_Or_Null(String value) {
         if (value.equalsIgnoreCase("null")) {
             return null;
