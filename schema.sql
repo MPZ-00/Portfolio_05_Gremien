@@ -1,4 +1,4 @@
-create table if not exists Gremien (
+create table Gremien (
     ID integer primary key,
     Name varchar (50),
     offiziell varchar (1) not null,
@@ -7,27 +7,27 @@ create table if not exists Gremien (
     Ende date
 );
 
-create table if not exists Aufgabengebiete (
+create table Aufgabengebiete (
     ID integer primary key,
     Ag_ID integer,
     Aufgabengebiet varchar (100),
     constraint fk_Ag_Gremien foreign key (Ag_ID) references Gremien (ID)
 );
 
-create table if not exists Personen (
+create table Personen (
     ID integer primary key,
     Geburtsdatum date,
     Geschlecht char (1)
 );
 
-create table if not exists Namen (
+create table Namen (
     ID integer primary key,
     Vorname varchar (100),
     Nachname varchar (300),
     constraint fk_Namen_Personen foreign key (ID) references Personen (ID)
 );
 
-create table if not exists Adresse (
+create table Adresse (
     ID integer primary key,
     Strasse varchar (200),
     Hausnummer integer,
@@ -36,7 +36,7 @@ create table if not exists Adresse (
     constraint fk_Adresse_Personen foreign key (ID) references Personen (ID)
 );
 
-create table if not exists Sitzungen (
+create table Sitzungen (
     ID integer primary key,
     Beginn timestamp,
     Ende timestamp,
@@ -46,29 +46,29 @@ create table if not exists Sitzungen (
     Protokoll varchar (4000)
 );
 
-create table if not exists Tagesordnung (
+create table Tagesordnung (
     ID integer primary key,
     Titel varchar (100),
     Kurzbeschreibung varchar (500),
     Protokolltext varchar (4000)
 );
 
-create table if not exists Lehrbeauftragte (
+create table Lehrbeauftragte (
     ID integer primary key,
     constraint fk_Lehrbeauftragte_Pers foreign key (ID) references Personen (ID)
 );
 
-create table if not exists Mitarbeiter (
+create table Mitarbeiter (
     ID integer primary key,
     constraint fk_Mitarbeiter_Pers foreign key (ID) references Personen (ID)
 );
 
-create table if not exists Professoren (
+create table Professoren (
     ID integer primary key,
     constraint fk_Professoren_Pers foreign key (ID) references Personen (ID)
 );
 
-create table if not exists Student (
+create table Student (
     ID integer primary key,
     Studiengang varchar (100),
     Studienbeginn date,
@@ -76,12 +76,12 @@ create table if not exists Student (
     constraint fk_Student_Pers foreign key (ID) references Personen (ID)
 );
 
-create table if not exists Sonstige_Personen (
+create table Sonstige_Personen (
     ID integer primary key,
     constraint fk_Sonstige_Pers foreign key (ID) references Personen (ID)
 );
 
-create table if not exists Dokument (
+create table Dokument (
     ID integer primary key,
     Mime_Typ varchar (50),
     Erstelldatum date,
@@ -89,7 +89,7 @@ create table if not exists Dokument (
     /* Dokument Author wurde entfernt, da der Author in 'erstellt_von' benannt wird */
 );
 
-create table if not exists Antrag (
+create table Antrag (
     ID integer primary key,
     Titel varchar (100),
     Text varchar (300),
@@ -97,15 +97,15 @@ create table if not exists Antrag (
     Angenommen varchar (1) not null /* da boolean nicht geht, varchar (1) not null */
 );
 
-create table if not exists nimmt_teil (
+create table nimmt_teil (
     ID_Personen integer,
     ID_Sitzungen integer,
     constraint fk_nt_Person foreign key (ID_Personen) references Personen (ID),
     constraint fk_nt_Sitzung foreign key (ID_Sitzungen) references Sitzungen (ID),
-    constarint pk_nt primary key (ID_Personen, ID_Sitzungen)
+    constraint pk_nt primary key (ID_Personen, ID_Sitzungen)
 );
 
-create table if not exists fuehrt_Protokoll_bei (
+create table fuehrt_Protokoll_bei (
     ID_Personen integer,
     ID_Sitzungen integer,
     constraint fk_fPb_Person foreign key (ID_Personen) references Personen (ID),
@@ -113,7 +113,7 @@ create table if not exists fuehrt_Protokoll_bei (
     constraint pk_fPb_ID primary key (ID_Personen, ID_Sitzungen)
 );
 
-create table if not exists top (
+create table top (
     ID_Sitzung integer,
     ID_Tagesordnung integer,
     constraint fk_top_Sitzungen foreign key (ID_Sitzung) references Sitzungen (ID),
@@ -121,7 +121,7 @@ create table if not exists top (
     constraint pk_top_ID primary key (ID_Sitzung, ID_Tagesordnung)
 );
 
-create table if not exists hat (
+create table hat (
     ID_Gremien integer,
     ID_Sitzungen integer,
     constraint fk_hat_Gremien foreign key (ID_Gremien) references Gremien (ID),
@@ -129,14 +129,14 @@ create table if not exists hat (
     constraint pk_hat_ID primary key (ID_Gremien, ID_Sitzungen)
 );
 
-create table if not exists erstellt_von (
+create table erstellt_von (
     ID_Author integer primary key,
     ID_Dokument integer,
     constraint fk_ert_Personen foreign key (ID_Author) references Personen (ID) on delete set null,
     constraint fk_ert_Dokument foreign key (ID_Dokument) references Dokument (ID) on delete set null
 );
 
-create table if not exists Mitglieder (
+create table Mitglieder (
     ID_Gremien integer,
     ID_Personen integer,
     Funktion varchar (200),
@@ -145,7 +145,7 @@ create table if not exists Mitglieder (
     constraint pk_Mitglieder_ID primary key (ID_Gremien, ID_Personen)
 );
 
-create table if not exists stellt (
+create table stellt (
     ID_Person integer,
     ID_Antrag integer,
     constraint fk_stellt_Person foreign key (ID_Person) references Personen (ID) on delete set null,
@@ -153,7 +153,7 @@ create table if not exists stellt (
     constraint pk_stellt_ID primary key (ID_Person, ID_Antrag)
 );
 
-create table if not exists gehoert_zu (
+create table gehoert_zu (
     ID_Antrag integer,
     ID_TOP integer,
     constraint fk_gehoert_zu_Antrag foreign key (ID_Antrag) references Antrag (ID) on delete set null,
@@ -161,7 +161,7 @@ create table if not exists gehoert_zu (
     constraint pk_gehoert_zu_ID primary key (ID_Antrag, ID_TOP)
 );
 
-create table if not exists if not exists fuer (
+create table fuer (
     ID_Dokument integer,
     ID_TOP integer,
     constraint fk_fuer_Dokument foreign key (ID_Dokument) references Dokument (ID),
