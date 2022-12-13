@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,13 +13,14 @@ import java.time.format.DateTimeFormatter;
 public class Main extends Aushilfe {
     private static final String PATTERN = "dd-MM-YYYY HH:mm:ss";
     private static final List<String> options = Arrays.asList(
-        "Verbindung selber einrichten",
         "Gremium und Beginn der Sitzung auswählen",
         "Tagesordnung anzeigen",
         "Tagesordnungspunkt oder Antrag auswählen",
         "Protokoll eintragen",
         "Ende der Sitzung eintragen",
+        "Verbindung selber einrichten",
         "Verbindung mit Localhost",
+        // "Interne DB initialisieren",
         "Programm beenden"
     );
     
@@ -32,7 +30,7 @@ public class Main extends Aushilfe {
         int auswahl;
         boolean beenden = false;
 
-        Aushilfe.getInstance().interne_DB_testen();
+        // Aushilfe.getInstance().interne_DB_testen();
         Aushilfe.getInstance().interne_DB_initialisieren();
 
         try {
@@ -40,7 +38,7 @@ public class Main extends Aushilfe {
                 for (int i = 0; i < options.size(); i++) {
                     System.out.println((i + 1) + ". " + options.get(i));
                 }
-                System.out.println("Auswahl: ");
+                System.out.print("Auswahl: ");
 
                 while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > options.size()) {
                     System.out.println("Bitte gültige Auswahl eingeben (1-" + options.size() + "): ");
@@ -49,7 +47,10 @@ public class Main extends Aushilfe {
 
                 // Verwende options.get() anstatt feste Werte im switch-Statement
                 switch (options.get(auswahl - 1)) {
-                    case "Verbindung selber einrichten": Verbindung_selber_einrichten(); break;
+                    case "Verbindung selber einrichten":
+                        Verbindung_selber_einrichten();
+                        aktuelle_Verbindung_anzeigen();
+                        break;
                     case "Gremium und Beginn der Sitzung auswählen": Gremium_und_Beginn_der_Sitzung(); break;
                     case "Tagesordnung anzeigen": Tagesordnung_anzeigen(); break; // Alle Tagesordnungspunkte einer Sitzung werden in der richtigen Reihenfolge angezeigt. Zu jedem Tagesordnungspunkt werden die zugehörigen Anträge angezeigt.
                     case "Tagesordnungspunkt oder Antrag auswählen": Tagesordnungspunkt_oder_Antrag(); break;
@@ -58,6 +59,11 @@ public class Main extends Aushilfe {
                     case "Programm beenden": beenden = true; break;
                     case "Verbindung mit Localhost": Verbindung_mit_Localhost(); break;
                     case "X_nacher": X_nacher(); break;
+                    case "Interne DB initialisieren": Aushilfe.getInstance().interne_DB_initialisieren(); break;
+                    case "Verbindung anzeigen":
+                        //Properties properties = ConnectionManager.getInstance().getConnection().getClientInfo();
+
+                        break;
                 }
             }
         } finally {
@@ -67,12 +73,10 @@ public class Main extends Aushilfe {
     }
 
     static void Gremium_und_Beginn_der_Sitzung() {
-        Scanner scanner = new Scanner(System.in);
-
         Aushilfe.getInstance().Gremium_Wahl();
+        System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
         Aushilfe.getInstance().Sitzung_Wahl();
-        
-        scanner.close();
+        System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
     }
 
     private static void X_nacher() {
@@ -225,6 +229,9 @@ public class Main extends Aushilfe {
             get_Value_Or_Null(port)
         );
         input.close();
+    }
+    private static void aktuelle_Verbindung_anzeigen() {
+        System.out.println(ConnectionManager.getInstance().getConnection().toString());
     }
 
     private static void Verbindung_mit_Localhost() {
