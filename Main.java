@@ -6,12 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 
 public class Main extends Aushilfe {
-    private static final String PATTERN = "dd-MM-YYYY HH:mm:ss";
     private static final List<String> options = Arrays.asList(
         "Gremium und Beginn der Sitzung auswählen",
         "Tagesordnung anzeigen",
@@ -29,7 +25,9 @@ public class Main extends Aushilfe {
         try (Scanner scanner = new Scanner(System.in)) {
             int auswahl;
             boolean beenden = false;
-            Aushilfe.getInstance().interne_DB_initialisieren();
+            
+            init(scanner);
+
             while (!beenden) {
                 for (int i = 0; i < options.size(); i++) {
                     System.out.println((i + 1) + ". " + options.get(i));
@@ -45,7 +43,7 @@ public class Main extends Aushilfe {
                 switch (options.get(auswahl - 1)) {
                     case "Verbindung selber einrichten":
                         Verbindung_selber_einrichten();
-                        aktuelle_Verbindung_anzeigen();
+                        ConnectionManager.getInstance().showConnection();
                         break;
                     case "Gremium und Beginn der Sitzung auswählen":
                         Gremium_und_Beginn_der_Sitzung();
@@ -66,7 +64,7 @@ public class Main extends Aushilfe {
                         beenden = true;
                         break;
                     case "Verbindung mit Localhost":
-                        ConnectionManager.getInstance().setConnection("localhost", "namib", "DABS_42", "DABS_42", "10111");
+                        Verbindung_mit_Localhost();
                         break;
                     case "X_nachher":
                         X_nachher();
@@ -84,6 +82,22 @@ public class Main extends Aushilfe {
         }
     }
 
+    private static void init(Scanner scanner) {
+        boolean mit_HS_verbunden = Aushilfe.getInstance().frage_Ja_Nein(scanner, "Befinden Sie sich im HS Netz");
+
+        if (!mit_HS_verbunden && Aushilfe.getInstance().frage_Ja_Nein(scanner, "Besteht über Putty ein Tunnel zur HS")) {
+            Verbindung_mit_Localhost();
+        } else {
+            Verbindung_selber_einrichten();
+        }
+
+        Aushilfe.getInstance().interne_DB_initialisieren();
+    }
+
+    private static void Verbindung_mit_Localhost() {
+        ConnectionManager.getInstance().setConnection("localhost", "namib", "DABS_42", "DABS_42", "10111");
+    }
+
     static void Gremium_und_Beginn_der_Sitzung() {
         Aushilfe.getInstance().Gremium_Wahl();
         System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
@@ -98,10 +112,9 @@ public class Main extends Aushilfe {
         System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
         String gremiumName = scanner.nextLine();
 
-        Boolean gremiumOffiziell = ist_Offiziell(scanner);
+        Boolean gremiumOffiziell = Aushilfe.getInstance().frage_Ja_Nein(scanner, "Ist das Gremium offiziell");
 
-        System.out.println("Geben Sie den Beginn der Sitzung ein (dd-MM-YYYY HH:mm:ss): ");
-        Timestamp sitzungBeginn = getTimestamp(scanner);
+        Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp(scanner, "Geben Sie den Beginn der Sitzung ein", "dd-MM-YYYY HH:mm:ss");
         // Date sitzungBeginn = Date.valueOf(scanner.nextLine());
         // Sitzungen(Timestamp Beginn, Timestamp Ende, Date Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll)
 
@@ -121,36 +134,6 @@ public class Main extends Aushilfe {
             if (top.equals("ende")) {break;}
             
         }
-    }
-
-    private static Timestamp getTimestamp(Scanner scanner) {
-        // Eingabeaufforderung ausgeben
-        System.out.println("Bitte geben Sie das Timestamp im Format dd-MM-YYYY HH:mm:ss ein: ");
-
-        // Nutzereingabe empfangen
-        String input = scanner.nextLine();
-
-        try {
-            // Konvertiere den Eingabe-String in ein LocalDateTime-Objekt
-            LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(PATTERN));
-
-            // Konvertiere das LocalDateTime-Objekt in ein Timestamp-Objekt
-            return Timestamp.from(dateTime.toInstant(ZoneOffset.UTC));
-        } catch (IllegalArgumentException e) {
-            // Fehlermeldung ausgeben und erneut nach Timestamp fragen
-            System.out.println("Ungültiges Datumsformat. Bitte versuchen Sie es erneut.");
-            return getTimestamp(scanner);
-        }
-    }
-
-    private static boolean ist_Offiziell(Scanner scanner) {
-        String input;
-        do {
-            System.out.println("Ist das Gremium offiziell (ja/nein): ");
-            input = scanner.nextLine();
-        } while (!input.equalsIgnoreCase("ja") && !input.equalsIgnoreCase("nein"));
-        
-        return (input.equalsIgnoreCase("ja"));
     }
 
     private static void Tagesordnung_anzeigen() {
@@ -233,8 +216,5 @@ public class Main extends Aushilfe {
 
         ConnectionManager.getInstance().setConnection(url, db_name, user, pass, port);
         input.close();
-    }
-    private static void aktuelle_Verbindung_anzeigen() {
-        System.out.println(ConnectionManager.getInstance().getConnection().toString());
     }
 }
