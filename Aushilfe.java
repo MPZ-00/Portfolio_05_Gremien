@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -20,14 +21,26 @@ public class Aushilfe implements IAushilfe {
         return instance;
     }
 
-    private boolean Gremium_Wahl() {
+    private void Gremium_Wahl() {
         Gremien_anzeigen();
         String eingabe;
         do {
             System.out.print("\nWelches Gremium soll es sein (Name oder 'neues_Gremium'): ");
             eingabe = Main.scanner.nextLine();
         } while (!Gremien_enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neues_Gremium"));
-        return !eingabe.equalsIgnoreCase("neues_Gremium");
+        
+        if (eingabe.equalsIgnoreCase("neues_Gremium")) {
+            Gremium_erzeugen();
+        }
+    }
+    private void Gremium_erzeugen() {
+        System.out.print("Bezeichnung des Gremiums: ");
+        String name = Main.scanner.nextLine();
+        Boolean offiziell = frage_Ja_Nein(Main.scanner, "Ist das Gremium offiziell");
+        LocalDate beginn = getLocalDate("Beginn des Gremiums");
+        LocalDate ende = getLocalDate("Ende des Gremiums");
+
+        Gremien.setAktuellesGremium(Factory.getInstance().createGremien(name, offiziell, !offiziell, beginn, ende));
     }
     private boolean Gremien_enthaelt_Eingabe(String eingabe) {
         for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
@@ -221,21 +234,19 @@ public class Aushilfe implements IAushilfe {
     }
 
     public Timestamp getTimestamp(String text) {
-        String pattern = "yyyy-MM-dd HH:mm:ss";
+        String template = "yyyy-MM-dd HH:mm:ss";
         String regex = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}";
         // Eingabeaufforderung ausgeben
-        System.out.printf("%s (%s) ein: ", text, pattern);
+        System.out.printf("%s (%s) ein: ", text, template);
         
         try {
-
-            // Nutzereingabe empfangen
             String input = Main.scanner.nextLine();
             if (!input.matches(regex)) {
                 throw new IllegalArgumentException();
             }
 
             // Konvertiere den Eingabe-String in ein LocalDateTime-Objekt
-            LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(pattern));
+            LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(template));
 
             // Konvertiere das LocalDateTime-Objekt in ein Timestamp-Objekt
             return Timestamp.from(dateTime.toInstant(ZoneOffset.of("+1")));
@@ -246,12 +257,44 @@ public class Aushilfe implements IAushilfe {
         }
     }
 
-    public boolean Aufgabe1() {
-        if (Aushilfe.getInstance().Gremium_Wahl()) {
-            // verfügbares Gremium wurde gewählt
-        } else {
-            // TODO: neues Gremium soll erstellt werden
+    public LocalDate getLocalDate(String text) {
+        int yy = 1964, mm = 5, dd = 14;
+        try {
+            System.out.printf("%s (%s) ein: ", text, "Jahr");
+            while (!Main.scanner.hasNextInt()) {
+                yy = Main.scanner.nextInt();
+            }
+            Main.scanner.nextLine();
+            
+            System.out.printf("%s (%s) ein: ", text, "Monat");
+            while (!Main.scanner.hasNextInt()) {
+                mm = Main.scanner.nextInt();
+            }
+            Main.scanner.nextLine();
+
+            System.out.printf("%s (%s) ein: ", text, "Tag");
+            while (!Main.scanner.hasNextInt()) {
+                dd = Main.scanner.nextInt();
+            }
+            Main.scanner.nextLine();
+            
+            return LocalDate.of(yy, mm, dd);
+        } catch (NumberFormatException e) {
+            System.err.println("Ungültige Eingabe. Bitte nur Zahlen eingeben.");
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.err.println("Ungültiges Datumsformat");
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public boolean isValidDateFormat(String input, String regex) {
+        return input.matches(regex);
+    }
+
+    public boolean Aufgabe1() {
+        Aushilfe.getInstance().Gremium_Wahl();
         System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
         
         try {

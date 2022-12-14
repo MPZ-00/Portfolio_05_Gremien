@@ -7,4 +7,5 @@ public interface IAushilfe {
     public void interne_DB_initialisieren();
     public boolean frage_Ja_Nein(Scanner scanner, String frage);
     public Timestamp getTimestamp(String text);
+    public boolean isValidDateFormat(String input, String regex);
 }

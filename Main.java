@@ -30,7 +30,7 @@ public class Main extends Aushilfe {
             init(scanner);
 
             while (!beenden) {
-                System.out.println("\n\n[Menü]");
+                System.out.println("\n[Menü]");
                 for (int i = 0; i < options.size(); i++) {
                     System.out.println((i + 1) + ". " + options.get(i));
                 }
