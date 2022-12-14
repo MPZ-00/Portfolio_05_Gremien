@@ -7,12 +7,21 @@ public class Antrag extends AHauptklasse implements IAntrag {
     private IAntrag.Ergebnis Ergebnis;
     private boolean Angenommen;
 
+    private static Antrag aktuellerAntrag;
+
     public Antrag(int ID, String Titel, String Text, IAntrag.Ergebnis Ergebnis, boolean Angenommen) {
         setID(ID);
         setTitel(Titel);
         setText(Text);
         setErgebnis(Ergebnis);
         setAngenommen(Angenommen);
+    }
+
+    public static void setAktuellenAntrag(Antrag antrag) {
+        aktuellerAntrag = antrag;
+    }
+    public static Antrag getAktuellenAngtrag() {
+        return aktuellerAntrag;
     }
     
     public void setTitel(String Titel) {
