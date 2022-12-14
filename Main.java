@@ -66,10 +66,10 @@ public class Main extends Aushilfe {
                         Aushilfe.getInstance().Sitzung_Wahl();
                         break;
                     case "Tagesordnung wählen":
-                        // TODO: Tagesordnung wählen
+                        Aushilfe.getInstance().Tagesordnung_Wahl();
                         break;
                     case "Antrag wählen":
-                        // TODO: Antrag wählen
+                        Aushilfe.getInstance().Antrag_Wahl();
                         break;
                 }
             }
@@ -114,8 +114,18 @@ public class Main extends Aushilfe {
              * inner join top on top.id_sitzung = s.id
              * inner join tagesordnung t on t.id = top.id_tagesordnung
              * where s.id = <2>
+             * 
+             * select a.id
+             * from tagesordnung t
+             * inner join gehoert_zu on gehoert_zu.id_top = t.id
+             * inner join antrag a on a.id = gehoert_zu.id_antrag
+             * where t.id = <3>
              */
             Aushilfe.getInstance().Aufgabe2();
+
+            /**
+             * Aufgabe 3
+             */
         } catch (Exception e) {
             e.printStackTrace();
         }

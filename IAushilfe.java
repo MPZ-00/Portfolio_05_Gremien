@@ -12,4 +12,6 @@ public interface IAushilfe {
     public boolean Aufgabe2();
     public void Gremium_Wahl();
     public void Sitzung_Wahl();
+    public void Tagesordnung_Wahl();
+    public void Antrag_Wahl();
 }

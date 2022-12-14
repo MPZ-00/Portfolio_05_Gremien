@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -24,6 +25,7 @@ public class Aushilfe implements IAushilfe {
     public void Gremium_Wahl() {
         Gremien_anzeigen();
         String eingabe;
+        Main.scanner.nextLine(); // Eingabepuffer löschen
         do {
             System.out.print("\nWelches Gremium soll es sein (Name oder 'neues_Gremium'): ");
             eingabe = Main.scanner.nextLine();
@@ -79,7 +81,6 @@ public class Aushilfe implements IAushilfe {
         for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen) object;
             
-            System.out.println("s.beginn vs ts beginn\t" + s.getBeginn() + " | " + beginn);
             if (s.getBeginn().equals(beginn)) {
                 Sitzungen.setAktiveSitzung(s);
                 return true;
@@ -311,9 +312,8 @@ public class Aushilfe implements IAushilfe {
     }
     public boolean Aufgabe2() {
         System.out.println("[Tagesordnung]");
-        HashSet<Integer> TOP_ids = new HashSet<>();
-
-        ResultSet rs = getRS(
+        
+        hs_ids top = new hs_ids(
             "select t.id " +
             "from sitzungen s " +
             "inner join top on top.id_sitzung = s.id " +
@@ -321,23 +321,30 @@ public class Aushilfe implements IAushilfe {
             "where s.id = " +
             Sitzungen.getAktiveSitzung().getID()
         );
-        try {
-            while (rs.next()) {
-                TOP_ids.add(rs.getInt("id"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        if (TOP_ids.size() == 0) {
+        if (top.getHS().size() == 0) {
             System.err.println("Für diese Sitzung gibt es keine Tagesordnungen");
             return false;
         }
 
         for (AHauptklasse object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
-            if (TOP_ids.contains(t.getID())) {
+            if (top.getHS().contains(t.getID())) {
                 System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
+                for (AHauptklasse obj : Factory.getInstance().getObject(Antrag.class.toString())) {
+                    Antrag a = (Antrag)obj;
+
+                    hs_ids antraege = new hs_ids(
+                        "select a.id" +
+                        "from tagesordnung t" +
+                        "inner join gehoert_zu on gehoert_zu.id_top = t.id" +
+                        "inner join antrag a on a.id = gehoert_zu.id_antrag" +
+                        "where t.id = " + t.getID()
+                    );
+                    if (antraege.getHS().size() > 0 && antraege.getHS().contains(a.getID())) {
+                        System.out.printf("\nID: %d\nTitel: %s\nText: %s\nErgebnis: %s\nAngenommen: %d", a.getID(), a.getTitel(), a.getText(), a.getErgebnis().toString(), a.isAngenommen());
+                    }
+                }
             }
         }
         return true;
@@ -357,5 +364,38 @@ public class Aushilfe implements IAushilfe {
         }
 
         Sitzungen.setAktiveSitzung(Factory.getInstance().createSitzungen(beginn, ende, einladung_am, oeffentlich, ort, protokoll));
+    }
+
+    public void Tagesordnung_Wahl() {}
+    private void Tagesordnung_erzeugen() {
+        System.out.print("TOP Titel eingeben: ");
+        String titel = Main.scanner.nextLine();
+        System.out.print("TOP Kurzbeschreibung eingeben: ");
+        String kurzbeschreibung = Main.scanner.nextLine();
+        System.out.print("TOP Protokolltext eingeben (oder null): ");
+        String protokolltext = Main.scanner.nextLine();
+        if (protokolltext == "null") {
+            protokolltext = "";
+        }
+
+        Tagesordnung.setAktuellenTOP(Factory.getInstance().createTagesordnung(titel, kurzbeschreibung, protokolltext));
+    }
+
+    public void Antrag_Wahl() {}
+    private void Antrag_erzeugen() {
+        System.out.print("Antrag Titel eingeben: ");
+        String titel = Main.scanner.nextLine();
+        System.out.print("Antrag Text eingeben: ");
+        String text = Main.scanner.nextLine();
+        EnumSet<IAntrag.Ergebnis> ergebnisse = EnumSet.allOf(IAntrag.Ergebnis.class);
+        String input;
+        do {
+            System.out.print("Antrag Ergebnis eingeben (" + ergebnisse.spliterator() + "): ");
+            input = Main.scanner.nextLine();
+        } while (!ergebnisse.contains(IAntrag.Ergebnis.valueOf(input)));
+        IAntrag.Ergebnis ergebnis = IAntrag.Ergebnis.valueOf(input);
+        boolean angenommen = frage_Ja_Nein(Main.scanner, "Antrag angenommen");
+
+        Antrag.setAktuellenAntrag(Factory.getInstance().createAngtrag(titel, text, ergebnis, angenommen));
     }
 }
