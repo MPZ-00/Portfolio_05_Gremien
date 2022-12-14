@@ -1,9 +1,6 @@
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
@@ -79,9 +76,9 @@ public class Main extends Aushilfe {
     }
 
     private static void init(Scanner scanner) {
-        boolean mit_HS_verbunden = Aushilfe.getInstance().frage_Ja_Nein(scanner, "Befinden Sie sich im HS Netz");
+        boolean mit_HS_verbunden = Aushilfe.getInstance().frage_Ja_Nein("Befinden Sie sich im HS Netz");
 
-        if (!mit_HS_verbunden && Aushilfe.getInstance().frage_Ja_Nein(scanner, "Besteht über Putty ein Tunnel zur HS")) {
+        if (!mit_HS_verbunden && Aushilfe.getInstance().frage_Ja_Nein("Besteht über Putty ein Tunnel zur HS")) {
             Verbindung_mit_Localhost();
         } else {
             Verbindung_selber_einrichten();
@@ -125,7 +122,13 @@ public class Main extends Aushilfe {
 
             /**
              * Aufgabe 3
+             * select t.id
+             * from tagesordnung t
+             * inner join top on top.id_tagesordnung = t.id
+             * inner join sitzung s on s.id = top.id_sitzung
+             * where s.id = 1
              */
+            Aushilfe.getInstance().Aufgabe3();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,7 +139,7 @@ public class Main extends Aushilfe {
         System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
         String gremiumName = scanner.nextLine();
 
-        Boolean gremiumOffiziell = Aushilfe.getInstance().frage_Ja_Nein(scanner, "Ist das Gremium offiziell");
+        Boolean gremiumOffiziell = Aushilfe.getInstance().frage_Ja_Nein("Ist das Gremium offiziell");
 
         Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein");
         // Date sitzungBeginn = Date.valueOf(scanner.nextLine());
@@ -157,33 +160,6 @@ public class Main extends Aushilfe {
             
             if (top.equals("ende")) {break;}
             
-        }
-    }
-
-    private static void Tagesordnung_anzeigen() {
-        try {
-            // Alle Tagesordnung einer Sitzung sortiert nach Titel ausgeben
-            Connection connection = ConnectionManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT Tagesordnung.Titel FROM top INNER JOIN Tagesordnung ON top.ID_Tagesordnung = Tagesordnung.ID WHERE top.ID_Sitzung = " + Sitzungen.getAktiveSitzung().getID() + " ORDER BY Tagesordnung.Titel ASC");
-    
-            List<String> titel = new ArrayList<>();
-            while (rs.next()) {
-                titel.add(rs.getString("Titel"));
-            }
-    
-            // Gib die Liste mit den Titeln der Tagesordnung aus
-            System.out.println(titel);
-    
-            ResultSet rs2 = statement.executeQuery("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
-            List<Antrag> antraege = new ArrayList<>();
-            while (rs2.next()) {
-                antraege.add(new Antrag(rs2.getInt("ID"), rs2.getString("Titel"), rs2.getString("Text"), IAntrag.Ergebnis.valueOf(rs2.getString("Ergebnis")), Boolean.parseBoolean(rs2.getString("Angenommen"))));
-            }
-
-            Antraege_fuer_TOP_anzeigen();
-        } catch (SQLException e) {
-            e.getStackTrace();
         }
     }
 
