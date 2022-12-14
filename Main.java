@@ -60,10 +60,10 @@ public class Main extends Aushilfe {
                         beenden = true;
                         break;
                     case "Gremium wählen":
-                        // TODO: Gremium wählen
+                        Aushilfe.getInstance().Gremium_Wahl();
                         break;
                     case "Sitzung wählen":
-                        // TODO: Sitzung wählen
+                        Aushilfe.getInstance().Sitzung_Wahl();
                         break;
                     case "Tagesordnung wählen":
                         // TODO: Tagesordnung wählen

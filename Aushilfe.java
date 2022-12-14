@@ -21,7 +21,7 @@ public class Aushilfe implements IAushilfe {
         return instance;
     }
 
-    private void Gremium_Wahl() {
+    public void Gremium_Wahl() {
         Gremien_anzeigen();
         String eingabe;
         do {
@@ -52,7 +52,6 @@ public class Aushilfe implements IAushilfe {
         }
         return false;
     }
-
     public void Gremien_anzeigen() {
         System.out.println("[Gremien]");
         for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
@@ -61,7 +60,7 @@ public class Aushilfe implements IAushilfe {
         }
     }
 
-    private void Sitzung_Wahl() {
+    public void Sitzung_Wahl() {
         if (Sitzungen_anzeigen(Gremien.getAktuellesGremium().getID())) {
             try {
                 Timestamp sitzungBeginn = getTimestamp("Geben Sie den Beginn der Sitzung ein");
@@ -302,7 +301,7 @@ public class Aushilfe implements IAushilfe {
             System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
         } catch (NullPointerException e) {
             if (Aushilfe.getInstance().frage_Ja_Nein(Main.scanner, "Jetzt neue Sitzung für dieses Gremium anlegen")) {
-                // TODO: Code für neue Sitzung anlegen
+                Sitzung_erzeugen();
             } else {
                 System.err.println("Keine Sitzungen für dieses Gremium verfügbar, wähle ein anderes Gremium aus\n");
                 return Aufgabe1();
@@ -310,8 +309,8 @@ public class Aushilfe implements IAushilfe {
         }
         return true;
     }
-    public void Aufgabe2() {
-        System.out.println("[Sitzungen]");
+    public boolean Aufgabe2() {
+        System.out.println("[Tagesordnung]");
         HashSet<Integer> TOP_ids = new HashSet<>();
 
         ResultSet rs = getRS(
@@ -331,8 +330,8 @@ public class Aushilfe implements IAushilfe {
         }
 
         if (TOP_ids.size() == 0) {
-            System.err.println("Für dieses Gremium gibt es keine Sitzungen");
-            return;
+            System.err.println("Für diese Sitzung gibt es keine Tagesordnungen");
+            return false;
         }
 
         for (AHauptklasse object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
@@ -341,5 +340,22 @@ public class Aushilfe implements IAushilfe {
                 System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
             }
         }
+        return true;
+    }
+
+    private void Sitzung_erzeugen() {
+        Timestamp beginn = getTimestamp("Gib den Beginn der Sitzung");
+        Timestamp ende = getTimestamp("Gib das Ende der Sitzung");
+        LocalDate einladung_am = getLocalDate("Gib das Datum der Einladung");
+        Boolean oeffentlich = frage_Ja_Nein(Main.scanner, "Ist die Sitzung öffentlich");
+        System.out.print("Gib den Ort der Sitzung ein: ");
+        String ort = Main.scanner.nextLine();
+        System.out.print("Gib das Protokoll der Sitzung ein (oder null): ");
+        String protokoll = Main.scanner.nextLine();
+        if (protokoll.matches("null")) {
+            protokoll = "";
+        }
+
+        Sitzungen.setAktiveSitzung(Factory.getInstance().createSitzungen(beginn, ende, einladung_am, oeffentlich, ort, protokoll));
     }
 }
