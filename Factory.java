@@ -60,18 +60,18 @@ public class Factory {
     }
     
     private Integer getGremienID() {
-        return objects.get(Gremien.class.getName()).size();
+        return objects.get(Gremien.class.getName()) == null ? 1 : objects.get(Gremien.class.getName()).size();
     }
     private Integer getAntragID() {
-        return objects.get(Antrag.class.getName()).size();
+        return objects.get(Antrag.class.getName()) == null ? 1 : objects.get(Antrag.class.getName()).size();
     }
     private Integer getTagesordnungID() {
-        return objects.get(Tagesordnung.class.getName()).size();
+        return objects.get(Tagesordnung.class.getName()) == null ? 1 : objects.get(Tagesordnung.class.getName()).size();
     }
     private Integer getAufgabengebieteID() {
-        return objects.get(Aufgabengebiete.class.getName()).size();
+        return objects.get(Aufgabengebiete.class.getName()) == null ? 1 : objects.get(Aufgabengebiete.class.getName()).size();
     }
     private Integer getSitzungenID() {
-        return objects.get(Sitzungen.class.getName()).size();
+        return objects.get(Sitzungen.class.getName()) == null ? 1 : objects.get(Sitzungen.class.getName()).size();
     }
 }
