@@ -448,6 +448,10 @@ public class Aushilfe implements IAushilfe {
                 System.out.print("\nWelcher Antrag soll es sein (Titel oder 'neu'): ");
                 eingabe = Main.scanner.nextLine();
             } while (!Antrag_mit_Titel(eingabe) && !eingabe.equalsIgnoreCase("neu"));
+
+            if (eingabe.equalsIgnoreCase("neu")) {
+                Antrag_erzeugen();
+            }
         } else if (frage_Ja_Nein("Neuen Antrag erstellen")) {
             Antrag_erzeugen();
         }

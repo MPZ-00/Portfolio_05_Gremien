@@ -132,58 +132,6 @@ public class Main extends Aushilfe {
         }
     }
 
-    private static void X_nachher() {
-        // Erstelle ein neues Gremium
-        System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
-        String gremiumName = scanner.nextLine();
-
-        Boolean gremiumOffiziell = Aushilfe.getInstance().frage_Ja_Nein("Ist das Gremium offiziell");
-
-        Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein");
-        // Date sitzungBeginn = Date.valueOf(scanner.nextLine());
-        // Sitzungen(Timestamp Beginn, Timestamp Ende, Date Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll)
-
-        Gremien gremium = Factory.getInstance().createGremien(gremiumName, gremiumOffiziell, !gremiumOffiziell, LocalDate.now(), LocalDate.now().plusYears(50));
-        Gremien.setAktuellesGremium(gremium);
-
-        // Timestamp sitzungEnde = Timestamp.valueOf((LocalDateTime)sitzungBeginn.toLocalDateTime().plus(Duration.ofHours(2)));
-        Timestamp sitzungEnde = new Timestamp(sitzungBeginn.getTime() + TimeUnit.HOURS.toMillis(2));
-        Sitzungen sitzung = Factory.getInstance().createSitzungen(sitzungBeginn, sitzungEnde, LocalDate.now(), true, "", "");
-        Sitzungen.setAktiveSitzung(sitzung);
-
-        // Füge Tagesordnung hinzu
-        while (true) {
-            System.out.println("Geben Sie den Namen des Tagesordnungspunks ein (oder 'ende', um die Eingabe zu beenden): ");
-            String top = scanner.nextLine();
-            
-            if (top.equals("ende")) {break;}
-            
-        }
-    }
-
-    private static void Antraege_fuer_TOP_anzeigen() {
-        try {
-            ResultSet rs = Aushilfe.getInstance().getRS("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
-            while (rs.next()) {
-                System.out.println("Antrag ID: " + rs.getInt("Antrag.ID"));
-                System.out.println("Antrag Titel: " + rs.getString("Antrag.Titel"));
-                System.out.println("Antrag Text: " + rs.getString("Antrag.Text"));
-                System.out.println("Antrag Ergebnis: " + rs.getString("Antrag.Ergebnis"));
-                System.out.println("Antrag Angenommen: " + Boolean.valueOf(rs.getString("Antrag.Angenommen")));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void Tagesordnungspunkt_oder_Antrag() {
-
-    }
-
-    private static void Protokoll_eintragen() {}
-    
-    private static void Ende_Sitzung_eintragen() {}
-
     private static void Verbindung_selber_einrichten() {
         System.out.println("Gib 'null' ein, wenn ein Standardwert verwendet werden soll.");
 
