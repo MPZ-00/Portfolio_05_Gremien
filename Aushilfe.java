@@ -26,11 +26,11 @@ public class Aushilfe implements IAushilfe {
         String eingabe;
         Main.scanner.nextLine(); // Eingabepuffer löschen
         do {
-            System.out.print("\nWelches Gremium soll es sein (Name oder 'neues_Gremium'): ");
+            System.out.print("\nWelches Gremium soll es sein (Name oder 'neu'): ");
             eingabe = Main.scanner.nextLine();
-        } while (!Gremien_enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neues_Gremium"));
+        } while (!Gremien_enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neu"));
         
-        if (eingabe.equalsIgnoreCase("neues_Gremium")) {
+        if (eingabe.equalsIgnoreCase("neu")) {
             Gremium_erzeugen();
         }
     }
@@ -107,7 +107,7 @@ public class Aushilfe implements IAushilfe {
         }
 
         if (s_ids.size() == 0) {
-            System.out.println("Für dieses Gremium gibt es keine Sitzungen");
+            System.err.println("Für dieses Gremium gibt es keine Sitzungen");
             return false;
         }
 
@@ -334,14 +334,14 @@ public class Aushilfe implements IAushilfe {
                     Antrag a = (Antrag)obj;
 
                     hs_ids antraege = new hs_ids(
-                        "select a.id" +
-                        "from tagesordnung t" +
-                        "inner join gehoert_zu on gehoert_zu.id_top = t.id" +
-                        "inner join antrag a on a.id = gehoert_zu.id_antrag" +
+                        "select a.id " +
+                        "from tagesordnung t " +
+                        "inner join gehoert_zu on gehoert_zu.id_top = t.id " +
+                        "inner join antrag a on a.id = gehoert_zu.id_antrag " +
                         "where t.id = " + t.getID()
                     );
                     if (antraege.getHS().size() > 0 && antraege.getHS().contains(a.getID())) {
-                        System.out.printf("\nID: %d\nTitel: %s\nText: %s\nErgebnis: %s\nAngenommen: %d", a.getID(), a.getTitel(), a.getText(), a.getErgebnis().toString(), a.isAngenommen());
+                        System.out.printf("\nID: %d\nTitel: %s\nText: %s\nErgebnis: %s\nAngenommen: %b", a.getID(), a.getTitel(), a.getText(), a.getErgebnis().toString(), a.isAngenommen());
                     }
                 }
             }
@@ -351,7 +351,7 @@ public class Aushilfe implements IAushilfe {
 
     public boolean Aufgabe3() {
         // Auswahl eines TOPs oder eines Antrags einer Sitzung
-        System.out.println("[Tagesordnung|Antrag]");
+        System.out.println("\n[Tagesordnung|Antrag]");
         
         Tagesordnung_Wahl();
         Antrag_Wahl();
@@ -378,13 +378,18 @@ public class Aushilfe implements IAushilfe {
     public void Tagesordnung_Wahl() {
         if (Tagesordnung_anzeigen()) {
             String eingabe;
-            Main.scanner.nextLine(); // Eingabepuffer löschen
             do {
                 System.out.print("\nWelche Tagesordnung soll es ein (Titel oder 'neu'): ");
                 eingabe = Main.scanner.nextLine();
             } while (!TOP_mit_Titel(eingabe) && !eingabe.equalsIgnoreCase("neu"));
-        } else if (frage_Ja_Nein("Neue Tagesordnung erstellen")) {
-            Tagesordnung_erzeugen();
+
+            if (eingabe.equalsIgnoreCase("neu")) {
+                Tagesordnung_erzeugen();
+            }
+        } else {
+            if (frage_Ja_Nein("Neue Tagesordnung erstellen")) {
+                Tagesordnung_erzeugen();
+            }
         }
     }
     private boolean TOP_mit_Titel(String eingabe) {
@@ -417,7 +422,7 @@ public class Aushilfe implements IAushilfe {
             "select t.id " +
             "from tagesordnung t " +
             "inner join top on top.id_tagesordnung = t.id " +
-            "inner join sitzung s on s.id = top.id_sitzung " +
+            "inner join sitzungen s on s.id = top.id_sitzung " +
             "where s.id = " +
             Sitzungen.getAktiveSitzung().getID()
         );
@@ -439,7 +444,6 @@ public class Aushilfe implements IAushilfe {
     public void Antrag_Wahl() {
         if (Antrag_anzeigen()) {
             String eingabe;
-            Main.scanner.nextLine(); // Eingabepuffer löschen
             do {
                 System.out.print("\nWelcher Antrag soll es sein (Titel oder 'neu'): ");
                 eingabe = Main.scanner.nextLine();
@@ -467,12 +471,25 @@ public class Aushilfe implements IAushilfe {
         String input;
         do {
             System.out.print("Antrag Ergebnis eingeben (" + ergebnisse.spliterator() + "): ");
-            input = Main.scanner.nextLine();
+            input = Main.scanner.nextLine().toUpperCase();
         } while (!ergebnisse.contains(IAntrag.Ergebnis.valueOf(input)));
         IAntrag.Ergebnis ergebnis = IAntrag.Ergebnis.valueOf(input);
         boolean angenommen = frage_Ja_Nein("Antrag angenommen");
 
         Antrag.setAktuellenAntrag(Factory.getInstance().createAngtrag(titel, text, ergebnis, angenommen));
+
+        ConnectionManager.getInstance().executeStatement("insert into antrag values (" +
+                Antrag.getAktuellenAngtrag().getID() + ", " +
+                Antrag.getAktuellenAngtrag().getTitel() + ", " +
+                Antrag.getAktuellenAngtrag().getText() + ", " +
+                Antrag.getAktuellenAngtrag().getErgebnis().toString() + ", " +
+                (Antrag.getAktuellenAngtrag().isAngenommen() == true ? "1" : "0") +
+                ")");
+        ConnectionManager.getInstance().executeStatement(
+                "insert into gehoert_zu values (" +
+                    Antrag.getAktuellenAngtrag().getID() + ", " +
+                    Tagesordnung.getAktuellenTOP().getID() + ")");
+        ConnectionManager.getInstance().executeStatement("commit");
     }
     public boolean Antrag_anzeigen() {
         System.out.println("[Antrag]");
@@ -494,7 +511,7 @@ public class Aushilfe implements IAushilfe {
         for (AHauptklasse object : Factory.getInstance().getObject(Antrag.class.toString())) {
             Antrag a = (Antrag)object;
             if (hs.getHS().contains(a.getID())) {
-                System.out.printf("\nID: %d\nTitel: %s\nText: %s\nErgebnis: %s\nAngenommen: %b", a.getID(), a.getTitel(), a.getErgebnis().toString(), a.isAngenommen());
+                System.out.printf("\nID: %d\nTitel: %s\nText: %s\nErgebnis: %s\nAngenommen: %b", a.getID(), a.getTitel(), a.getText(), a.getErgebnis().toString(), a.isAngenommen());
             }
         }
         return true;

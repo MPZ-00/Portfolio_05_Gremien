@@ -18,8 +18,6 @@ public class Main extends Aushilfe {
     );
     
     public static void main(String[] args) {
-        // Erstelle einen Scanner, um die Eingabe vom Benutzer zu lesen
-
         try {
             int auswahl;
             boolean beenden = false;
