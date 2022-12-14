@@ -11,6 +11,10 @@ public class Main extends Aushilfe {
     public static final Scanner scanner = new Scanner(System.in);
     private static final List<String> options = Arrays.asList(
         "Prozess starten",
+        "Gremium wählen",
+        "Sitzung wählen",
+        "Tagesordnung wählen",
+        "Antrag wählen",
         "Verbindung selber einrichten",
         "Verbindung mit Localhost",
         "Programm beenden"
@@ -26,6 +30,7 @@ public class Main extends Aushilfe {
             init(scanner);
 
             while (!beenden) {
+                System.out.println("\n\n[Menü]");
                 for (int i = 0; i < options.size(); i++) {
                     System.out.println((i + 1) + ". " + options.get(i));
                 }
@@ -53,6 +58,18 @@ public class Main extends Aushilfe {
                         break;
                     case "Programm beenden":
                         beenden = true;
+                        break;
+                    case "Gremium wählen":
+                        // TODO: Gremium wählen
+                        break;
+                    case "Sitzung wählen":
+                        // TODO: Sitzung wählen
+                        break;
+                    case "Tagesordnung wählen":
+                        // TODO: Tagesordnung wählen
+                        break;
+                    case "Antrag wählen":
+                        // TODO: Antrag wählen
                         break;
                 }
             }
@@ -94,7 +111,7 @@ public class Main extends Aushilfe {
              * Aufgabe 2
              * select t.id
              * from sitzungen s
-             * inner join top on top.id_sitzungen = s.id
+             * inner join top on top.id_sitzung = s.id
              * inner join tagesordnung t on t.id = top.id_tagesordnung
              * where s.id = <2>
              */
@@ -111,7 +128,7 @@ public class Main extends Aushilfe {
 
         Boolean gremiumOffiziell = Aushilfe.getInstance().frage_Ja_Nein(scanner, "Ist das Gremium offiziell");
 
-        Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein", "dd-MM-YYYY HH:mm:ss");
+        Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein");
         // Date sitzungBeginn = Date.valueOf(scanner.nextLine());
         // Sitzungen(Timestamp Beginn, Timestamp Ende, Date Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll)
 

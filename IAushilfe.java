@@ -3,8 +3,8 @@ import java.util.Scanner;
 
 public interface IAushilfe {
     public void Gremien_anzeigen();
-    public void Sitzungen_anzeigen(Integer id);
+    public boolean Sitzungen_anzeigen(Integer id);
     public void interne_DB_initialisieren();
     public boolean frage_Ja_Nein(Scanner scanner, String frage);
-    public Timestamp getTimestamp(String text, String pattern);
+    public Timestamp getTimestamp(String text);
 }
