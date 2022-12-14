@@ -2,6 +2,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class Aushilfe implements IAushilfe {
@@ -15,7 +20,7 @@ public class Aushilfe implements IAushilfe {
         return instance;
     }
 
-    public void Gremium_Wahl() {
+    private void Gremium_Wahl() {
         Gremien_anzeigen();
         Scanner scanner = new Scanner(System.in);
         String eingabe;
@@ -23,7 +28,6 @@ public class Aushilfe implements IAushilfe {
             System.out.print("\nWelches Gremium soll es sein (Name): ");
             eingabe = scanner.nextLine();
         } while (!Gremien_enthaelt_Eingabe(eingabe));
-
         scanner.close();
     }
     private boolean Gremien_enthaelt_Eingabe(String eingabe) {
@@ -45,46 +49,61 @@ public class Aushilfe implements IAushilfe {
         }
     }
 
-    public void Sitzung_Wahl() {
-        Sitzungen_anzeigen();
-        try (Scanner scanner = new Scanner(System.in)) {
-            String eingabe;
-            do {
-                System.out.print("\nWelche Sitzung soll es sein (Beginn): ");
-                while (!scanner.hasNextLine()) {
-                    // Warten, bis der Scanner Eingabebereit ist
-                }
-                System.out.println("nextLine: " + scanner.nextLine());
-                eingabe = scanner.nextLine();
-                if (eingabe.equals("")) {
-                    continue;
-                }
-                // TODO: Fix this
-                System.out.println("Ihre Eingabe: " + eingabe);
-            } while (!Sitzungen_enthaelt_Eingabe(eingabe));
+    private void Sitzung_Wahl() {
+        Sitzungen_anzeigen(Gremien.getAktuellesGremium().getID());
+        try {
+            Timestamp sitzungBeginn = getTimestamp("Geben Sie den Beginn der Sitzung ein", "yyyy-MM-dd HH:mm:ss");
+            
+            if (Sitzungen_enthaelt_Eingabe(sitzungBeginn)) {
+                System.out.println("OK");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private boolean Sitzungen_enthaelt_Eingabe(String eingabe) {
+    private boolean Sitzungen_enthaelt_Eingabe(Timestamp beginn) {
         for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen) object;
-            if (s.getBeginn().toString().equalsIgnoreCase(eingabe)) {
+            if (s.getBeginn().equals(beginn)) {
                 Sitzungen.setAktiveSitzung(s);
                 return true;
             }
         }
         return false;
     }
-    public void Sitzungen_anzeigen() {
+    public void Sitzungen_anzeigen(Integer id) {
         System.out.println("[Sitzungen]");
+        HashSet<Integer> s_ids = new HashSet<>();
+
+        ResultSet rs = getRS(
+            "select s.id " +
+            "from sitzungen s " +
+            "inner join hat on hat.id_sitzungen = s.id " +
+            "inner join gremien g on g.id = hat.id_gremien where g.id = " +
+            Gremien.getAktuellesGremium().getID()
+        );
+        try {
+            while (rs.next()) {
+                s_ids.add(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (s_ids.size() == 0) {
+            System.out.println("Für dieses Gremium gibt es keine Sitzungen");
+            return;
+        }
+
         for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen)object;
-            System.out.printf("\nID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), "könnte zu lang sein");
+            if (s_ids.contains(s.getID())) {
+                System.out.printf("\nID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), s.getProtokoll());
+            }
         }
     }
 
-    private ResultSet getRS(String sql) {
+    public ResultSet getRS(String sql) {
         try {
             Connection connection = ConnectionManager.getInstance().getConnection();
             Statement statement = connection.createStatement();
@@ -182,6 +201,94 @@ public class Aushilfe implements IAushilfe {
             );
 
             Factory.getInstance().addObject(Tagesordnung.class.toString(), t);
+        }
+    }
+
+    public boolean frage_Ja_Nein(Scanner scanner, String frage) {
+        String input;
+        do {
+            System.out.println(frage + " (ja/nein): ");
+            input = scanner.nextLine();
+        } while (!input.equalsIgnoreCase("ja") && !input.equalsIgnoreCase("nein"));
+
+        return (input.equalsIgnoreCase("ja"));
+    }
+
+    public Timestamp getTimestamp(String text, String pattern) {
+        // Eingabeaufforderung ausgeben
+        System.out.printf("%s (%s) ein: ", text, pattern);
+        
+        try (Scanner scanner = new Scanner(System.in)) {
+            // Auf Bereitschaft vom Scanner warten
+            while (!scanner.hasNextLine()) {
+                Thread.sleep(1 * 1000);
+            }
+
+            // Nutzereingabe empfangen
+            String input = scanner.nextLine();
+
+            // Konvertiere den Eingabe-String in ein LocalDateTime-Objekt
+            LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(pattern));
+
+            // Konvertiere das LocalDateTime-Objekt in ein Timestamp-Objekt
+            return Timestamp.from(dateTime.toInstant(ZoneOffset.UTC));
+        } catch (IllegalArgumentException e) {
+            // Fehlermeldung ausgeben und erneut nach Timestamp fragen
+            System.err.println("Ungültiges Datumsformat. Bitte versuchen Sie es erneut.");
+            return getTimestamp(text, pattern);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean Aufgabe1() {
+        Aushilfe.getInstance().Gremium_Wahl();
+        System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            Aushilfe.getInstance().Sitzung_Wahl();
+            System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
+        } catch (NullPointerException e) {
+            if (Aushilfe.getInstance().frage_Ja_Nein(scanner, "Jetzt neue Sitzung für dieses Gremium anlegen")) {
+                // TODO: Code für neue Sitzung anlegen
+            } else {
+                System.err.println("Keine Sitzungen für dieses Gremium verfügbar, wähle ein anderes Gremium aus");
+                return Aufgabe1();
+            }
+        }
+        return true;
+    }
+    public void Aufgabe2() {
+        System.out.println("[Sitzungen]");
+        HashSet<Integer> TOP_ids = new HashSet<>();
+
+        ResultSet rs = getRS(
+            "select t.id " +
+            "from sitzungen s " +
+            "inner join top on top.id_sitzungen = s.id " +
+            "inner join tagesordnung t on t.id = top.id_tagesordnung " +
+            "where s.id = " +
+            Sitzungen.getAktiveSitzung().getID()
+        );
+        try {
+            while (rs.next()) {
+                TOP_ids.add(rs.getInt("s.id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (TOP_ids.size() == 0) {
+            System.out.println("Für dieses Gremium gibt es keine Sitzungen");
+            return;
+        }
+
+        for (AHauptklasse object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+            Tagesordnung t = (Tagesordnung)object;
+            if (TOP_ids.contains(t.getID())) {
+                System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
+            }
         }
     }
 }

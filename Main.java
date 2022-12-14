@@ -9,11 +9,7 @@ import java.time.LocalDate;
 
 public class Main extends Aushilfe {
     private static final List<String> options = Arrays.asList(
-        "Gremium und Beginn der Sitzung auswählen",
-        "Tagesordnung anzeigen",
-        "Tagesordnungspunkt oder Antrag auswählen",
-        "Protokoll eintragen",
-        "Ende der Sitzung eintragen",
+        "Prozess starten",
         "Verbindung selber einrichten",
         "Verbindung mit Localhost",
         "Programm beenden"
@@ -45,35 +41,17 @@ public class Main extends Aushilfe {
                         Verbindung_selber_einrichten();
                         ConnectionManager.getInstance().showConnection();
                         break;
-                    case "Gremium und Beginn der Sitzung auswählen":
-                        Gremium_und_Beginn_der_Sitzung();
-                        break;
-                    case "Tagesordnung anzeigen":
-                        Tagesordnung_anzeigen();
-                        break;
-                    case "Tagesordnungspunkt oder Antrag auswählen":
-                        Tagesordnungspunkt_oder_Antrag();
-                        break;
-                    case "Protokoll eintragen":
-                        Protokoll_eintragen();
-                        break;
-                    case "Ende der Sitzung eintragen":
-                        Ende_Sitzung_eintragen();
-                        break;
-                    case "Programm beenden":
-                        beenden = true;
-                        break;
                     case "Verbindung mit Localhost":
                         Verbindung_mit_Localhost();
                         break;
-                    case "X_nachher":
-                        X_nachher();
-                        break;
-                    case "Interne DB initialisieren":
-                        Aushilfe.getInstance().interne_DB_initialisieren();
-                        break;
                     case "Verbindung anzeigen":
                         ConnectionManager.getInstance().showConnection();
+                        break;
+                    case "Prozess starten":
+                        Prozessschritte();
+                        break;
+                    case "Programm beenden":
+                        beenden = true;
                         break;
                 }
             }
@@ -92,17 +70,37 @@ public class Main extends Aushilfe {
         }
 
         Aushilfe.getInstance().interne_DB_initialisieren();
+        System.out.println();
     }
 
     private static void Verbindung_mit_Localhost() {
         ConnectionManager.getInstance().setConnection("localhost", "namib", "DABS_42", "DABS_42", "10111");
     }
 
-    static void Gremium_und_Beginn_der_Sitzung() {
-        Aushilfe.getInstance().Gremium_Wahl();
-        System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
-        Aushilfe.getInstance().Sitzung_Wahl();
-        System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
+    private static void Prozessschritte() {
+        try {
+            /**
+             * Aufgabe 1
+             * select s.id
+             * from sitzungen s
+             * inner join hat on hat.id_sitzungen = s.id
+             * inner join gremien g on g.id = hat.id_gremien
+             * where g.id = <1>
+             */
+            Aushilfe.getInstance().Aufgabe1();
+            
+            /**
+             * Aufgabe 2
+             * select t.id
+             * from sitzungen s
+             * inner join top on top.id_sitzungen = s.id
+             * inner join tagesordnung t on t.id = top.id_tagesordnung
+             * where s.id = <2>
+             */
+            Aushilfe.getInstance().Aufgabe2();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void X_nachher() {
@@ -114,7 +112,7 @@ public class Main extends Aushilfe {
 
         Boolean gremiumOffiziell = Aushilfe.getInstance().frage_Ja_Nein(scanner, "Ist das Gremium offiziell");
 
-        Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp(scanner, "Geben Sie den Beginn der Sitzung ein", "dd-MM-YYYY HH:mm:ss");
+        Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein", "dd-MM-YYYY HH:mm:ss");
         // Date sitzungBeginn = Date.valueOf(scanner.nextLine());
         // Sitzungen(Timestamp Beginn, Timestamp Ende, Date Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll)
 
@@ -165,7 +163,7 @@ public class Main extends Aushilfe {
 
     private static void Antraege_fuer_TOP_anzeigen() {
         try {
-            ResultSet rs = getRS("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
+            ResultSet rs = Aushilfe.getInstance().getRS("SELECT Antrag.* FROM Antrag JOIN gehoert_zu ON Antrag.ID = gehoert_zu.ID_Antrag WHERE gehoert_zu.ID_TOP = " + Tagesordnung.getAktuellenTOP().getID());
             while (rs.next()) {
                 System.out.println("Antrag ID: " + rs.getInt("Antrag.ID"));
                 System.out.println("Antrag Titel: " + rs.getString("Antrag.Titel"));
@@ -175,17 +173,6 @@ public class Main extends Aushilfe {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private static ResultSet getRS(String sql) {
-        try {
-            Connection connection = ConnectionManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
