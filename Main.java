@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 
 public class Main extends Aushilfe {
+    public static final Scanner scanner = new Scanner(System.in);
     private static final List<String> options = Arrays.asList(
         "Prozess starten",
         "Verbindung selber einrichten",
@@ -18,7 +19,7 @@ public class Main extends Aushilfe {
     public static void main(String[] args) {
         // Erstelle einen Scanner, um die Eingabe vom Benutzer zu lesen
 
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
             int auswahl;
             boolean beenden = false;
             
@@ -32,7 +33,7 @@ public class Main extends Aushilfe {
 
                 while (!scanner.hasNextInt() || (auswahl = scanner.nextInt()) < 1 || auswahl > options.size()) {
                     System.out.println("Bitte gültige Auswahl eingeben (1-" + options.size() + "): ");
-                    scanner.nextLine(); // Leere den Eingabepuffer
+                    scanner.nextLine(); // Leere den Eingabepuffer bei falscher Eingabe
                 }
 
                 // Verwende options.get() anstatt feste Werte im switch-Statement
@@ -104,8 +105,6 @@ public class Main extends Aushilfe {
     }
 
     private static void X_nachher() {
-        Scanner scanner = new Scanner(System.in);
-        
         // Erstelle ein neues Gremium
         System.out.println("Geben Sie die Bezeichnung des Gremiums ein: ");
         String gremiumName = scanner.nextLine();
@@ -185,23 +184,20 @@ public class Main extends Aushilfe {
     private static void Ende_Sitzung_eintragen() {}
 
     private static void Verbindung_selber_einrichten() {
-        Scanner input = new Scanner(System.in);
-
         System.out.println("Gib 'null' ein, wenn ein Standardwert verwendet werden soll.");
 
         // Eingabeaufforderungen für die Verbindungsparameter
         System.out.print("URL der Datenbank: ");
-        String url = input.nextLine();
+        String url = scanner.nextLine();
         System.out.print("Name der Datenbank: ");
-        String db_name = input.nextLine();
+        String db_name = scanner.nextLine();
         System.out.print("Benutzername: ");
-        String user = input.nextLine();
+        String user = scanner.nextLine();
         System.out.print("Passwort: ");
-        String pass = input.nextLine();
+        String pass = scanner.nextLine();
         System.out.print("Port: ");
-        String port = input.nextLine();
+        String port = scanner.nextLine();
 
         ConnectionManager.getInstance().setConnection(url, db_name, user, pass, port);
-        input.close();
     }
 }

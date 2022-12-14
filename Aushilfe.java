@@ -22,13 +22,11 @@ public class Aushilfe implements IAushilfe {
 
     private void Gremium_Wahl() {
         Gremien_anzeigen();
-        Scanner scanner = new Scanner(System.in);
         String eingabe;
         do {
             System.out.print("\nWelches Gremium soll es sein (Name): ");
-            eingabe = scanner.nextLine();
+            eingabe = Main.scanner.nextLine();
         } while (!Gremien_enthaelt_Eingabe(eingabe));
-        scanner.close();
     }
     private boolean Gremien_enthaelt_Eingabe(String eingabe) {
         for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
@@ -218,14 +216,14 @@ public class Aushilfe implements IAushilfe {
         // Eingabeaufforderung ausgeben
         System.out.printf("%s (%s) ein: ", text, pattern);
         
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
             // Auf Bereitschaft vom Scanner warten
-            while (!scanner.hasNextLine()) {
-                Thread.sleep(1 * 1000);
+            if (!Main.scanner.hasNextLine()) {
+                Main.scanner.reset();
             }
 
             // Nutzereingabe empfangen
-            String input = scanner.nextLine();
+            String input = Main.scanner.nextLine();
 
             // Konvertiere den Eingabe-String in ein LocalDateTime-Objekt
             LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(pattern));
@@ -236,21 +234,18 @@ public class Aushilfe implements IAushilfe {
             // Fehlermeldung ausgeben und erneut nach Timestamp fragen
             System.err.println("Ungültiges Datumsformat. Bitte versuchen Sie es erneut.");
             return getTimestamp(text, pattern);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 
     public boolean Aufgabe1() {
         Aushilfe.getInstance().Gremium_Wahl();
         System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
-        Scanner scanner = new Scanner(System.in);
-
+        
         try {
             Aushilfe.getInstance().Sitzung_Wahl();
             System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
         } catch (NullPointerException e) {
-            if (Aushilfe.getInstance().frage_Ja_Nein(scanner, "Jetzt neue Sitzung für dieses Gremium anlegen")) {
+            if (Aushilfe.getInstance().frage_Ja_Nein(Main.scanner, "Jetzt neue Sitzung für dieses Gremium anlegen")) {
                 // TODO: Code für neue Sitzung anlegen
             } else {
                 System.err.println("Keine Sitzungen für dieses Gremium verfügbar, wähle ein anderes Gremium aus");
