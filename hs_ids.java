@@ -6,7 +6,7 @@ public class hs_ids {
     private HashSet<Integer> hs = new HashSet<>();
 
     public hs_ids(String sql) {
-        ResultSet rs = Aushilfe.getInstance().getRS(sql);
+        ResultSet rs = ConnectionManager.getInstance().executeStatement(sql);
         try {
             while (rs.next()) {
                 hs.add(rs.getInt("id"));

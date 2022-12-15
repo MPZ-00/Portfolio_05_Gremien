@@ -103,7 +103,7 @@ public class Aushilfe implements IAushilfe {
         System.out.println("[Sitzungen]");
         HashSet<Integer> s_ids = new HashSet<>();
 
-        ResultSet rs = getRS(
+        ResultSet rs = ConnectionManager.getInstance().executeStatement(
             "select s.id " +
             "from sitzungen s " +
             "inner join hat on hat.id_sitzungen = s.id " +
@@ -133,17 +133,6 @@ public class Aushilfe implements IAushilfe {
         return true;
     }
 
-    public ResultSet getRS(String sql) {
-        try {
-            Connection connection = ConnectionManager.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public void interne_DB_initialisieren() {
         System.out.println("Interne DB wird initialisiert");
         try {
@@ -160,25 +149,25 @@ public class Aushilfe implements IAushilfe {
     }
 
     private void init_Gremien_from_ResultSet() throws Exception {
-        ResultSet rs_Gremien = getRS("SELECT * FROM Gremien");
+        ResultSet rs_Gremien = ConnectionManager.getInstance().executeStatement("SELECT * FROM Gremien");
         while (rs_Gremien != null && rs_Gremien.next()) {
             java.sql.Date beginn = rs_Gremien.getDate("Beginn");
             java.sql.Date ende = rs_Gremien.getDate("Ende");
 
             Gremien g = new Gremien(
-                    rs_Gremien.getInt("ID"),
-                    rs_Gremien.getString("Name"),
-                    rs_Gremien.getString("offiziell").matches("(?i)1|t|y"),
-                    rs_Gremien.getString("inoffiziell").matches("(?i)1|t|y"),
-                    beginn.toLocalDate(),
-                    ende.toLocalDate()
+                rs_Gremien.getInt("ID"),
+                rs_Gremien.getString("Name"),
+                rs_Gremien.getString("offiziell").matches("(?i)1|t|y"),
+                rs_Gremien.getString("inoffiziell").matches("(?i)1|t|y"),
+                beginn.toLocalDate(),
+                ende.toLocalDate()
             );
 
             Factory.getInstance().addObject(Gremien.class.toString(), g);
         }
     }
     private void init_Antrag_from_ResultSet() throws Exception {
-        ResultSet rs_Antrag = getRS("SELECT * FROM Antrag");
+        ResultSet rs_Antrag = ConnectionManager.getInstance().executeStatement("SELECT * FROM Antrag");
         while (rs_Antrag != null && rs_Antrag.next()) {
             Antrag a = new Antrag(
                 rs_Antrag.getInt("ID"),
@@ -192,7 +181,7 @@ public class Aushilfe implements IAushilfe {
         }
     }
     private void init_Sitzungen_from_ResultSet() throws SQLException {
-        ResultSet rs_Sitzungen = getRS("SELECT * FROM Sitzungen");
+        ResultSet rs_Sitzungen = ConnectionManager.getInstance().executeStatement("SELECT * FROM Sitzungen");
         while (rs_Sitzungen != null && rs_Sitzungen.next()) {
             java.sql.Date Einladung_am = rs_Sitzungen.getDate("Einladung_am");
             Sitzungen s = new Sitzungen(
@@ -209,7 +198,7 @@ public class Aushilfe implements IAushilfe {
         }
     }
     private void init_Aufgabengebiete_from_ResultSet() throws SQLException {
-        ResultSet rs_Aufgabengebiete = getRS("SELECT * FROM Aufgabengebiete");
+        ResultSet rs_Aufgabengebiete = ConnectionManager.getInstance().executeStatement("SELECT * FROM Aufgabengebiete");
         while (rs_Aufgabengebiete != null && rs_Aufgabengebiete.next()) {
             Aufgabengebiete au = new Aufgabengebiete(
                 rs_Aufgabengebiete.getInt("ID"),
@@ -221,7 +210,7 @@ public class Aushilfe implements IAushilfe {
         }
     }
     private void init_Tagesordnung_from_ResultSet() throws SQLException {
-        ResultSet rs_Tagesordnung = getRS("SELECT * FROM Tagesordnung");
+        ResultSet rs_Tagesordnung = ConnectionManager.getInstance().executeStatement("SELECT * FROM Tagesordnung");
         while (rs_Tagesordnung != null && rs_Tagesordnung.next()) {
             Tagesordnung t = new Tagesordnung(
                 rs_Tagesordnung.getInt("ID"),

@@ -1,8 +1,4 @@
 import java.util.*;
-import java.util.concurrent.TimeUnit;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.time.LocalDate;
 
 public class Main extends Aushilfe {
     public static final Scanner scanner = new Scanner(System.in);
