@@ -42,6 +42,18 @@ public class Aushilfe implements IAushilfe {
         LocalDate ende = getLocalDate("Ende des Gremiums");
 
         Gremien.setAktuellesGremium(Factory.getInstance().createGremien(name, offiziell, !offiziell, beginn, ende));
+
+        ConnectionManager.getInstance().executeStatement(
+            "insert into Gremien values (" +
+            Gremien.getAktuellesGremium().getID() + ", " +
+            Gremien.getAktuellesGremium().getName() + ", " +
+            (Gremien.getAktuellesGremium().getOffiziell() ? "1" : "0") + ", " +
+            (Gremien.getAktuellesGremium().getInoffiziell() ? "1" : "0") + ", " +
+            Gremien.getAktuellesGremium().getBeginn() + ", " +
+            Gremien.getAktuellesGremium().getEnde() + ")"
+        );
+
+        ConnectionManager.getInstance().executeStatement("commit");
     }
     private boolean Gremien_enthaelt_Eingabe(String eingabe) {
         for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
@@ -373,6 +385,25 @@ public class Aushilfe implements IAushilfe {
         }
 
         Sitzungen.setAktiveSitzung(Factory.getInstance().createSitzungen(beginn, ende, einladung_am, oeffentlich, ort, protokoll));
+        
+        ConnectionManager.getInstance().executeStatement(
+            "insert into sitzungen values (" +
+            Sitzungen.getAktiveSitzung().getID() + ", " +
+            Sitzungen.getAktiveSitzung().getBeginn() + ", " +
+            Sitzungen.getAktiveSitzung().getEnde() + ", " +
+            Sitzungen.getAktiveSitzung().getEinladung_am() + ", " +
+            (Sitzungen.getAktiveSitzung().getOeffentlich() ? "1" : "0") + ", " +
+            Sitzungen.getAktiveSitzung().getOrt() + ", " +
+            Sitzungen.getAktiveSitzung().getProtokoll() + ")"
+        );
+
+        ConnectionManager.getInstance().executeStatement(
+            "insert into hat values (" +
+            Gremien.getAktuellesGremium().getID() + ", " +
+            Sitzungen.getAktiveSitzung().getID() + ")"
+        );
+
+        ConnectionManager.getInstance().executeStatement("commit");
     }
 
     public void Tagesordnung_Wahl() {
@@ -414,6 +445,22 @@ public class Aushilfe implements IAushilfe {
         }
 
         Tagesordnung.setAktuellenTOP(Factory.getInstance().createTagesordnung(titel, kurzbeschreibung, protokolltext));
+        
+        ConnectionManager.getInstance().executeStatement(
+            "insert into tagesordnung values (" +
+            Tagesordnung.getAktuellenTOP().getID() + ", " +
+            Tagesordnung.getAktuellenTOP().getTitel() + ", " +
+            Tagesordnung.getAktuellenTOP().getKurzbeschreibung() + ", " +
+            Tagesordnung.getAktuellenTOP().getProtokolltext() + ")"
+        );
+
+        ConnectionManager.getInstance().executeStatement(
+            "insert into top values (" +
+            Sitzungen.getAktiveSitzung().getID() + ", " +
+            Tagesordnung.getAktuellenTOP().getID() + ")"
+        );
+
+        ConnectionManager.getInstance().executeStatement("commit");
     }
     public boolean Tagesordnung_anzeigen() {
         System.out.println("[Tagesordnung]");
