@@ -8,16 +8,16 @@ insert into Gremien (ID, Name, offiziell, inoffiziell, Beginn, Ende) values (6, 
 insert into Gremien (ID, Name, offiziell, inoffiziell, Beginn, Ende) values (7, 'Mitarbeiter-Initiative', '0', '1', to_date('01.01.2022', 'dd.mm.YYYY'), to_date('31.12.2022', 'dd.mm.YYYY'));
 insert into Gremien (ID, Name, offiziell, inoffiziell, Beginn, Ende) values (8, 'Geschäftsführung', '1', '0', to_date('01.01.2022', 'dd.mm.YYYY'), to_date('31.12.2022', 'dd.mm.YYYY'));
 
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (7, 6, 'Qualitätskontrolle und sicherung');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (8, 4, 'IT-Support und Entwicklung');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (9, 7, 'Einkauf undBeschaffung');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (10, 1, 'Projektmanagement');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (11, 5, 'Kundenbetreuung');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (12, 1, 'Personalmanagement');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (13, 7, 'Marketing und Werbung');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (14, 2, 'Finanzplanung und kontrolle');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (15, 8, 'Produktentwicklung und management');
-insert into Aufgabengebiete (ID, Ag_ID, Aufgabengebiet) values (16, 3, 'Lieferantenmanagement');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (7, 'Qualitätskontrolle und sicherung');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (8, 'IT-Support und Entwicklung');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (9, 'Einkauf undBeschaffung');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (10, 'Projektmanagement');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (11, 'Kundenbetreuung');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (12, 'Personalmanagement');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (13, 'Marketing und Werbung');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (14, 'Finanzplanung und kontrolle');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (15, 'Produktentwicklung und management');
+insert into Aufgabengebiete (ID, Aufgabengebiet) values (16, 'Lieferantenmanagement');
 
 insert into Dokument (ID, Mime_Typ, Erstelldatum, Inhalt) values (5, 'pdf', to_date('15.01.2022', 'dd.mm.YYYY'), 'Inhalt des Dokuments');
 insert into Dokument (ID, Mime_Typ, Erstelldatum, Inhalt) values (6, 'docx', to_date('01.03.2022', 'dd.mm.YYYY'), 'Inhalt des Dokuments');
@@ -37,7 +37,7 @@ insert into Adresse (ID, Strasse, Hausnummer, PLZ, Ort) values (6, 'Lustigstr.',
 insert into Lehrbeauftragte (ID) values (6);
 
 insert into Personen (ID, Geburtsdatum, Geschlecht) values (7, to_date('01.07.2000', 'dd.mm.YYYY'), 'd');
-insert into Namen (ID, Vorname, Nachname) (7, 'Friedrich', 'Feuerstein');
+insert into Namen (ID, Vorname, Nachname) values (7, 'Friedrich', 'Feuerstein');
 insert into Adresse (ID, Strasse, Hausnummer, PLZ, Ort) values (7, 'Feuersteinstr.', 10, 98765, 'Feuersteinburg');
 insert into Mitarbeiter (ID) values (7);
 
@@ -70,17 +70,59 @@ insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protoko
 insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (5, to_timestamp('11.05.2022 10:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('11.05.2022 12:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('10.05.2022', 'dd.mm.YYYY'), '1', 'Hauptsitzungsraum', 'Protokoll der Sitzung vom 11.05.2022');
 insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (6, to_timestamp('18.05.2022 09:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('18.05.2022 11:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('17.05.2022', 'dd.mm.YYYY'), '0', 'Konferenzraum 2', 'Protokoll der Sitzung vom 18.05.2022');
 insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (7, to_timestamp('25.05.2022 14:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('25.05.2022 16:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('24.05.2022', 'dd.mm.YYYY'), '1', 'Hauptsitzungsraum', 'Protokoll der Sitzung vom 25.05.2022');
-insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (8, to_timestamp('01.06.2022 13:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('01.06.2022 15:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('31.05.2022', 'dd.mm.YYYY'), '0', 'Besprechungsraum 1', 'Protokoll der Sitzung vom 01.06.2022');
+insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (8, to_timestamp('25.02.2022 14:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('25.02.2022 16:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('24.06.2022', 'dd.mm.YYYY'), '1', 'Hauptgebäude Raum 102', '');
+insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (9, to_timestamp('01.06.2022 13:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('01.06.2022 15:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('31.05.2022', 'dd.mm.YYYY'), '0', 'Besprechungsraum 1', 'Protokoll der Sitzung vom 01.06.2022');
+insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (10, to_timestamp('01.08.2022 13:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('01.08.2022 15:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('31.07.2022', 'dd.mm.YYYY'), '1', 'Besprechungsraum 2', '');
+insert into Sitzungen (ID, Beginn, Ende, Einladung_am, oeffentlich, Ort, Protokoll) values (5, to_timestamp('11.05.2012 10:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_timestamp('11.05.2012 12:00:00', 'dd.mm.YYYY HH24:MI:SS'), to_date('10.05.2012', 'dd.mm.YYYY'), '1', 'Besprechungsraum 3', '');
 
-insert into top (ID_Sitzung, ID_Tagesordnung) values (4, 5);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (4, 6);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (5, 7);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (5, 8);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (6, 9);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (6, 10);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (7, 11);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (7, 12);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (8, 13);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (8, 14);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (3, 15);
-insert into top (ID_Sitzung, ID_Tagesordnung) values (3, 16);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (4, 8);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (4, 12);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (5, 9);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (5, 11);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (6, 6);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (6, 13);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (7, 7);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (7, 14);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (8, 5);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (8, 10);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (8, 15);
+insert into top (ID_Sitzung, ID_Tagesordnung) values (8, 16);
+
+
+insert into hat (ID_Gremien, ID_Sitzungen) values (1, 1);
+insert into hat (ID_Gremien, ID_Sitzungen) values (2, 2);
+insert into hat (ID_Gremien, ID_Sitzungen) values (3, 3);
+insert into hat (ID_Gremien, ID_Sitzungen) values (4, 4);
+insert into hat (ID_Gremien, ID_Sitzungen) values (5, 5);
+insert into hat (ID_Gremien, ID_Sitzungen) values (6, 6);
+insert into hat (ID_Gremien, ID_Sitzungen) values (7, 7);
+insert into hat (ID_Gremien, ID_Sitzungen) values (8, 8);
+
+/*drop table Aufgabengebiete;
+create table Aufgabengebiete (
+    ID integer primary key,
+    Aufgabengebiet varchar(500)
+);
+
+create table Aufgaben_Gremien (
+    ID_Aufgabe integer,
+    ID_Gremium integer,
+    constraint fk_AG_Aufgabe foreign key (ID_Aufgabe) references Aufgabengebiete (ID),
+    constraint fk_AG_Gremien foreign key (ID_Gremium) references Gremien (ID),
+    constraint pk_AG_ID primary key (ID_Aufgabe, ID_Gremium)
+);
+*/
+
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (12, 4);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (7, 4);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (8, 4);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (13, 5);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (11, 5);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (8, 6);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (10, 6);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (7, 7);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (11, 7);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (9, 8);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (14, 8);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (15, 8);
+insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (16, 8);

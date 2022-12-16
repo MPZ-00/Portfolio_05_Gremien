@@ -1,7 +1,5 @@
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,8 +47,8 @@ public class Aushilfe implements IAushilfe {
             Gremien.getAktuellesGremium().getName() + ", " +
             (Gremien.getAktuellesGremium().getOffiziell() ? "1" : "0") + ", " +
             (Gremien.getAktuellesGremium().getInoffiziell() ? "1" : "0") + ", " +
-            Gremien.getAktuellesGremium().getBeginn() + ", " +
-            Gremien.getAktuellesGremium().getEnde() + ")"
+            java.sql.Date.valueOf(Gremien.getAktuellesGremium().getBeginn()) + ", " +
+            java.sql.Date.valueOf(Gremien.getAktuellesGremium().getEnde()) + ")"
         );
 
         ConnectionManager.getInstance().executeStatement("commit");
@@ -100,7 +98,7 @@ public class Aushilfe implements IAushilfe {
         return false;
     }
     public boolean Sitzungen_anzeigen(Integer id) {
-        System.out.println("[Sitzungen]");
+        System.out.println("[Sitzungen für Gremium (" + id + ")]");
         HashSet<Integer> s_ids = new HashSet<>();
 
         ResultSet rs = ConnectionManager.getInstance().executeStatement(
@@ -292,75 +290,8 @@ public class Aushilfe implements IAushilfe {
     public boolean isValidDateFormat(String input, String regex) {
         return input.matches(regex);
     }
-
-    public boolean Aufgabe1() {
-        Aushilfe.getInstance().Gremium_Wahl();
-        System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
-        
-        try {
-            Aushilfe.getInstance().Sitzung_Wahl();
-            System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
-        } catch (NullPointerException e) {
-            if (Aushilfe.getInstance().frage_Ja_Nein("Jetzt neue Sitzung für dieses Gremium anlegen")) {
-                Sitzung_erzeugen();
-            } else {
-                System.err.println("Keine Sitzungen für dieses Gremium verfügbar, wähle ein anderes Gremium aus\n");
-                return Aufgabe1();
-            }
-        }
-        return true;
-    }
-    public boolean Aufgabe2() {
-        System.out.println("[Tagesordnung]");
-        
-        hs_ids top = new hs_ids(
-            "select t.id " +
-            "from sitzungen s " +
-            "inner join top on top.id_sitzung = s.id " +
-            "inner join tagesordnung t on t.id = top.id_tagesordnung " +
-            "where s.id = " +
-            Sitzungen.getAktiveSitzung().getID()
-        );
-
-        if (top.getHS().size() == 0) {
-            System.err.println("Für diese Sitzung gibt es keine Tagesordnungen");
-            return false;
-        }
-
-        for (AHauptklasse object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
-            Tagesordnung t = (Tagesordnung)object;
-            if (top.getHS().contains(t.getID())) {
-                System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
-                for (AHauptklasse obj : Factory.getInstance().getObject(Antrag.class.toString())) {
-                    Antrag a = (Antrag)obj;
-
-                    hs_ids antraege = new hs_ids(
-                        "select a.id " +
-                        "from tagesordnung t " +
-                        "inner join gehoert_zu on gehoert_zu.id_top = t.id " +
-                        "inner join antrag a on a.id = gehoert_zu.id_antrag " +
-                        "where t.id = " + t.getID()
-                    );
-                    if (antraege.getHS().size() > 0 && antraege.getHS().contains(a.getID())) {
-                        System.out.printf("\nID: %d\nTitel: %s\nText: %s\nErgebnis: %s\nAngenommen: %b", a.getID(), a.getTitel(), a.getText(), a.getErgebnis().toString(), a.isAngenommen());
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    public boolean Aufgabe3() {
-        // Auswahl eines TOPs oder eines Antrags einer Sitzung
-        System.out.println("\n[Tagesordnung|Antrag]");
-        
-        Tagesordnung_Wahl();
-        Antrag_Wahl();
-        
-        return true;
-    }
-
-    private void Sitzung_erzeugen() {
+    
+    public void Sitzung_erzeugen() {
         Timestamp beginn = getTimestamp("Gib den Beginn der Sitzung");
         Timestamp ende = getTimestamp("Gib das Ende der Sitzung");
         LocalDate einladung_am = getLocalDate("Gib das Datum der Einladung");
@@ -532,7 +463,10 @@ public class Aushilfe implements IAushilfe {
         ConnectionManager.getInstance().executeStatement("commit");
     }
     public boolean Antrag_anzeigen() {
-        System.out.println("[Antrag]");
+        return Antrag_anzeigen(Tagesordnung.getAktuellenTOP().getID());
+    }
+    public boolean Antrag_anzeigen(Integer id) {
+        System.out.println("[Antrag für Tagesordnung (" + id + ")]");
 
         hs_ids hs = new hs_ids(
             "select a.id " +
@@ -540,7 +474,7 @@ public class Aushilfe implements IAushilfe {
             "inner join gehoert_zu on gehoert_zu.id_antrag = a.id " +
             "inner join tagesordnung t on t.id = gehoert_zu.id_top " +
             "where t.id = " +
-            Tagesordnung.getAktuellenTOP().getID()
+            id
         );
 
         if (hs.getHS().size() == 0) {
@@ -551,7 +485,13 @@ public class Aushilfe implements IAushilfe {
         for (AHauptklasse object : Factory.getInstance().getObject(Antrag.class.toString())) {
             Antrag a = (Antrag)object;
             if (hs.getHS().contains(a.getID())) {
-                System.out.printf("\nID: %d\nTitel: %s\nText: %s\nErgebnis: %s\nAngenommen: %b", a.getID(), a.getTitel(), a.getText(), a.getErgebnis().toString(), a.isAngenommen());
+                System.out.println(
+                    "\nID: " + a.getID() +
+                    "\nTitel: " +a.getTitel() +
+                    "\nText: " + a.getText() +
+                    "\nErgebnis: " + a.getErgebnis() +
+                    "\nAngenommen: " + a.isAngenommen()
+                );
             }
         }
         return true;

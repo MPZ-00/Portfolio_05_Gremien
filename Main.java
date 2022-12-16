@@ -96,7 +96,7 @@ public class Main extends Aushilfe {
              * inner join gremien g on g.id = hat.id_gremien
              * where g.id = <1>
              */
-            Aushilfe.getInstance().Aufgabe1();
+            new Aufgabe1();
             
             /**
              * Aufgabe 2
@@ -112,7 +112,7 @@ public class Main extends Aushilfe {
              * inner join antrag a on a.id = gehoert_zu.id_antrag
              * where t.id = <3>
              */
-            Aushilfe.getInstance().Aufgabe2();
+            new Aufgabe2();
 
             /**
              * Aufgabe 3
@@ -122,7 +122,7 @@ public class Main extends Aushilfe {
              * inner join sitzung s on s.id = top.id_sitzung
              * where s.id = 1
              */
-            Aushilfe.getInstance().Aufgabe3();
+            new Aufgabe3();
         } catch (Exception e) {
             e.printStackTrace();
         }

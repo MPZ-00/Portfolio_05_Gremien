@@ -41,7 +41,7 @@ public class ConnectionManager implements IConnectionManager {
                 String new_DB_URL = PREFIX + DB_URL + ":" + PORT + ":" + DB_NAME;
                 connection = DriverManager.getConnection(new_DB_URL, USER, PASS);
             } catch (SQLException e) {
-                System.out.println("Fehler beim Herstellen der Verbindung zur Datenbank");
+                System.err.println("Fehler beim Herstellen der Verbindung zur Datenbank");
                 e.printStackTrace();
             }
         }
