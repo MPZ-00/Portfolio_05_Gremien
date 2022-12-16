@@ -70,12 +70,12 @@ public class Main extends Aushilfe {
     }
 
     private static void init(Scanner scanner) {
-        boolean mit_HS_verbunden = Aushilfe.getInstance().frage_Ja_Nein("Befinden Sie sich im HS Netz");
+        boolean mit_Tunnel_verbunden = Aushilfe.getInstance().frage_Ja_Nein("Besteht über Putty ein Tunnel zur HS");
 
-        if (!mit_HS_verbunden && Aushilfe.getInstance().frage_Ja_Nein("Besteht über Putty ein Tunnel zur HS")) {
-            Verbindung_mit_Localhost();
-        } else {
+        if (!mit_Tunnel_verbunden && Aushilfe.getInstance().frage_Ja_Nein("Befinden Sie sich im HS Netz")) {
             Verbindung_selber_einrichten();
+        } else {
+            Verbindung_mit_Localhost();
         }
 
         Aushilfe.getInstance().interne_DB_initialisieren();

@@ -99,31 +99,24 @@ public class Aushilfe implements IAushilfe {
     }
     public boolean Sitzungen_anzeigen(Integer id) {
         System.out.println("[Sitzungen für Gremium (" + id + ")]");
-        HashSet<Integer> s_ids = new HashSet<>();
-
-        ResultSet rs = ConnectionManager.getInstance().executeStatement(
+        
+        hs_ids hs = new hs_ids(
             "select s.id " +
             "from sitzungen s " +
             "inner join hat on hat.id_sitzungen = s.id " +
-            "inner join gremien g on g.id = hat.id_gremien where g.id = " +
+            "inner join gremien g on g.id = hat.id_gremien " +
+            "where g.id = " +
             Gremien.getAktuellesGremium().getID()
         );
-        try {
-            while (rs.next()) {
-                s_ids.add(rs.getInt("id"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        if (s_ids.size() == 0) {
+        if (hs.getHS().size() == 0) {
             System.err.println("Für dieses Gremium gibt es keine Sitzungen");
             return false;
         }
 
         for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen)object;
-            if (s_ids.contains(s.getID())) {
+            if (hs.getHS().contains(s.getID())) {
                 System.out.printf("\nID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), s.getProtokoll());
             }
         }
