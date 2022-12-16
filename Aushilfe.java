@@ -76,7 +76,7 @@ public class Aushilfe implements IAushilfe {
                 Timestamp sitzungBeginn = getTimestamp("Geben Sie den Beginn der Sitzung ein");
                 
                 if (Sitzungen_enthaelt_Eingabe(sitzungBeginn)) {
-                    System.out.println("OK");
+                    System.out.println("\033[32mOK\033[0m");
                 } else {
                     System.err.println("FALSCH");
                 }

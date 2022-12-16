@@ -119,6 +119,17 @@ public class Main extends Aushilfe {
              * where s.id = 1
              */
             new Aufgabe3();
+
+            /**
+             * Aufgabe 4
+             * TODO: wiederhole Aufgabe 3 solange top.protokolltext = null oder s.ergebnis = null
+             */
+
+            /**
+             * Aufgabe 5
+             * Das Ende der Sitzung eintragen
+             */
+            new Aufgabe5();
         } catch (Exception e) {
             e.printStackTrace();
         }
