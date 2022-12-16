@@ -1,6 +1,6 @@
 public class Aufgabe2 {
     public Aufgabe2() {
-        System.out.println("[Tagesordnung für Sitzung (" + Sitzungen.getAktiveSitzung().getID() + ")]");
+        Aushilfe.getInstance().print_Titel("Tagesordnung für Sitzung (" + Sitzungen.getAktiveSitzung().getID() + ")");
         
         hs_ids top = new hs_ids(
             "select t.id " +

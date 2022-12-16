@@ -26,6 +26,7 @@ public class Aufgabe3 {
             Tagesordnung t = (Tagesordnung)object;
             if (hs.getHS().contains(t.getID())) {
                 System.out.println(
+                    "[Tagesordnung]" +
                     "\nID: " + t.getID() +
                     "\nTitel: " + t.getTitel() +
                     "\nKurzbeschreibung: " + t.getKurzbeschreibung() +
@@ -42,12 +43,12 @@ public class Aufgabe3 {
         } while (!test_auf_TOP_oder_Antrag(eingabe));
         
         if (this.is_TOP) {
-            System.out.println("Sie können jetzt das Protokoll für den TOP (" + this.ID + ") eingtagen:");
+            System.out.println("Sie können jetzt das Protokoll für den TOP (" + this.ID + ") eintragen:");
             eingabe = Main.scanner.nextLine();
 
             ConnectionManager.getInstance().executeStatement(
-                "update tagesordnungspunkt " +
-                "set protokoll = " + eingabe +
+                "update Tagesordnung " +
+                "set protokolltext = '" + eingabe + "'" +
                 " where id = " + this.ID
             );
         } else {
@@ -58,7 +59,7 @@ public class Aufgabe3 {
 
             ConnectionManager.getInstance().executeStatement(
                 "update antrag " +
-                "set ergebnis = " + eingabe.toUpperCase() +
+                "set ergebnis = '" + eingabe + "'" +
                 " where id = " + this.ID
             );
         }

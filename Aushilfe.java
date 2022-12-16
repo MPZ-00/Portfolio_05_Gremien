@@ -64,7 +64,7 @@ public class Aushilfe implements IAushilfe {
         return false;
     }
     public void Gremien_anzeigen() {
-        System.out.println("[Gremien]");
+        Aushilfe.getInstance().print_Titel("Gremien");
         for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
             Gremien g = (Gremien)object;
             System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
@@ -98,7 +98,7 @@ public class Aushilfe implements IAushilfe {
         return false;
     }
     public boolean Sitzungen_anzeigen(Integer id) {
-        System.out.println("[Sitzungen für Gremium (" + id + ")]");
+        System.out.println("\033[35m[Sitzungen für Gremium (" + id + ")\033[0m]");
         
         hs_ids hs = new hs_ids(
             "select s.id " +
@@ -125,7 +125,7 @@ public class Aushilfe implements IAushilfe {
     }
 
     public void interne_DB_initialisieren() {
-        System.out.println("Interne DB wird initialisiert");
+        Aushilfe.getInstance().print_Warnung("Interne DB wird initialisiert");
         try {
             init_Gremien_from_ResultSet();
             init_Antrag_from_ResultSet();
@@ -136,7 +136,7 @@ public class Aushilfe implements IAushilfe {
             System.err.println("Interne DB konnte nicht initialisert werden,");
             e.printStackTrace();
         }
-        System.out.println("Interne DB initialisiert.");
+        Aushilfe.getInstance().print_Warnung("Interne DB initialisiert.");
     }
 
     private void init_Gremien_from_ResultSet() throws Exception {
@@ -376,7 +376,7 @@ public class Aushilfe implements IAushilfe {
         ConnectionManager.getInstance().executeStatement("commit");
     }
     public boolean Tagesordnung_anzeigen() {
-        System.out.println("[Tagesordnung]");
+        Aushilfe.getInstance().print_Titel("Tagesordnung");
 
         hs_ids hs = new hs_ids(
             "select t.id " +
@@ -459,7 +459,7 @@ public class Aushilfe implements IAushilfe {
         return Antrag_anzeigen(Tagesordnung.getAktuellenTOP().getID());
     }
     public boolean Antrag_anzeigen(Integer id) {
-        System.out.println("[Antrag für Tagesordnung (" + id + ")]");
+        Aushilfe.getInstance().print_Titel("Antrag für Tagesordnung (" + id + ")");
 
         hs_ids hs = new hs_ids(
             "select a.id " +
@@ -488,5 +488,12 @@ public class Aushilfe implements IAushilfe {
             }
         }
         return true;
+    }
+
+    public void print_Titel(String text) {
+        System.out.println("[\033[35m" + text + "\033[0m]");
+    }
+    public void print_Warnung(String text) {
+        System.out.println("[\033[33m" + text + "\033[0m]");
     }
 }

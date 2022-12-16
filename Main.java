@@ -4,10 +4,6 @@ public class Main extends Aushilfe {
     public static final Scanner scanner = new Scanner(System.in);
     private static final List<String> options = Arrays.asList(
         "Prozess starten",
-        "Gremium wählen",
-        "Sitzung wählen",
-        "Tagesordnung wählen",
-        "Antrag wählen",
         "Verbindung selber einrichten",
         "Verbindung mit Localhost",
         "Programm beenden"
