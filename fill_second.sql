@@ -126,3 +126,41 @@ insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (9, 8);
 insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (14, 8);
 insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (15, 8);
 insert into Aufgaben_Gremien (ID_Aufgabe, ID_Gremium) values (16, 8);
+
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (7, 'Erweiterung der Pause auf 15 Minuten', 'Die aktuelle Pause von 10 Minuten ist zu kurz, um sich wirklich zu erholen und gestärkt zurück an die Arbeit zu gehen. Deshalb schlage ich vor, die Pause auf 15 Minuten zu erweitern.', 'ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (8, 'Einführung einer Mitarbeitervertretung', 'Um die Interessen der Mitarbeiter besser zu vertreten, schlage ich vor, eine Mitarbeitervertretung einzuführen. Diese soll aus gewählten Vertretern der Mitarbeiter bestehen und regelmäßig mit der Geschäftsführung zusammenkommen.', 'nein', '0');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (9, 'Erhöhung des Weihnachtsgeldes', 'Um die Motivation und Zufriedenheit der Mitarbeiter zu steigern, schlage ich vor, das Weihnachtsgeld um 10% zu erhöhen.', 'enthaltung', '0');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (10, 'Einführung von Flexibilitätszeiten', 'Um die Work-Life-Balance der Mitarbeiter zu verbessern, schlage ich vor, Flexibilitätszeiten einzuführen. Diese sollen es den Mitarbeitern ermöglichen, ihre Arbeitszeiten individuell anzupassen, solange die notwendigen Arbeitsaufgaben erledigt werden.', 'ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (11, 'Einführung von Homeoffice-Regelungen', 'Um den Mitarbeitern mehr Flexibilität zu bieten und um im Falle von Krankheit oder anderen Härtefällen die Arbeitsfähigkeit aufrechtzuerhalten, schlage ich vor, Homeoffice-Regelungen einzuführen.', 'ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (12, 'Einführung von Gesundheitsmaßnahmen', 'Um die Gesundheit und das Wohlbefinden der Mitarbeiter zu fördern, schlage ich vor, Gesundheitsmaßnahmen wie regelmäßige Massagen und Gesundheitsseminare einzuführen.', 'nein', '0');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (13, 'Erweiterung der Parkplätze', 'Die aktuellen Parkplätze reichen bei weitem nicht aus, um alle Mitarbeiter unterzubringen. Deshalb schlage ich vor, weitere Parkplätze einzurichten.', 'ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (14, 'Einführung von Obstkörben im Büro', 'Um die Gesundheit der Mitarbeiter zu fördern, schlage ich vor, Obstkörbe im Büro bereitzustellen, damit die Mitarbeiter jederzeit gesunde Snacks zur Verfügung haben.', 'ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (15, 'Einführung von betrieblicher Altersvorsorge', 'Um die finanzielle Absicherung der Mitarbeiter im Alter zu verbessern, schlage ich vor, eine betriebliche Altersvorsorge einzuführen.', 'enthaltung', '0');
+
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (7, 1);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (8, 2);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (9, 3);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (10, 4);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (11, 5);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (12, 6);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (13, 7);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (14, 8);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (15, 9);
+
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (16, 'Tablets für eine moderne Unterrichtsmethodik', 'Wir schlagen vor, in allen Klassenräumen Tablet-Computer einzuführen, um den Unterricht zu modernisieren und den Schülern die Möglichkeit zu geben, auf digitale Ressourcen zuzugreifen. Dies würde auch den Papierverbrauch reduzieren und den Unterricht interaktiver gestalten.', 'Ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (17, 'Vegane Optionen für alle Schüler', 'Wir schlagen vor, in der Schulcafeteria vegane Menüs einzuführen, um allen Schülern gesunde und ausgewogene Mahlzeiten anzubieten und den CO2-Fußabdruck der Schule zu reduzieren.', 'Nein', '0');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (18, 'Mehr Zeit zum Entspannen und Freizeitaktivitäten', 'Wir schlagen vor, die Pausenzeiten für Schüler zu erweitern, um ihnen mehr Zeit zum Entspannen und für Freizeitaktivitäten zu geben. Dies würde auch dazu beitragen, die Konzentration und Leistungsfähigkeit der Schüler während des Unterrichts zu verbessern.', 'Enthaltung', '0');
+
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (16, 10);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (17, 11);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (18, 12);
+
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (19, 'Förderung von Informatikkenntnissen für Schüler', 'Vorschlag: in der Schule Programmierkurse einzuführen, um den Schülern ihre Informatikkenntnisse zu verbessern und sich für zukünftige Karrieren in der Technologiebranche zu qualifizieren. Dies würde auch die Schule am Puls der Zeit halten und den Schülern Wettbewerbsvorteile verschaffen.', 'Ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (20, 'Flexibles Lernen durch virtuelle Klassenräume', 'Wir schlagen vor, virtuelle Klassenräume einzuführen, um den Schülern von überall aus an Unterricht teilnehmen zu lassen und Flexibilität in ihrem Lernprozess zu haben. Dies würde auch die Schülerbeteiligung und -motivation erhöhen und den Unterricht inklusive gestalten.', 'Ja', '1');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (21, 'Moderne Kommunikation durch Schul-Websites', 'Wir schlagen vor, jeder Schule eine eigene Website zu geben, um die Kommunikation zwischen Schülern, Lehrern und Eltern zu verbessern und die Schüler auf die digitale Welt vorzubereiten. Dies würde auch dazu beitragen, die Sichtbarkeit und Attraktivität der Schule zu erhöhen.', 'Nein', '0');
+insert into Antrag (ID, Titel, Text, Ergebnis, Angenommen) values (22, 'Schutz vor Cyberbedrohungen durch Cybersecurity-Kurse', 'Wir schlagen vor, Cybersecurity-Kurse in der Schule einzuführen, um die Schüler über die Gefahren von Cyberbedrohungen aufzuklären und ihnen die Fähigkeiten beizubringen, sich selbst zu schützen. Dies würde auch dazu beitragen, die Schule und ihre Daten vor möglichen Angriffen zu schützen.', 'Enthaltung', '0');
+
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (19, 13);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (20, 14);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (21, 15);
+insert into gehoert_zu (ID_Antrag, ID_TOP) values (22, 16);

@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.EnumSet;
-import java.util.HashSet;
 
 public class Aushilfe implements IAushilfe {
     private static Aushilfe instance = null;
@@ -240,7 +239,7 @@ public class Aushilfe implements IAushilfe {
             LocalDateTime dateTime = LocalDateTime.parse(input, DateTimeFormatter.ofPattern(template));
 
             // Konvertiere das LocalDateTime-Objekt in ein Timestamp-Objekt
-            return Timestamp.from(dateTime.toInstant(ZoneOffset.of("+1")));
+            return Timestamp.from(dateTime.toInstant(ZoneOffset.of("+2"))); // offset to utc
         } catch (IllegalArgumentException e) {
             // Fehlermeldung ausgeben und erneut nach Timestamp fragen
             System.err.println("Ungültiges Datumsformat. Bitte versuchen Sie es erneut.");
