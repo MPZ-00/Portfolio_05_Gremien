@@ -7,7 +7,7 @@ public class Aufgabe3 {
 
     public Aufgabe3() {
         // Auswahl eines TOPs oder eines Antrags einer Sitzung
-        System.out.println("\n[Aufgabe 3]");
+        Aushilfe.getInstance().print_Titel("\nAufgabe 3");
 
         hs_ids hs = new hs_ids(
             "select t.id " +
