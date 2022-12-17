@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class Gremien extends ATabellenVerwaltung {
+public class Gremien extends APrimaryKey {
     private static Gremien aktuellesGremium;
 
     // Attribute, die den Spalten der Tabelle Sitzungen entsprechen
@@ -103,7 +103,7 @@ public class Gremien extends ATabellenVerwaltung {
         ConnectionManager.getInstance().executeStatement("commit");
     }
     private boolean Gremien_enthaelt_Eingabe(String eingabe) {
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Gremien.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Gremien.class.toString())) {
             Gremien g = (Gremien) object;
             if (g.getName().equalsIgnoreCase(eingabe)) {
                 setAktuellesGremium(g);
@@ -116,7 +116,7 @@ public class Gremien extends ATabellenVerwaltung {
     @Override
     public boolean Anzeigen() {
         Aushilfe.getInstance().print_Titel("Gremien");
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Gremien.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Gremien.class.toString())) {
             Gremien g = (Gremien)object;
             System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
         }
@@ -126,7 +126,7 @@ public class Gremien extends ATabellenVerwaltung {
     @Override
     public boolean Anzeigen(Integer id) {
         Aushilfe.getInstance().print_Titel("Gremien");
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Gremien.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Gremien.class.toString())) {
             Gremien g = (Gremien)object;
             if (g.getID() == id) {
                 System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());

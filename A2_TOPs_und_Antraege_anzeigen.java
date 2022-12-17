@@ -16,11 +16,11 @@ public class A2_TOPs_und_Antraege_anzeigen {
             return;
         }
 
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (top.getHS().contains(t.getID())) {
                 System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
-                for (ATabellenVerwaltung obj : Factory.getInstance().getObject(Antrag.class.toString())) {
+                for (APrimaryKey obj : Factory.getInstance().getObject(Antrag.class.toString())) {
                     Antrag a = (Antrag)obj;
 
                     hs_ids antraege = new hs_ids(

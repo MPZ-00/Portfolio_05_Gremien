@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class Factory {
-    private HashMap<String, HashSet<ATabellenVerwaltung>> objects = new HashMap<>();
+    private HashMap<String, HashSet<APrimaryKey>> objects = new HashMap<>();
     private static Factory instance;
 
     private Factory() {}
@@ -16,15 +16,15 @@ public class Factory {
         return instance;
     }
 
-    public void addObject(String className, ATabellenVerwaltung obj) {
+    public void addObject(String className, APrimaryKey obj) {
         if (!objects.containsKey(className)) {
-            objects.put(className, new HashSet<ATabellenVerwaltung>());
+            objects.put(className, new HashSet<APrimaryKey>());
         }
 
         objects.get(className).add(obj);
     }
 
-    public HashSet<ATabellenVerwaltung> getObject(String className) {
+    public HashSet<APrimaryKey> getObject(String className) {
         return objects.get(className);
     }
 

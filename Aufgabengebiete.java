@@ -1,4 +1,4 @@
-public class Aufgabengebiete extends ATabellenVerwaltung {
+public class Aufgabengebiete extends APrimaryKey {
     private String Aufgabengebiet;
     private static Aufgabengebiete aktuellesAufgabengebiet;
 
@@ -28,7 +28,7 @@ public class Aufgabengebiete extends ATabellenVerwaltung {
     }
 
     private boolean Aufgabengebiet_enthaelt_Eingabe(String eingabe) {
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Aufgabengebiete.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Aufgabengebiete.class.toString())) {
             Aufgabengebiete a = (Aufgabengebiete) object;
             if (a.getAufgabengebiet().equalsIgnoreCase(eingabe)) {
                 setAktuellesAufgabengebiet(a);
@@ -86,7 +86,7 @@ public class Aufgabengebiete extends ATabellenVerwaltung {
             return false;
         }
 
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Aufgabengebiete.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Aufgabengebiete.class.toString())) {
             Aufgabengebiete a = (Aufgabengebiete) object;
             if (hs.getHS().contains(a.getID())) {
                 System.out.println(

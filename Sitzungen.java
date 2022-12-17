@@ -1,7 +1,7 @@
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-public class Sitzungen extends ATabellenVerwaltung {
+public class Sitzungen extends APrimaryKey {
     private static Sitzungen aktiveSitzung;
 
     // Attribute, die den Spalten der Tabelle Sitzungen entsprechen
@@ -84,7 +84,7 @@ public class Sitzungen extends ATabellenVerwaltung {
         }
     }
     private boolean Sitzungen_enthaelt_Eingabe(Timestamp beginn) {
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen) object;
 
             System.out.println(s.getBeginn() + ".equals(" + beginn + ")"); // Debug: warum läuft der Scheiß nicht immer?
@@ -119,7 +119,7 @@ public class Sitzungen extends ATabellenVerwaltung {
             return false;
         }
 
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen)object;
             if (hs.getHS().contains(s.getID())) {
                 System.out.printf("\nID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), s.getProtokoll());

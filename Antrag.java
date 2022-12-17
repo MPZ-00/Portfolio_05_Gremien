@@ -1,6 +1,6 @@
 import java.util.EnumSet;
 
-public class Antrag extends ATabellenVerwaltung {
+public class Antrag extends APrimaryKey {
     public enum Ergebnis {
         JA, NEIN, ENTHALTUNG
     }
@@ -54,7 +54,7 @@ public class Antrag extends ATabellenVerwaltung {
     }
 
     private boolean Antrag_mit_Titel(String eingabe) {
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Antrag.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Antrag.class.toString())) {
             Antrag a = (Antrag)object;
             if (a.getTitel().equalsIgnoreCase(eingabe)) {
                 Antrag.setAktuellenAntrag(a);
@@ -104,7 +104,7 @@ public class Antrag extends ATabellenVerwaltung {
             return false;
         }
 
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Antrag.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Antrag.class.toString())) {
             Antrag a = (Antrag)object;
             if (hs.getHS().contains(a.getID())) {
                 System.out.println(

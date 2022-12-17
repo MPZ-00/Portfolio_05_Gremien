@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
-public class Aushilfe implements IAushilfe {
+public class Aushilfe {
     private static Aushilfe instance = null;
     
     public Aushilfe() {}

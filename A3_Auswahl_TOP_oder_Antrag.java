@@ -23,7 +23,7 @@ public class A3_Auswahl_TOP_oder_Antrag {
             System.err.println("Für diese Sitzung gibt es keine Tagesordnungen");
             return;
         }
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (hs.getHS().contains(t.getID())) {
                 System.out.println(

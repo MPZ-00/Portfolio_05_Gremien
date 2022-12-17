@@ -1,4 +1,4 @@
-public class Tagesordnung extends ATabellenVerwaltung {
+public class Tagesordnung extends APrimaryKey {
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen
     private String Titel;
     private String Kurzbeschreibung;
@@ -59,7 +59,7 @@ public class Tagesordnung extends ATabellenVerwaltung {
         }
     }
     private boolean TOP_mit_Titel(String eingabe) {
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (t.getTitel().equalsIgnoreCase(eingabe)) {
                 Tagesordnung.setAktuellenTOP(t);
@@ -118,7 +118,7 @@ public class Tagesordnung extends ATabellenVerwaltung {
             return false;
         }
 
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (hs.getHS().contains(t.getID())) {
                 System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
@@ -129,7 +129,7 @@ public class Tagesordnung extends ATabellenVerwaltung {
 
     @Override
     public boolean Anzeigen(Integer id) {
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (t.getID() == id) {
                 System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
