@@ -7,7 +7,8 @@ public class A3_Auswahl_TOP_oder_Antrag {
 
     public A3_Auswahl_TOP_oder_Antrag() {
         // Auswahl eines TOPs oder eines Antrags einer Sitzung
-        Aushilfe.getInstance().print_Titel("\nAufgabe 3");
+        System.out.println();
+        Aushilfe.getInstance().print_Titel("Aufgabe 3");
 
         hs_ids hs = new hs_ids(
             "select t.id " +

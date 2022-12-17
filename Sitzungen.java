@@ -103,7 +103,7 @@ public class Sitzungen extends ATabellenVerwaltung {
 
     @Override
     public boolean Anzeigen(Integer id_gremium) {
-        System.out.println("\033[35m[Sitzungen für Gremium (" + id_gremium + ")\033[0m]");
+        System.out.println("[\033[35mSitzungen für Gremium (" + id_gremium + ")\033[0m]");
         
         hs_ids hs = new hs_ids(
             "select s.id " +
