@@ -86,58 +86,20 @@ public class Main extends Aushilfe {
 
     private static void Prozessschritte() {
         try {
-            /**
-             * Aufgabe 1
-             * select s.id
-             * from sitzungen s
-             * inner join hat on hat.id_sitzungen = s.id
-             * inner join gremien g on g.id = hat.id_gremien
-             * where g.id = <1>
-             */
-            new Aufgabe1();
+            new A1_Eingabe_Gremium_und_Sitzung();
             
-            /**
-             * Aufgabe 2
-             * select t.id
-             * from sitzungen s
-             * inner join top on top.id_sitzung = s.id
-             * inner join tagesordnung t on t.id = top.id_tagesordnung
-             * where s.id = <2>
-             * 
-             * select a.id
-             * from tagesordnung t
-             * inner join gehoert_zu on gehoert_zu.id_top = t.id
-             * inner join antrag a on a.id = gehoert_zu.id_antrag
-             * where t.id = <3>
-             */
-            new Aufgabe2();
+            new A2_TOPs_und_Antraege_anzeigen();
 
             do {
-                /**
-                 * Aufgabe 3
-                 * select t.id
-                 * from tagesordnung t
-                 * inner join top on top.id_tagesordnung = t.id
-                 * inner join sitzung s on s.id = top.id_sitzung
-                 * where s.id = 1
-                 */
                 System.out.println();
-                new Aufgabe3();
+                new A3_Auswahl_TOP_oder_Antrag();
 
-                /**
-                 * Aufgabe 4
-                 * Wiederhole Aufgabe 3 solange top.protokolltext = null oder s.ergebnis = null
-                 */
-                if (Aufgabe4.getInstance().is_any_Protokolltext_null()) {
+                if (A4_gesamtes_Protokoll_eintragen.getInstance().is_any_Protokolltext_null()) {
                     Aushilfe.getInstance().print_Warnung("Es gibt noch einen TOP, bei dem der Protokolltext 'null' ist!");
                 }
-            } while (Aufgabe4.getInstance().is_any_Protokolltext_null());
+            } while (A4_gesamtes_Protokoll_eintragen.getInstance().is_any_Protokolltext_null());
 
-            /**
-             * Aufgabe 5
-             * Das Ende der Sitzung eintragen
-             */
-            new Aufgabe5();
+            new A5_Das_Ende_der_Sitzung_eintragen();
         } catch (Exception e) {
             e.printStackTrace();
         }

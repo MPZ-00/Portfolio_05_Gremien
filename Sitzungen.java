@@ -4,7 +4,7 @@ import java.time.LocalDate;
 public class Sitzungen extends ATabellenVerwaltung {
     private static Sitzungen aktiveSitzung;
 
-    // Attribute, die den Spalten der Tabelle Sitzungen entprechen
+    // Attribute, die den Spalten der Tabelle Sitzungen entsprechen
     private Timestamp Beginn;
     private Timestamp Ende;
     private LocalDate Einladung_am;
@@ -12,7 +12,6 @@ public class Sitzungen extends ATabellenVerwaltung {
     private String Ort;
     private String Protokoll;
 
-    // Konstruktor-Methode, die die Attriubute initialisiert
     public Sitzungen(Integer ID, Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
         setID(ID);
         setBeginn(Beginn);

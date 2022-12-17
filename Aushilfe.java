@@ -88,7 +88,6 @@ public class Aushilfe implements IAushilfe {
         while (rs_Aufgabengebiete != null && rs_Aufgabengebiete.next()) {
             Aufgabengebiete au = new Aufgabengebiete(
                 rs_Aufgabengebiete.getInt("ID"),
-                rs_Aufgabengebiete.getInt("Ag_ID"),
                 rs_Aufgabengebiete.getString("Aufgabengebiet")
             );
 

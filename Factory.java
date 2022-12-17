@@ -46,9 +46,9 @@ public class Factory {
         addObject(Tagesordnung.class.toString(), new_Tagesordnung);
         return new_Tagesordnung;
     }
-    public Aufgabengebiete createAufgabengebiete(int Ag_ID, String Aufgabengebiet) {
+    public Aufgabengebiete createAufgabengebiete(String Aufgabengebiet) {
         Integer id = getID(Aufgabengebiete.class.toString());
-        Aufgabengebiete new_Aufgabengebiete = new Aufgabengebiete(id, Ag_ID, Aufgabengebiet);
+        Aufgabengebiete new_Aufgabengebiete = new Aufgabengebiete(id, Aufgabengebiet);
         addObject(Aufgabengebiete.class.toString(), new_Aufgabengebiete);
         return new_Aufgabengebiete;
     }
