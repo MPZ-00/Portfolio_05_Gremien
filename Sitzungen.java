@@ -1,7 +1,7 @@
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-public class Sitzungen extends ATabellenVerwaltung implements ISitzungen {
+public class Sitzungen extends ATabellenVerwaltung {
     private static Sitzungen aktiveSitzung;
 
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen

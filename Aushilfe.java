@@ -166,7 +166,7 @@ public class Aushilfe implements IAushilfe {
                 rs_Antrag.getInt("ID"),
                 rs_Antrag.getString("Titel"),
                 rs_Antrag.getString("Text"),
-                IAntrag.Ergebnis.valueOf(rs_Antrag.getString("Ergebnis").toUpperCase()),
+                Antrag.Ergebnis.valueOf(rs_Antrag.getString("Ergebnis").toUpperCase()),
                 Boolean.parseBoolean(rs_Antrag.getString("Angenommen"))
             );
 
@@ -433,13 +433,13 @@ public class Aushilfe implements IAushilfe {
         String titel = Main.scanner.nextLine();
         System.out.print("Antrag Text eingeben: ");
         String text = Main.scanner.nextLine();
-        EnumSet<IAntrag.Ergebnis> ergebnisse = EnumSet.allOf(IAntrag.Ergebnis.class);
+        EnumSet<Antrag.Ergebnis> ergebnisse = EnumSet.allOf(Antrag.Ergebnis.class);
         String input;
         do {
             System.out.print("Antrag Ergebnis eingeben (" + ergebnisse.spliterator() + "): ");
             input = Main.scanner.nextLine().toUpperCase();
-        } while (!ergebnisse.contains(IAntrag.Ergebnis.valueOf(input)));
-        IAntrag.Ergebnis ergebnis = IAntrag.Ergebnis.valueOf(input);
+        } while (!ergebnisse.contains(Antrag.Ergebnis.valueOf(input)));
+        Antrag.Ergebnis ergebnis = Antrag.Ergebnis.valueOf(input);
         boolean angenommen = frage_Ja_Nein("Antrag angenommen");
 
         Antrag.setAktuellenAntrag(Factory.getInstance().createAngtrag(titel, text, ergebnis, angenommen));

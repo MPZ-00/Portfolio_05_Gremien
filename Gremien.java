@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 
-public class Gremien extends ATabellenVerwaltung implements IGremien {
+public class Gremien extends ATabellenVerwaltung {
     // public static List<Gremien> objects = new ArrayList<Gremien>(); // Liste aller Objekte von Gremien, O(N)
     private static Gremien aktuellesGremium;
 

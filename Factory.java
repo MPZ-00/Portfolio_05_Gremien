@@ -34,7 +34,7 @@ public class Factory {
         addObject(Gremien.class.toString(), new_Gremien);
         return new_Gremien;
     }
-    public Antrag createAngtrag(String Titel, String Text, IAntrag.Ergebnis Ergebnis, boolean Angenommen) {
+    public Antrag createAngtrag(String Titel, String Text, Antrag.Ergebnis Ergebnis, boolean Angenommen) {
         Integer id = getAntragID();
         Antrag new_Antrag = new Antrag(id, Titel, Text, Ergebnis, Angenommen);
         addObject(Antrag.class.toString(), new_Antrag);
@@ -73,5 +73,9 @@ public class Factory {
     }
     private Integer getSitzungenID() {
         return objects.get(Sitzungen.class.getName()) == null ? 1 : objects.get(Sitzungen.class.getName()).size();
+    }
+
+    private Integer getID(String className) {
+        return objects.get(className) == null ? 1 : objects.get(className).size();
     }
 }

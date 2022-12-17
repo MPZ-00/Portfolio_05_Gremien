@@ -1,15 +1,15 @@
-public class Antrag extends ATabellenVerwaltung implements IAntrag {
+public class Antrag extends ATabellenVerwaltung {
     public enum Ergebnis {
         JA, NEIN, ENTHALTUNG
     }
     private String Titel;
     private String Text;
-    private IAntrag.Ergebnis Ergebnis;
+    private Ergebnis Ergebnis;
     private boolean Angenommen;
 
     private static Antrag aktuellerAntrag;
 
-    public Antrag(int ID, String Titel, String Text, IAntrag.Ergebnis Ergebnis, boolean Angenommen) {
+    public Antrag(int ID, String Titel, String Text, Ergebnis Ergebnis, boolean Angenommen) {
         setID(ID);
         setTitel(Titel);
         setText(Text);
@@ -40,15 +40,14 @@ public class Antrag extends ATabellenVerwaltung implements IAntrag {
     public String getText() {
         return this.Text;
     }
-    public IAntrag.Ergebnis getErgebnis() {
+    public Ergebnis getErgebnis() {
         return this.Ergebnis;
     }
     public Boolean isAngenommen() {
         return this.Angenommen;
     }
 
-    @Override
-    public void setErgebnis(IAntrag.Ergebnis Ergebnis) {
+    public void setErgebnis(Ergebnis Ergebnis) {
         this.Ergebnis = Ergebnis;
     }
 }

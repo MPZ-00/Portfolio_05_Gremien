@@ -1,4 +1,4 @@
-public class Tagesordnung extends ATabellenVerwaltung implements ITagesordnung {
+public class Tagesordnung extends ATabellenVerwaltung {
     // Attribute, die den Spalten der Tabelle Sitzungen entprechen
     private String Titel;
     private String Kurzbeschreibung;

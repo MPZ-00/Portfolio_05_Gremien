@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ConnectionManager implements IConnectionManager {
+public class ConnectionManager {
     // JDBC-Treiber- und Datenbank-URL
     private static final String JDBC_DRIVER = "oracle.jdbc.pool.OracleDataSource";
     private String DB_URL = "fbe-neptun.hs-weingarten.de"; // localhost
