@@ -16,7 +16,7 @@ public class A3_Auswahl_TOP_oder_Antrag {
             "inner join top on top.id_tagesordnung = t.id " +
             "inner join sitzungen s on s.id = top.id_sitzung " +
             "where s.id = " +
-            Sitzungen.getAktiveSitzung().getID()
+            Sitzungen.getInstance().getAktiveSitzung().getID()
         );
 
         if (hs.getHS().size() == 0) {
@@ -33,7 +33,7 @@ public class A3_Auswahl_TOP_oder_Antrag {
                     "\nKurzbeschreibung: " + t.getKurzbeschreibung() +
                     "\nProtokolltext: " + t.getProtokolltext()
                 );
-                Antrag.getAktuellenAntrag().Anzeigen(t.getID());
+                Antraege.getInstance().Anzeigen(t.getID());
             }
         }
 

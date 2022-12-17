@@ -18,7 +18,7 @@ public class Factory {
 
     public void addObject(String className, APrimaryKey obj) {
         if (!objects.containsKey(className)) {
-            objects.put(className, new HashSet<APrimaryKey>());
+            objects.put(className, new HashSet<>());
         }
 
         objects.get(className).add(obj);
@@ -28,13 +28,13 @@ public class Factory {
         return objects.get(className);
     }
 
-    public Gremien createGremien(String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
-        Integer id = getID(Gremien.class.toString());
-        Gremien new_Gremien = new Gremien(id, Name, offiziell, inoffiziell, Beginn, Ende);
-        addObject(Gremien.class.toString(), new_Gremien);
-        return new_Gremien;
+    public Gremium createGremium(String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
+        Integer id = getID(Gremium.class.toString());
+        Gremium new_Gremium = new Gremium(id, Name, offiziell, inoffiziell, Beginn, Ende);
+        addObject(Gremium.class.toString(), new_Gremium);
+        return new_Gremium;
     }
-    public Antrag createAngtrag(String Titel, String Text, Antrag.Ergebnis Ergebnis, boolean Angenommen) {
+    public Antrag createAntrag(String Titel, String Text, Antrag.Ergebnis Ergebnis, boolean Angenommen) {
         Integer id = getID(Antrag.class.toString());
         Antrag new_Antrag = new Antrag(id, Titel, Text, Ergebnis, Angenommen);
         addObject(Antrag.class.toString(), new_Antrag);
@@ -46,17 +46,17 @@ public class Factory {
         addObject(Tagesordnung.class.toString(), new_Tagesordnung);
         return new_Tagesordnung;
     }
-    public Aufgabengebiete createAufgabengebiete(String Aufgabengebiet) {
-        Integer id = getID(Aufgabengebiete.class.toString());
-        Aufgabengebiete new_Aufgabengebiete = new Aufgabengebiete(id, Aufgabengebiet);
-        addObject(Aufgabengebiete.class.toString(), new_Aufgabengebiete);
-        return new_Aufgabengebiete;
+    public Aufgabengebiet createAufgabengebiet(String Aufgabengebiet) {
+        Integer id = getID(Aufgabengebiet.class.toString());
+        Aufgabengebiet new_Aufgabengebiet = new Aufgabengebiet(id, Aufgabengebiet);
+        addObject(Aufgabengebiet.class.toString(), new_Aufgabengebiet);
+        return new_Aufgabengebiet;
     }
-    public Sitzungen createSitzungen(Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
-        Integer id = getID(Sitzungen.class.toString());
-        Sitzungen new_Sitzungen = new Sitzungen(id, Beginn, Ende, Einladung_am, Oeffentlich, Ort, Protokoll);
-        addObject(Sitzungen.class.toString(), new_Sitzungen);
-        return new_Sitzungen;
+    public Sitzung createSitzung(Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
+        Integer id = getID(Sitzung.class.toString());
+        Sitzung new_Sitzung = new Sitzung(id, Beginn, Ende, Einladung_am, Oeffentlich, Ort, Protokoll);
+        addObject(Sitzung.class.toString(), new_Sitzung);
+        return new_Sitzung;
     }
 
     private Integer getID(String className) {

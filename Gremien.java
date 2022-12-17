@@ -1,68 +1,23 @@
 import java.time.LocalDate;
 
-public class Gremien extends APrimaryKey {
-    private static Gremien aktuellesGremium;
+public class Gremien extends ATabellenVerwaltung {
+    private static Gremium aktuellesGremium;
+    private static Gremien instance;
 
-    // Attribute, die den Spalten der Tabelle Sitzungen entsprechen
-    private String Name;
-    private Boolean Offiziell;
-    private Boolean Inoffiziell;
-    private LocalDate Beginn;
-    private LocalDate Ende;
+    public Gremien() {}
 
-    public Gremien(String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
-        setName(Name);
-        setOffiziell(offiziell);
-        setInoffiziell(inoffiziell);
-        setBeginn(Beginn);
-        setEnde(Ende);
+    public static Gremien getInstance() {
+        if (instance == null) {
+            instance = new Gremien();
+        }
+        return instance;
     }
-    public Gremien(Integer ID, String Name, Boolean offiziell, Boolean inoffiziell, LocalDate Beginn, LocalDate Ende) {
-        setID(ID);
-        setName(Name);
-        setOffiziell(offiziell);
-        setInoffiziell(inoffiziell);
-        setBeginn(Beginn);
-        setEnde(Ende);
-    }
-    
-    public static void setAktuellesGremium(Gremien gremium) {
+
+    public void setAktuellesGremium(Gremium gremium) {
         aktuellesGremium = gremium;
     }
-    public static Gremien getAktuellesGremium() {
+    public Gremium getAktuellesGremium() {
         return aktuellesGremium;
-    }
-
-    public void setName(String Name) {
-        this.Name = Name;
-    }
-    public void setOffiziell(Boolean Offiziell) {
-        this.Offiziell = Offiziell;
-    }
-    public void setInoffiziell(Boolean Inoffiziell) {
-        this.Inoffiziell = Inoffiziell;
-    }
-    public void setBeginn(LocalDate Beginn) {
-        this.Beginn = Beginn;
-    }
-    public void setEnde(LocalDate Ende) {
-        this.Ende = Ende;
-    }
-
-    public String getName() {
-        return this.Name;
-    }
-    public Boolean getOffiziell() {
-        return this.Offiziell;
-    }
-    public Boolean getInoffiziell() {
-        return this.Inoffiziell;
-    }
-    public LocalDate getBeginn() {
-        return this.Beginn;
-    }
-    public LocalDate getEnde() {
-        return this.Ende;
     }
 
     @Override
@@ -73,7 +28,7 @@ public class Gremien extends APrimaryKey {
         do {
             System.out.print("\nWelches Gremium soll es sein (Name oder 'neu'): ");
             eingabe = Main.scanner.nextLine();
-        } while (!Gremien_enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neu"));
+        } while (!Enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neu"));
         
         if (eingabe.equalsIgnoreCase("neu")) {
             Erzeugen();
@@ -88,7 +43,7 @@ public class Gremien extends APrimaryKey {
         LocalDate beginn = Aushilfe.getInstance().getLocalDate("Beginn des Gremiums");
         LocalDate ende = Aushilfe.getInstance().getLocalDate("Ende des Gremiums");
 
-        setAktuellesGremium(Factory.getInstance().createGremien(name, offiziell, !offiziell, beginn, ende));
+        setAktuellesGremium(Factory.getInstance().createGremium(name, offiziell, !offiziell, beginn, ende));
 
         ConnectionManager.getInstance().executeStatement(
             "insert into Gremien values (" +
@@ -102,9 +57,11 @@ public class Gremien extends APrimaryKey {
 
         ConnectionManager.getInstance().executeStatement("commit");
     }
-    private boolean Gremien_enthaelt_Eingabe(String eingabe) {
-        for (APrimaryKey object : Factory.getInstance().getObject(Gremien.class.toString())) {
-            Gremien g = (Gremien) object;
+
+    @Override
+    public boolean Enthaelt_Eingabe(String eingabe) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Gremium.class.toString())) {
+            Gremium g = (Gremium) object;
             if (g.getName().equalsIgnoreCase(eingabe)) {
                 setAktuellesGremium(g);
                 return true;
@@ -115,9 +72,9 @@ public class Gremien extends APrimaryKey {
 
     @Override
     public boolean Anzeigen() {
-        Aushilfe.getInstance().print_Titel("Gremien");
-        for (APrimaryKey object : Factory.getInstance().getObject(Gremien.class.toString())) {
-            Gremien g = (Gremien)object;
+        Aushilfe.getInstance().print_Titel("Gremium");
+        for (APrimaryKey object : Factory.getInstance().getObject(Gremium.class.toString())) {
+            Gremium g = (Gremium)object;
             System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
         }
         return true;
@@ -125,9 +82,9 @@ public class Gremien extends APrimaryKey {
 
     @Override
     public boolean Anzeigen(Integer id) {
-        Aushilfe.getInstance().print_Titel("Gremien");
-        for (APrimaryKey object : Factory.getInstance().getObject(Gremien.class.toString())) {
-            Gremien g = (Gremien)object;
+        Aushilfe.getInstance().print_Titel("Gremium");
+        for (APrimaryKey object : Factory.getInstance().getObject(Gremium.class.toString())) {
+            Gremium g = (Gremium)object;
             if (g.getID() == id) {
                 System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
                 return true;

@@ -40,7 +40,7 @@ public class Aushilfe {
             java.sql.Date beginn = rs_Gremien.getDate("Beginn");
             java.sql.Date ende = rs_Gremien.getDate("Ende");
 
-            Gremien g = new Gremien(
+            Gremium g = new Gremium(
                 rs_Gremien.getInt("ID"),
                 rs_Gremien.getString("Name"),
                 rs_Gremien.getString("offiziell").matches("(?i)1|t|y"),
@@ -70,7 +70,7 @@ public class Aushilfe {
         ResultSet rs_Sitzungen = ConnectionManager.getInstance().executeStatement("SELECT * FROM Sitzungen");
         while (rs_Sitzungen != null && rs_Sitzungen.next()) {
             java.sql.Date Einladung_am = rs_Sitzungen.getDate("Einladung_am");
-            Sitzungen s = new Sitzungen(
+            Sitzung s = new Sitzung(
                 rs_Sitzungen.getInt("ID"),
                 rs_Sitzungen.getTimestamp("Beginn"),
                 rs_Sitzungen.getTimestamp("Ende"),
@@ -86,12 +86,12 @@ public class Aushilfe {
     private void init_Aufgabengebiete_from_ResultSet() throws SQLException {
         ResultSet rs_Aufgabengebiete = ConnectionManager.getInstance().executeStatement("SELECT * FROM Aufgabengebiete");
         while (rs_Aufgabengebiete != null && rs_Aufgabengebiete.next()) {
-            Aufgabengebiete au = new Aufgabengebiete(
+            Aufgabengebiet au = new Aufgabengebiet(
                 rs_Aufgabengebiete.getInt("ID"),
                 rs_Aufgabengebiete.getString("Aufgabengebiet")
             );
 
-            Factory.getInstance().addObject(Aufgabengebiete.class.toString(), au);
+            Factory.getInstance().addObject(Aufgabengebiet.class.toString(), au);
         }
     }
     private void init_Tagesordnung_from_ResultSet() throws SQLException {

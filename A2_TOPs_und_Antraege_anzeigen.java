@@ -1,6 +1,6 @@
 public class A2_TOPs_und_Antraege_anzeigen {
     public A2_TOPs_und_Antraege_anzeigen() {
-        Aushilfe.getInstance().print_Titel("Tagesordnung für Sitzung (" + Sitzungen.getAktiveSitzung().getID() + ")");
+        Aushilfe.getInstance().print_Titel("Tagesordnung für Sitzung (" + Sitzungen.getInstance().getAktiveSitzung().getID() + ")");
         
         hs_ids top = new hs_ids(
             "select t.id " +
@@ -8,7 +8,7 @@ public class A2_TOPs_und_Antraege_anzeigen {
             "inner join top on top.id_sitzung = s.id " +
             "inner join tagesordnung t on t.id = top.id_tagesordnung " +
             "where s.id = " +
-            Sitzungen.getAktiveSitzung().getID()
+            Sitzungen.getInstance().getAktiveSitzung().getID()
         );
 
         if (top.getHS().size() == 0) {

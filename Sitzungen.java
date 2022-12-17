@@ -1,79 +1,34 @@
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-public class Sitzungen extends APrimaryKey {
-    private static Sitzungen aktiveSitzung;
+public class Sitzungen extends ATabellenVerwaltung {
+    private static Sitzung aktiveSitzung;
+    private static Sitzungen instance;
 
-    // Attribute, die den Spalten der Tabelle Sitzungen entsprechen
-    private Timestamp Beginn;
-    private Timestamp Ende;
-    private LocalDate Einladung_am;
-    private boolean Oeffentlich;
-    private String Ort;
-    private String Protokoll;
+    public Sitzungen() {}
 
-    public Sitzungen(Integer ID, Timestamp Beginn, Timestamp Ende, LocalDate Einladung_am, Boolean Oeffentlich, String Ort, String Protokoll) {
-        setID(ID);
-        setBeginn(Beginn);
-        setEnde(Ende);
-        setEinladung_am(Einladung_am);
-        setOeffentlich(Oeffentlich);
-        setOrt(Ort);
-        setProtokoll(Protokoll);
+    public static Sitzungen getInstance() {
+        if (instance == null) {
+            instance = new Sitzungen();
+        }
+        return instance;
     }
+    
 
-    public static void setAktiveSitzung(Sitzungen sitzung) {
+    public void setAktiveSitzung(Sitzung sitzung) {
         aktiveSitzung = sitzung;
     }
-    public static Sitzungen getAktiveSitzung() {
+    public Sitzung getAktiveSitzung() {
         return aktiveSitzung;
-    }
-
-    public Timestamp getBeginn() {
-        return this.Beginn;
-    }
-    public Timestamp getEnde() {
-        return this.Ende;
-    }
-    public LocalDate getEinladung_am() {
-        return this.Einladung_am;
-    }
-    public Boolean getOeffentlich() {
-        return this.Oeffentlich;
-    }
-    public String getOrt() {
-        return this.Ort;
-    }
-    public String getProtokoll() {
-        return this.Protokoll;
-    }
-
-    public void setBeginn(Timestamp Beginn) {
-        this.Beginn = Beginn;
-    }
-    public void setEnde(Timestamp Ende) {
-        this.Ende = Ende;
-    }
-    public void setEinladung_am(LocalDate Einladung_am) {
-        this.Einladung_am = Einladung_am;
-    }
-    public void setOeffentlich(Boolean Oeffentlich) {
-        this.Oeffentlich = Oeffentlich;
-    }
-    public void setOrt(String Ort) {
-        this.Ort = Ort;
-    }
-    public void setProtokoll(String Protokoll) {
-        this.Protokoll = Protokoll;
     }
 
     @Override
     public void Wahl() {
-        if (Anzeigen(Gremien.getAktuellesGremium().getID())) {
+        if (Anzeigen(Gremien.getInstance().getAktuellesGremium().getID())) {
             try {
                 Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein");
                 
-                if (Sitzungen_enthaelt_Eingabe(sitzungBeginn)) {
+                if (Enthaelt_Eingabe(sitzungBeginn)) {
                     System.out.println("\033[32mOK\033[0m");
                 } else {
                     System.err.println("FALSCH");
@@ -83,18 +38,23 @@ public class Sitzungen extends APrimaryKey {
             }
         }
     }
-    private boolean Sitzungen_enthaelt_Eingabe(Timestamp beginn) {
-        for (APrimaryKey object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
-            Sitzungen s = (Sitzungen) object;
+
+    @Override
+    public boolean Enthaelt_Eingabe(Timestamp beginn) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Sitzung.class.toString())) {
+            Sitzung s = (Sitzung) object;
 
             System.out.println(s.getBeginn() + ".equals(" + beginn + ")"); // Debug: warum läuft der Scheiß nicht immer?
             if (s.getBeginn().equals(beginn)) {
-                Sitzungen.setAktiveSitzung(s);
+                Sitzungen.getInstance().setAktiveSitzung(s);
                 return true;
             }
         }
         return false;
     }
+
+    @Override
+    public boolean Enthaelt_Eingabe(String eingabe) {return true;}
 
     @Override
     public boolean Anzeigen() {
@@ -111,7 +71,7 @@ public class Sitzungen extends APrimaryKey {
             "inner join hat on hat.id_sitzungen = s.id " +
             "inner join gremien g on g.id = hat.id_gremien " +
             "where g.id = " +
-            Gremien.getAktuellesGremium().getID()
+            Gremien.getInstance().getAktuellesGremium().getID()
         );
 
         if (hs.getHS().size() == 0) {
@@ -119,8 +79,8 @@ public class Sitzungen extends APrimaryKey {
             return false;
         }
 
-        for (APrimaryKey object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
-            Sitzungen s = (Sitzungen)object;
+        for (APrimaryKey object : Factory.getInstance().getObject(Sitzung.class.toString())) {
+            Sitzung s = (Sitzung)object;
             if (hs.getHS().contains(s.getID())) {
                 System.out.printf("\nID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), s.getProtokoll());
             }
@@ -143,7 +103,7 @@ public class Sitzungen extends APrimaryKey {
             protokoll = "";
         }
 
-        setAktiveSitzung(Factory.getInstance().createSitzungen(beginn, ende, einladung_am, oeffentlich, ort, protokoll));
+        setAktiveSitzung(Factory.getInstance().createSitzung(beginn, ende, einladung_am, oeffentlich, ort, protokoll));
         
         ConnectionManager.getInstance().executeStatement(
             "insert into sitzungen values (" +
@@ -158,7 +118,7 @@ public class Sitzungen extends APrimaryKey {
 
         ConnectionManager.getInstance().executeStatement(
             "insert into hat values (" +
-            Gremien.getAktuellesGremium().getID() + ", " +
+            Gremien.getInstance().getAktuellesGremium().getID() + ", " +
             getAktiveSitzung().getID() + ")"
         );
 

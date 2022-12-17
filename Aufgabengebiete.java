@@ -1,35 +1,32 @@
-public class Aufgabengebiete extends APrimaryKey {
-    private String Aufgabengebiet;
-    private static Aufgabengebiete aktuellesAufgabengebiet;
+public class Aufgabengebiete extends ATabellenVerwaltung {
+    private static Aufgabengebiet aktuellesAufgabengebiet;
+    private static Aufgabengebiete instance;
 
-    public Aufgabengebiete(int ID, String Aufgabengebiet) {
-        setID(ID);
-        setAufgabengebiet(Aufgabengebiet);
+    public Aufgabengebiete() {}
+    public static Aufgabengebiete getInstance() {
+        if (instance == null) {
+            instance = new Aufgabengebiete();
+        }
+        return instance;
     }
 
-    public void setAufgabengebiet(String Aufgabengebiet) {
-        this.Aufgabengebiet = Aufgabengebiet;
-    }
-
-    public String getAufgabengebiet() {
-        return this.Aufgabengebiet;
-    };
-
-    public static void setAktuellesAufgabengebiet(Aufgabengebiete aufgabengebiet) {
+    public void setAktuellesAufgabengebiet(Aufgabengebiet aufgabengebiet) {
         aktuellesAufgabengebiet = aufgabengebiet;
     }
 
-    public static Aufgabengebiete getAktuellesAufgabengebiet() {
+    public Aufgabengebiet getAktuellesAufgabengebiet() {
         return aktuellesAufgabengebiet;
     }
 
     private boolean Aufgabengebiet_vorhanden(String aufgabengebiet) {
+        // TODO: diese Funktion hier einbauen
         return true;
     }
 
-    private boolean Aufgabengebiet_enthaelt_Eingabe(String eingabe) {
-        for (APrimaryKey object : Factory.getInstance().getObject(Aufgabengebiete.class.toString())) {
-            Aufgabengebiete a = (Aufgabengebiete) object;
+    @Override
+    public boolean Enthaelt_Eingabe(String eingabe) {
+        for (APrimaryKey object : Factory.getInstance().getObject(Aufgabengebiet.class.toString())) {
+            Aufgabengebiet a = (Aufgabengebiet) object;
             if (a.getAufgabengebiet().equalsIgnoreCase(eingabe)) {
                 setAktuellesAufgabengebiet(a);
                 return true;
@@ -46,7 +43,7 @@ public class Aufgabengebiete extends APrimaryKey {
         do {
             System.out.print("\nWelches Aufgabengebiet soll es sein: ");
             eingabe = Main.scanner.nextLine();
-        } while (!Aufgabengebiet_enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neu"));
+        } while (!Enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neu"));
 
         ConnectionManager.getInstance().executeStatement(
             "insert into aufgabengebiete values (" +
@@ -59,9 +56,9 @@ public class Aufgabengebiete extends APrimaryKey {
 
     @Override
     public void Erzeugen() {
-        System.out.println("Aufgabengebiet für das Gremium (" + Gremien.getAktuellesGremium().getID() + "): ");
+        System.out.println("Aufgabengebiet für das Gremium (" + Gremien.getInstance().getAktuellesGremium().getID() + "): ");
         String Aufgabengebiet = Main.scanner.nextLine();
-        setAktuellesAufgabengebiet(Factory.getInstance().createAufgabengebiete(Aufgabengebiet));
+        setAktuellesAufgabengebiet(Factory.getInstance().createAufgabengebiet(Aufgabengebiet));
     }
 
     @Override
@@ -72,7 +69,7 @@ public class Aufgabengebiete extends APrimaryKey {
 
     @Override
     public boolean Anzeigen(Integer id_gremium) {
-        Aushilfe.getInstance().print_Titel("Aufgabengebiete für Gremium (" + Gremien.getAktuellesGremium().getID() + ")");
+        Aushilfe.getInstance().print_Titel("Aufgabengebiete für Gremium (" + Gremien.getInstance().getAktuellesGremium().getID() + ")");
 
         hs_ids hs = new hs_ids(
             "select a.id " +
@@ -86,8 +83,8 @@ public class Aufgabengebiete extends APrimaryKey {
             return false;
         }
 
-        for (APrimaryKey object : Factory.getInstance().getObject(Aufgabengebiete.class.toString())) {
-            Aufgabengebiete a = (Aufgabengebiete) object;
+        for (APrimaryKey object : Factory.getInstance().getObject(Aufgabengebiet.class.toString())) {
+            Aufgabengebiet a = (Aufgabengebiet) object;
             if (hs.getHS().contains(a.getID())) {
                 System.out.println(
                     "ID: " + a.getID() +

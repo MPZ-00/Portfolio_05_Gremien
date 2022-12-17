@@ -1,18 +1,18 @@
 public class A1_Eingabe_Gremium_und_Sitzung {
     public A1_Eingabe_Gremium_und_Sitzung() {
-        Gremien.getAktuellesGremium().Wahl();
-        System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
+        Gremien.getInstance().Wahl();
+        System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getInstance().getAktuellesGremium().getID() + "/" + Gremien.getInstance().getAktuellesGremium().getName());
 
-        if (Gremien.getAktuellesGremium() == null) {
+        if (Gremien.getInstance().getAktuellesGremium() == null) {
             System.err.println("Kein Gremium verfügbar, wähle ein anderes Gremium aus\n");
         }
         
         try {
-            Sitzungen.getAktiveSitzung().Wahl();
-            System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
+            Sitzungen.getInstance().Wahl();
+            System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getInstance().getAktiveSitzung().getID() + "/" + Sitzungen.getInstance().getAktiveSitzung().getBeginn());
         } catch (NullPointerException e) {
             if (Aushilfe.getInstance().frage_Ja_Nein("Jetzt neue Sitzung für dieses Gremium anlegen")) {
-                Sitzungen.getAktiveSitzung().Erzeugen();
+                Sitzungen.getInstance().Erzeugen();
             }
         }
     }
