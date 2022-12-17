@@ -1,11 +1,11 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Aufgabe3 {
+public class A3_Auswahl_TOP_oder_Antrag {
     private boolean is_TOP = true;
     private Integer ID;
 
-    public Aufgabe3() {
+    public A3_Auswahl_TOP_oder_Antrag() {
         // Auswahl eines TOPs oder eines Antrags einer Sitzung
         Aushilfe.getInstance().print_Titel("\nAufgabe 3");
 

@@ -1,5 +1,5 @@
-public class Aufgabe1 {
-    public Aufgabe1() {
+public class A1_Eingabe_Gremium_und_Sitzung {
+    public A1_Eingabe_Gremium_und_Sitzung() {
         Gremien.getAktuellesGremium().Wahl();
         System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
 

@@ -1,5 +1,5 @@
-public class Aufgabe2 {
-    public Aufgabe2() {
+public class A2_TOPs_und_Antraege_anzeigen {
+    public A2_TOPs_und_Antraege_anzeigen() {
         Aushilfe.getInstance().print_Titel("Tagesordnung für Sitzung (" + Sitzungen.getAktiveSitzung().getID() + ")");
         
         hs_ids top = new hs_ids(

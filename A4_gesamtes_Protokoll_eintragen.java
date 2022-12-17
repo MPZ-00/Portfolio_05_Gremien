@@ -1,11 +1,11 @@
-public class Aufgabe4 {
-    private static Aufgabe4 instance = null;
+public class A4_gesamtes_Protokoll_eintragen {
+    private static A4_gesamtes_Protokoll_eintragen instance = null;
 
-    public Aufgabe4() {}
+    public A4_gesamtes_Protokoll_eintragen() {}
 
-    public static Aufgabe4 getInstance() {
+    public static A4_gesamtes_Protokoll_eintragen getInstance() {
         if (instance == null) {
-            instance = new Aufgabe4();
+            instance = new A4_gesamtes_Protokoll_eintragen();
         }
         return instance;
     }
