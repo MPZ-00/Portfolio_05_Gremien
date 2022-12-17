@@ -14,10 +14,14 @@ public class Main extends Aushilfe {
             int auswahl;
             boolean beenden = false;
             
-            init(scanner);
+            if (!init_DB()) {
+                return;
+            }
 
             while (!beenden) {
-                System.out.println("\n[Menü]");
+                System.out.println();
+                Aushilfe.getInstance().print_Titel("Menü");
+
                 for (int i = 0; i < options.size(); i++) {
                     System.out.println((i + 1) + ". " + options.get(i));
                 }
@@ -65,21 +69,31 @@ public class Main extends Aushilfe {
         }
     }
 
-    private static void init(Scanner scanner) {
+    private static boolean init_DB() {
         boolean mit_Tunnel_verbunden = Aushilfe.getInstance().frage_Ja_Nein("Besteht über Putty ein Tunnel zur HS");
 
-        if (!mit_Tunnel_verbunden && Aushilfe.getInstance().frage_Ja_Nein("Befinden Sie sich im HS Netz")) {
-            Verbindung_selber_einrichten();
-        } else {
+        if (mit_Tunnel_verbunden) {
             Verbindung_mit_Localhost();
+        } else if (Aushilfe.getInstance().frage_Ja_Nein("Befinden Sie sich im HS Netz")) {
+            Verbindung_mit_Neptun();
+        } else {
+            Verbindung_selber_einrichten();
         }
 
-        Aushilfe.getInstance().interne_DB_initialisieren();
+        if (!Aushilfe.getInstance().interne_DB_initialisieren()) {
+            System.err.println("Fehler beim Initialisieren der DB");
+            return false;
+        }
         System.out.println();
+        return true;
     }
 
     private static void Verbindung_mit_Localhost() {
         ConnectionManager.getInstance().setConnection("localhost", "namib", "DABS_42", "DABS_42", "10111");
+    }
+
+    private static void Verbindung_mit_Neptun() {
+        ConnectionManager.getInstance().setConnection("fbe-neptun.hs-weingarten.de", "namib", "DABS_42", "DABS_42", "1521");
     }
 
     private static void Prozessschritte() {
@@ -110,20 +124,25 @@ public class Main extends Aushilfe {
              */
             new Aufgabe2();
 
-            /**
-             * Aufgabe 3
-             * select t.id
-             * from tagesordnung t
-             * inner join top on top.id_tagesordnung = t.id
-             * inner join sitzung s on s.id = top.id_sitzung
-             * where s.id = 1
-             */
-            new Aufgabe3();
+            do {
+                /**
+                 * Aufgabe 3
+                 * select t.id
+                 * from tagesordnung t
+                 * inner join top on top.id_tagesordnung = t.id
+                 * inner join sitzung s on s.id = top.id_sitzung
+                 * where s.id = 1
+                 */
+                new Aufgabe3();
 
-            /**
-             * Aufgabe 4
-             * TODO: wiederhole Aufgabe 3 solange top.protokolltext = null oder s.ergebnis = null
-             */
+                /**
+                 * Aufgabe 4
+                 * Wiederhole Aufgabe 3 solange top.protokolltext = null oder s.ergebnis = null
+                 */
+                if (Aufgabe4.getInstance().is_any_Protokolltext_null()) {
+                    Aushilfe.getInstance().print_Warnung("Es gibt noch einen TOP, bei dem der Protokolltext 'null' ist!");
+                }
+            } while (Aufgabe4.getInstance().is_any_Protokolltext_null());
 
             /**
              * Aufgabe 5

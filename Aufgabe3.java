@@ -42,9 +42,16 @@ public class Aufgabe3 {
             eingabe = Main.scanner.nextLine();
         } while (!test_auf_TOP_oder_Antrag(eingabe));
         
+        Integer max_length_protokolltext = 4000;
         if (this.is_TOP) {
-            System.out.println("Sie können jetzt das Protokoll für den TOP (" + this.ID + ") eintragen:");
-            eingabe = Main.scanner.nextLine();
+            do {
+                System.out.println("Sie können jetzt das Protokoll für den TOP (" + this.ID + ") eintragen:");
+            
+                eingabe = Main.scanner.nextLine();
+                if (eingabe.length() > max_length_protokolltext) {
+                    Aushilfe.getInstance().print_Warnung("Bitte beachten Sie, dass das Protokoll eine Gesamtlänge von maximal " + max_length_protokolltext + " Zeichen haben darf:");
+                }
+            } while (eingabe.length() > max_length_protokolltext);
 
             ConnectionManager.getInstance().executeStatement(
                 "update Tagesordnung " +

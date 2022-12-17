@@ -123,7 +123,7 @@ public class Aushilfe implements IAushilfe {
         return true;
     }
 
-    public void interne_DB_initialisieren() {
+    public boolean interne_DB_initialisieren() {
         Aushilfe.getInstance().print_Warnung("Interne DB wird initialisiert");
         try {
             init_Gremien_from_ResultSet();
@@ -134,8 +134,10 @@ public class Aushilfe implements IAushilfe {
         } catch (Exception e) {
             System.err.println("Interne DB konnte nicht initialisert werden,");
             e.printStackTrace();
+            return false;
         }
-        Aushilfe.getInstance().print_Warnung("Interne DB initialisiert.");
+        Aushilfe.getInstance().print_Warnung("Interne DB initialisiert");
+        return true;
     }
 
     private void init_Gremien_from_ResultSet() throws Exception {
