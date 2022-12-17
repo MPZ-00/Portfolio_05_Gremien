@@ -5,7 +5,7 @@ public class Aufgabe5 {
         // Ende der aktuellen Sitzung eintragen
         Aushilfe.getInstance().print_Titel("Aufgabe 5");
 
-        Aushilfe.getInstance().Sitzungen_anzeigen(Sitzungen.getAktiveSitzung().getID());
+        Sitzungen.getAktiveSitzung().Anzeigen(Sitzungen.getAktiveSitzung().getID());
 
         if (Aushilfe.getInstance().frage_Ja_Nein("Ende der Sitzung eintragen")) {
             Timestamp ende = Aushilfe.getInstance().getTimestamp("Ende der Sitzung");
