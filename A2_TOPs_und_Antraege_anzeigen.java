@@ -1,6 +1,6 @@
 public class A2_TOPs_und_Antraege_anzeigen {
     public A2_TOPs_und_Antraege_anzeigen() {
-        Aushilfe.getInstance().print_Titel("Tagesordnung für Sitzung (" + Sitzungen.getInstance().getAktiveSitzung().getID() + ")");
+        Drucken.getInstance().print_Titel("Tagesordnung für Sitzung (" + Sitzungen.getInstance().getAktiveSitzung().getID() + ")");
         
         hs_ids top = new hs_ids(
             "select t.id " +

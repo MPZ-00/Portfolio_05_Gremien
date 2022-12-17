@@ -45,7 +45,7 @@ public class Antraege extends ATabellenVerwaltung {
             if (eingabe.equalsIgnoreCase("neu")) {
                 Erzeugen();
             }
-        } else if (Aushilfe.getInstance().frage_Ja_Nein("Neuen Antrag erstellen")) {
+        } else if (Tools.getInstance().frage_Ja_Nein("Neuen Antrag erstellen")) {
             Erzeugen();
         }
     }
@@ -57,7 +57,7 @@ public class Antraege extends ATabellenVerwaltung {
 
     @Override
     public boolean Anzeigen(Integer id) {
-        Aushilfe.getInstance().print_Titel("Antrag für Tagesordnung (" + id + ")");
+        Drucken.getInstance().print_Titel("Antrag für Tagesordnung (" + id + ")");
 
         hs_ids hs = new hs_ids(
             "select a.id " +
@@ -103,7 +103,7 @@ public class Antraege extends ATabellenVerwaltung {
         } while (!ergebnisse.contains(Antrag.Ergebnis.valueOf(input)));
 
         Antrag.Ergebnis ergebnis = Antrag.Ergebnis.valueOf(input);
-        boolean angenommen = Aushilfe.getInstance().frage_Ja_Nein("Antrag angenommen");
+        boolean angenommen = Tools.getInstance().frage_Ja_Nein("Antrag angenommen");
 
         setAktuellenAntrag(Factory.getInstance().createAntrag(titel, text, ergebnis, angenommen));
 

@@ -63,13 +63,13 @@ public class Aufgabengebiete extends ATabellenVerwaltung {
 
     @Override
     public boolean Anzeigen() {
-        Aushilfe.getInstance().print_Titel("Aufgabengebiete");
+        Drucken.getInstance().print_Titel("Aufgabengebiete");
         return true;
     }
 
     @Override
     public boolean Anzeigen(Integer id_gremium) {
-        Aushilfe.getInstance().print_Titel("Aufgabengebiete für Gremium (" + Gremien.getInstance().getAktuellesGremium().getID() + ")");
+        Drucken.getInstance().print_Titel("Aufgabengebiete für Gremium (" + Gremien.getInstance().getAktuellesGremium().getID() + ")");
 
         hs_ids hs = new hs_ids(
             "select a.id " +

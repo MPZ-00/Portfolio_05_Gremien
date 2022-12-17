@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main extends Aushilfe {
+public class Main extends Tools {
     public static final Scanner scanner = new Scanner(System.in);
     private static final List<String> options = Arrays.asList(
         "Prozess starten",
@@ -20,7 +20,7 @@ public class Main extends Aushilfe {
 
             while (!beenden) {
                 System.out.println();
-                Aushilfe.getInstance().print_Titel("Menü");
+                Drucken.getInstance().print_Titel("Menü");
 
                 for (int i = 0; i < options.size(); i++) {
                     System.out.println((i + 1) + ". " + options.get(i));
@@ -58,17 +58,17 @@ public class Main extends Aushilfe {
     }
 
     private static boolean init_DB() {
-        boolean mit_Tunnel_verbunden = Aushilfe.getInstance().frage_Ja_Nein("Besteht über Putty ein Tunnel zur HS");
+        boolean mit_Tunnel_verbunden = Tools.getInstance().frage_Ja_Nein("Besteht über Putty ein Tunnel zur HS");
 
         if (mit_Tunnel_verbunden) {
             Verbindung_mit_Localhost();
-        } else if (Aushilfe.getInstance().frage_Ja_Nein("Befinden Sie sich im HS Netz")) {
+        } else if (Tools.getInstance().frage_Ja_Nein("Befinden Sie sich im HS Netz")) {
             Verbindung_mit_Neptun();
         } else {
             Verbindung_selber_einrichten();
         }
 
-        if (!Aushilfe.getInstance().interne_DB_initialisieren()) {
+        if (!DBInitialisierung.getInstance().interne_DB_initialisieren()) {
             System.err.println("Fehler beim Initialisieren der DB");
             return false;
         }
@@ -95,12 +95,13 @@ public class Main extends Aushilfe {
                 new A3_Auswahl_TOP_oder_Antrag();
 
                 if (A4_gesamtes_Protokoll_eintragen.getInstance().is_any_Protokolltext_null()) {
-                    Aushilfe.getInstance().print_Warnung("Es gibt noch einen TOP, bei dem der Protokolltext 'null' ist!");
+                    Drucken.getInstance().print_Warnung("Es gibt noch einen TOP, bei dem der Protokolltext 'null' ist!");
                 }
             } while (A4_gesamtes_Protokoll_eintragen.getInstance().is_any_Protokolltext_null());
 
             new A5_Das_Ende_der_Sitzung_eintragen();
         } catch (Exception e) {
+            System.err.println("In Prozessschritte ist ein Fehler aufgetreten");
             e.printStackTrace();
         }
     }

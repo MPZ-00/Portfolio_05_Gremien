@@ -11,7 +11,7 @@ public class A1_Eingabe_Gremium_und_Sitzung {
             Sitzungen.getInstance().Wahl();
             System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getInstance().getAktiveSitzung().getID() + "/" + Sitzungen.getInstance().getAktiveSitzung().getBeginn());
         } catch (NullPointerException e) {
-            if (Aushilfe.getInstance().frage_Ja_Nein("Jetzt neue Sitzung für dieses Gremium anlegen")) {
+            if (Tools.getInstance().frage_Ja_Nein("Jetzt neue Sitzung für dieses Gremium anlegen")) {
                 Sitzungen.getInstance().Erzeugen();
             }
         }

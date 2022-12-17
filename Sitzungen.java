@@ -26,7 +26,7 @@ public class Sitzungen extends ATabellenVerwaltung {
     public void Wahl() {
         if (Anzeigen(Gremien.getInstance().getAktuellesGremium().getID())) {
             try {
-                Timestamp sitzungBeginn = Aushilfe.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein");
+                Timestamp sitzungBeginn = Tools.getInstance().getTimestamp("Geben Sie den Beginn der Sitzung ein");
                 
                 if (Enthaelt_Eingabe(sitzungBeginn)) {
                     System.out.println("\033[32mOK\033[0m");
@@ -91,10 +91,10 @@ public class Sitzungen extends ATabellenVerwaltung {
 
     @Override
     public void Erzeugen() {
-        Timestamp beginn = Aushilfe.getInstance().getTimestamp("Gib den Beginn der Sitzung");
-        Timestamp ende = Aushilfe.getInstance().getTimestamp("Gib das Ende der Sitzung");
-        LocalDate einladung_am = Aushilfe.getInstance().getLocalDate("Gib das Datum der Einladung");
-        Boolean oeffentlich = Aushilfe.getInstance().frage_Ja_Nein("Ist die Sitzung öffentlich");
+        Timestamp beginn = Tools.getInstance().getTimestamp("Gib den Beginn der Sitzung");
+        Timestamp ende = Tools.getInstance().getTimestamp("Gib das Ende der Sitzung");
+        LocalDate einladung_am = Tools.getInstance().getLocalDate("Gib das Datum der Einladung");
+        Boolean oeffentlich = Tools.getInstance().frage_Ja_Nein("Ist die Sitzung öffentlich");
         System.out.print("Gib den Ort der Sitzung ein: ");
         String ort = Main.scanner.nextLine();
         System.out.print("Gib das Protokoll der Sitzung ein (oder null): ");

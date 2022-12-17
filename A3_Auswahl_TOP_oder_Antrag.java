@@ -8,7 +8,7 @@ public class A3_Auswahl_TOP_oder_Antrag {
     public A3_Auswahl_TOP_oder_Antrag() {
         // Auswahl eines TOPs oder eines Antrags einer Sitzung
         System.out.println();
-        Aushilfe.getInstance().print_Titel("Aufgabe 3");
+        Drucken.getInstance().print_Titel("Aufgabe 3");
 
         hs_ids hs = new hs_ids(
             "select t.id " +
@@ -50,7 +50,7 @@ public class A3_Auswahl_TOP_oder_Antrag {
             
                 eingabe = Main.scanner.nextLine();
                 if (eingabe.length() > max_length_protokolltext) {
-                    Aushilfe.getInstance().print_Warnung("Bitte beachten Sie, dass das Protokoll eine Gesamtlänge von maximal " + max_length_protokolltext + " Zeichen haben darf:");
+                    Drucken.getInstance().print_Warnung("Bitte beachten Sie, dass das Protokoll eine Gesamtlänge von maximal " + max_length_protokolltext + " Zeichen haben darf:");
                 }
             } while (eingabe.length() > max_length_protokolltext);
 

@@ -30,7 +30,7 @@ public class Tagesordnungen extends ATabellenVerwaltung {
                 Erzeugen();
             }
         } else {
-            if (Aushilfe.getInstance().frage_Ja_Nein("Neue Tagesordnung erstellen")) {
+            if (Tools.getInstance().frage_Ja_Nein("Neue Tagesordnung erstellen")) {
                 Erzeugen();
             }
         }
@@ -81,7 +81,7 @@ public class Tagesordnungen extends ATabellenVerwaltung {
 
     @Override
     public boolean Anzeigen() {
-        Aushilfe.getInstance().print_Titel("Tagesordnung");
+        Drucken.getInstance().print_Titel("Tagesordnung");
 
         hs_ids hs = new hs_ids(
             "select t.id " +
