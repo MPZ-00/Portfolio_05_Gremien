@@ -32,7 +32,7 @@ public class Aufgabe3 {
                     "\nKurzbeschreibung: " + t.getKurzbeschreibung() +
                     "\nProtokolltext: " + t.getProtokolltext()
                 );
-                Aushilfe.getInstance().Antrag_anzeigen(t.getID());
+                Antrag.getAktuellenAntrag().Anzeigen(t.getID());
             }
         }
 
@@ -42,7 +42,7 @@ public class Aufgabe3 {
             eingabe = Main.scanner.nextLine();
         } while (!test_auf_TOP_oder_Antrag(eingabe));
         
-        Integer max_length_protokolltext = 4000;
+        int max_length_protokolltext = 4000;
         if (this.is_TOP) {
             do {
                 System.out.println("Sie können jetzt das Protokoll für den TOP (" + this.ID + ") eintragen:");
@@ -60,7 +60,7 @@ public class Aufgabe3 {
             );
         } else {
             do {
-                System.out.println("Sie können jetzt das Ergebnis (ja, nein, enthaltung) für den Antrag (" + this.ID + ") eingtagen:");
+                System.out.println("Sie können jetzt das Ergebnis (ja, nein, enthaltung) für den Antrag (" + this.ID + ") eintragen:");
                 eingabe = Main.scanner.nextLine();
             } while (!eingabe.toLowerCase().contains("ja") && eingabe.toLowerCase().contains("nein") && eingabe.toLowerCase().contains("enthaltung"));
 

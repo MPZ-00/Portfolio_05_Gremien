@@ -8,8 +8,4 @@ public abstract class ATabellenVerwaltung implements IATabellenVerwaltung {
     public int getID() {
         return this.ID;
     }
-
-    public void Wahl() {}
-    public void Erzeugen() {}
-    public void Anzeigen() {}
 }

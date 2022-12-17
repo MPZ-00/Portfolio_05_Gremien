@@ -3,5 +3,6 @@ public interface IATabellenVerwaltung {
     public int getID();
     public void Wahl();
     public void Erzeugen();
-    public void Anzeigen();
+    public boolean Anzeigen();
+    public boolean Anzeigen(Integer id);
 }

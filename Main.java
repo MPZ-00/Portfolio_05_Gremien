@@ -50,18 +50,6 @@ public class Main extends Aushilfe {
                     case "Programm beenden":
                         beenden = true;
                         break;
-                    case "Gremium wählen":
-                        Aushilfe.getInstance().Gremium_Wahl();
-                        break;
-                    case "Sitzung wählen":
-                        Aushilfe.getInstance().Sitzung_Wahl();
-                        break;
-                    case "Tagesordnung wählen":
-                        Aushilfe.getInstance().Tagesordnung_Wahl();
-                        break;
-                    case "Antrag wählen":
-                        Aushilfe.getInstance().Antrag_Wahl();
-                        break;
                 }
             }
         } finally {
