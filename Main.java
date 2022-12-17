@@ -133,6 +133,7 @@ public class Main extends Aushilfe {
                  * inner join sitzung s on s.id = top.id_sitzung
                  * where s.id = 1
                  */
+                System.out.println();
                 new Aufgabe3();
 
                 /**

@@ -88,7 +88,8 @@ public class Aushilfe implements IAushilfe {
     private boolean Sitzungen_enthaelt_Eingabe(Timestamp beginn) {
         for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen) object;
-            
+
+            System.out.println(s.getBeginn() + ".equals(" + beginn + ")"); // Debug: warum läuft der Scheiß nicht immer?
             if (s.getBeginn().equals(beginn)) {
                 Sitzungen.setAktiveSitzung(s);
                 return true;

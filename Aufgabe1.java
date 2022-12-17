@@ -1,13 +1,11 @@
 public class Aufgabe1 {
     public Aufgabe1() {
-        do {
-            Aushilfe.getInstance().Gremium_Wahl();            
-            System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
+        Aushilfe.getInstance().Gremium_Wahl();
+        System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
 
-            if (Gremien.getAktuellesGremium() == null) {
-                System.err.println("Keine Sitzungen für dieses Gremium verfügbar, wähle ein anderes Gremium aus\n");
-            }
-        } while (Gremien.getAktuellesGremium() == null);
+        if (Gremien.getAktuellesGremium() == null) {
+            System.err.println("Kein Gremium verfügbar, wähle ein anderes Gremium aus\n");
+        }
         
         try {
             Aushilfe.getInstance().Sitzung_Wahl();
