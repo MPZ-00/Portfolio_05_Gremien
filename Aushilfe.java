@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.EnumSet;
 
 public class Aushilfe implements IAushilfe {
     private static Aushilfe instance = null;
@@ -16,58 +15,6 @@ public class Aushilfe implements IAushilfe {
             instance = new Aushilfe();
         }
         return instance;
-    }
-
-    public void Gremium_Wahl() {
-        Gremien_anzeigen();
-        String eingabe;
-        Main.scanner.nextLine(); // Eingabepuffer löschen
-        do {
-            System.out.print("\nWelches Gremium soll es sein (Name oder 'neu'): ");
-            eingabe = Main.scanner.nextLine();
-        } while (!Gremien_enthaelt_Eingabe(eingabe) && !eingabe.equalsIgnoreCase("neu"));
-        
-        if (eingabe.equalsIgnoreCase("neu")) {
-            Gremium_erzeugen();
-        }
-    }
-    private void Gremium_erzeugen() {
-        System.out.print("Bezeichnung des Gremiums: ");
-        String name = Main.scanner.nextLine();
-        Boolean offiziell = frage_Ja_Nein("Ist das Gremium offiziell");
-        LocalDate beginn = getLocalDate("Beginn des Gremiums");
-        LocalDate ende = getLocalDate("Ende des Gremiums");
-
-        Gremien.setAktuellesGremium(Factory.getInstance().createGremien(name, offiziell, !offiziell, beginn, ende));
-
-        ConnectionManager.getInstance().executeStatement(
-            "insert into Gremien values (" +
-            Gremien.getAktuellesGremium().getID() + ", " +
-            Gremien.getAktuellesGremium().getName() + ", " +
-            (Gremien.getAktuellesGremium().getOffiziell() ? "1" : "0") + ", " +
-            (Gremien.getAktuellesGremium().getInoffiziell() ? "1" : "0") + ", " +
-            java.sql.Date.valueOf(Gremien.getAktuellesGremium().getBeginn()) + ", " +
-            java.sql.Date.valueOf(Gremien.getAktuellesGremium().getEnde()) + ")"
-        );
-
-        ConnectionManager.getInstance().executeStatement("commit");
-    }
-    private boolean Gremien_enthaelt_Eingabe(String eingabe) {
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Gremien.class.toString())) {
-            Gremien g = (Gremien) object;
-            if (g.getName().equalsIgnoreCase(eingabe)) {
-                Gremien.setAktuellesGremium(g);
-                return true;
-            }
-        }
-        return false;
-    }
-    public void Gremien_anzeigen() {
-        Aushilfe.getInstance().print_Titel("Gremien");
-        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Gremien.class.toString())) {
-            Gremien g = (Gremien)object;
-            System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
-        }
     }
 
     public void Sitzung_Wahl() {

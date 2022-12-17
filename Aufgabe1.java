@@ -1,6 +1,6 @@
 public class Aufgabe1 {
     public Aufgabe1() {
-        Aushilfe.getInstance().Gremium_Wahl();
+        Gremien.getAktuellesGremium().Wahl();
         System.out.println("Ausgewähltes Gremium (ID/Name): " + Gremien.getAktuellesGremium().getID() + "/" + Gremien.getAktuellesGremium().getName());
 
         if (Gremien.getAktuellesGremium() == null) {
@@ -8,11 +8,11 @@ public class Aufgabe1 {
         }
         
         try {
-            Aushilfe.getInstance().Sitzung_Wahl();
+            Sitzungen.getAktiveSitzung().Wahl();
             System.out.println("Ausgewählte Sitzung (ID/Beginn): " + Sitzungen.getAktiveSitzung().getID() + "/" + Sitzungen.getAktiveSitzung().getBeginn());
         } catch (NullPointerException e) {
             if (Aushilfe.getInstance().frage_Ja_Nein("Jetzt neue Sitzung für dieses Gremium anlegen")) {
-                Aushilfe.getInstance().Sitzung_erzeugen();
+                Sitzungen.getAktiveSitzung().Erzeugen();
             }
         }
     }
