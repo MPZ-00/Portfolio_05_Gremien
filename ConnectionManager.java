@@ -67,6 +67,8 @@ public class ConnectionManager {
         setPass(pass);
         setPort(port);
 
+        showConnection();
+        
         getConnection();
     }
 
