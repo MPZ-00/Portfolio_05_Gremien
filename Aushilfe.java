@@ -49,7 +49,7 @@ public class Aushilfe {
                 ende.toLocalDate()
             );
 
-            Factory.getInstance().addObject(Gremien.class.toString(), g);
+            Factory.getInstance().addObject(Gremium.class.toString(), g);
         }
     }
     private void init_Antrag_from_ResultSet() throws Exception {
@@ -80,7 +80,7 @@ public class Aushilfe {
                 rs_Sitzungen.getString("Protokoll")
             );
 
-            Factory.getInstance().addObject(Sitzungen.class.toString(), s);
+            Factory.getInstance().addObject(Sitzung.class.toString(), s);
         }
     }
     private void init_Aufgabengebiete_from_ResultSet() throws SQLException {
