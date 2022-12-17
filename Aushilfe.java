@@ -53,7 +53,7 @@ public class Aushilfe implements IAushilfe {
         ConnectionManager.getInstance().executeStatement("commit");
     }
     private boolean Gremien_enthaelt_Eingabe(String eingabe) {
-        for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Gremien.class.toString())) {
             Gremien g = (Gremien) object;
             if (g.getName().equalsIgnoreCase(eingabe)) {
                 Gremien.setAktuellesGremium(g);
@@ -64,7 +64,7 @@ public class Aushilfe implements IAushilfe {
     }
     public void Gremien_anzeigen() {
         Aushilfe.getInstance().print_Titel("Gremien");
-        for (AHauptklasse object : Factory.getInstance().getObject(Gremien.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Gremien.class.toString())) {
             Gremien g = (Gremien)object;
             System.out.printf("\nID: %d\nName: %s\noffiziell: %b\ninoffiziell: %b\nBeginn: %s\nEnde: %s\n", g.getID(), g.getName(), g.getOffiziell(), g.getInoffiziell(), g.getBeginn().toString(), g.getEnde().toString());
         }
@@ -86,7 +86,7 @@ public class Aushilfe implements IAushilfe {
         }
     }
     private boolean Sitzungen_enthaelt_Eingabe(Timestamp beginn) {
-        for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen) object;
 
             System.out.println(s.getBeginn() + ".equals(" + beginn + ")"); // Debug: warum läuft der Scheiß nicht immer?
@@ -114,7 +114,7 @@ public class Aushilfe implements IAushilfe {
             return false;
         }
 
-        for (AHauptklasse object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Sitzungen.class.toString())) {
             Sitzungen s = (Sitzungen)object;
             if (hs.getHS().contains(s.getID())) {
                 System.out.printf("\nID: %d\nBeginn: %s\nEnde: %s\nEinladung_am: %s\noeffentlich: %b\nOrt: %s\nProtokoll: %s\n", s.getID(), s.getBeginn().toString(), s.getEnde().toString(), s.getEinladung_am().toString(), s.getOeffentlich(), s.getOrt(), s.getProtokoll());
@@ -339,7 +339,7 @@ public class Aushilfe implements IAushilfe {
         }
     }
     private boolean TOP_mit_Titel(String eingabe) {
-        for (AHauptklasse object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (t.getTitel().equalsIgnoreCase(eingabe)) {
                 Tagesordnung.setAktuellenTOP(t);
@@ -394,7 +394,7 @@ public class Aushilfe implements IAushilfe {
             return false;
         }
 
-        for (AHauptklasse object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (hs.getHS().contains(t.getID())) {
                 System.out.printf("\nID: %d\nTitel: %s\nKurzbeschreibung: %s\nProtokolltext: %s", t.getID(), t.getTitel(), t.getKurzbeschreibung(), t.getProtokolltext());
@@ -419,7 +419,7 @@ public class Aushilfe implements IAushilfe {
         }
     }
     private boolean Antrag_mit_Titel(String eingabe) {
-        for (AHauptklasse object : Factory.getInstance().getObject(Antrag.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Antrag.class.toString())) {
             Antrag a = (Antrag)object;
             if (a.getTitel().equalsIgnoreCase(eingabe)) {
                 Antrag.setAktuellenAntrag(a);
@@ -477,7 +477,7 @@ public class Aushilfe implements IAushilfe {
             return false;
         }
 
-        for (AHauptklasse object : Factory.getInstance().getObject(Antrag.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Antrag.class.toString())) {
             Antrag a = (Antrag)object;
             if (hs.getHS().contains(a.getID())) {
                 System.out.println(

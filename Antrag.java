@@ -1,4 +1,4 @@
-public class Antrag extends AHauptklasse implements IAntrag {
+public class Antrag extends ATabellenVerwaltung implements IAntrag {
     public enum Ergebnis {
         JA, NEIN, ENTHALTUNG
     }

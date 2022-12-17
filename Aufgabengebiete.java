@@ -1,4 +1,4 @@
-public class Aufgabengebiete extends AHauptklasse implements IAufgabengebiete {
+public class Aufgabengebiete extends ATabellenVerwaltung implements IAufgabengebiete {
     // Attribute
     private int Ag_ID; // Referenz auf Gremium
     private String Aufgabengebiet;

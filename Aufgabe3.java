@@ -22,7 +22,7 @@ public class Aufgabe3 {
             System.err.println("Für diese Sitzung gibt es keine Tagesordnungen");
             return;
         }
-        for (AHauptklasse object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
+        for (ATabellenVerwaltung object : Factory.getInstance().getObject(Tagesordnung.class.toString())) {
             Tagesordnung t = (Tagesordnung)object;
             if (hs.getHS().contains(t.getID())) {
                 System.out.println(
