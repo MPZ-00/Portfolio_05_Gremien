@@ -1,7 +1,7 @@
 import java.sql.Timestamp;
 
-public class Aufgabe5 {
-    public Aufgabe5() {
+public class A5_Das_Ende_der_Sitzung_eintragen {
+    public A5_Das_Ende_der_Sitzung_eintragen() {
         // Ende der aktuellen Sitzung eintragen
         Aushilfe.getInstance().print_Titel("Aufgabe 5");
 
